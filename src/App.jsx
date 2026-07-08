@@ -1768,12 +1768,12 @@ const SUBJECTS = {
 };
 
 
-const INK = "#1F2A24";
-const PAPER = "#F6F2E7";
-const GREEN = "#2F6F5E";
-const RUST = "#A6432D";
-const AMBER = "#C8912B";
-const LINE = "#D9D2C0";
+const INK = "#152A47";
+const PAPER = "#F3F6FB";
+const GREEN = "#2158A6";
+const RUST = "#B3402C";
+const AMBER = "#C08A25";
+const LINE = "#CBD6E6";
 
 function Ring({ pct, size = 140 }) {
   const stroke = 12;
@@ -1793,7 +1793,7 @@ function Ring({ pct, size = 140 }) {
 
 export default function App() {
   const [subject, setSubject] = useState("chem"); // chem | bio
-  const [screen, setScreen] = useState("units"); // units | sections | student | quiz | report
+  const [screen, setScreen] = useState("landing"); // landing | units | sections | student | quiz | report
   const [unitIdx, setUnitIdx] = useState(null);
   const [student, setStudent] = useState({ name: "", email: "" });
   const [studentDraft, setStudentDraft] = useState({ name: "", email: "" });
@@ -1890,31 +1890,48 @@ export default function App() {
         <div className="flex items-baseline justify-between mb-6 pb-4" style={{ borderBottom: `2px solid ${INK}` }}>
           <div>
             <div className="text-[11px] uppercase tracking-[0.2em]" style={{ fontFamily: "ui-monospace, monospace", color: GREEN }}>
-              ChemBio with Yoo
+              ChemBio with YOO
             </div>
             <h1 className="text-3xl font-bold mt-1">
-              {subjectData.label}
-              {unit ? ` — Unit ${unit.id}: ${unit.title}` : ""}
+              {screen === "landing" ? "현정쌤과 함께하는 AP 학습" : (
+                <>
+                  {subjectData.label}
+                  {unit ? ` — Unit ${unit.id}: ${unit.title}` : ""}
+                </>
+              )}
             </h1>
           </div>
         </div>
 
-        {screen === "units" && (
+        {screen === "landing" && (
           <div>
-            <div className="flex gap-2 mb-6">
+            <div className="mb-10 p-5" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
+              <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: GREEN }}>공지</div>
+              <ul className="space-y-2 text-sm leading-relaxed" style={{ color: "#33455E" }}>
+                <li>· 이 사이트는 단순 암기가 아니라 "왜 이렇게 되는지" 이해했는지 확인하는 용도예요. 답만 확인하지 말고 해설까지 꼭 읽어보세요.</li>
+                <li>· AI나 친구 답 베껴서 풀지 마세요. 지금 정직하게 틀리는 게, 시험장에서 실력 없이 틀리는 것보다 훨씬 낫습니다.</li>
+                <li>· 제출한 결과는 선생님께 자동으로 전달됩니다. 이름/이메일 정확히 입력해주세요.</li>
+                <li>· 궁금한 점이나 이해 안 되는 해설은 수업 시간에 꼭 질문하세요.</li>
+              </ul>
+            </div>
+
+            <p className="mb-4 text-sm font-bold uppercase tracking-wide" style={{ color: GREEN }}>과목을 선택하세요</p>
+            <div className="grid grid-cols-2 gap-4">
               {Object.entries(SUBJECTS).map(([key, s]) => (
                 <button key={key} onClick={() => switchSubject(key)}
-                  className="px-5 py-2.5 text-sm font-bold uppercase tracking-wide"
-                  style={{
-                    border: `1.5px solid ${INK}`,
-                    background: subject === key ? INK : "transparent",
-                    color: subject === key ? PAPER : INK,
-                    borderRadius: 3,
-                  }}>
-                  {s.label}
+                  className="p-8 text-center"
+                  style={{ border: `2px solid ${INK}`, borderRadius: 6, background: "#FFFEFB" }}>
+                  <div className="text-2xl font-bold" style={{ color: INK }}>{s.label}</div>
+                  <div className="text-xs mt-2 uppercase tracking-wide" style={{ color: GREEN }}>단원 선택하기 →</div>
                 </button>
               ))}
             </div>
+          </div>
+        )}
+
+        {screen === "units" && (
+          <div>
+            <button onClick={() => setScreen("landing")} className="mb-5 px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 처음으로</button>
             <p className="mb-4 leading-relaxed" style={{ color: "#4A4438" }}>
               단원을 선택하세요. 준비중인 단원은 곧 추가됩니다.
             </p>
