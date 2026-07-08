@@ -1765,6 +1765,14 @@ const SUBJECTS = {
       { id: "8", title: "Ecology", sections: null },
     ],
   },
+  hsChem: {
+    label: "High School Chemistry",
+    units: [],
+  },
+  hsBio: {
+    label: "High School Biology",
+    units: [],
+  },
 };
 
 
@@ -1801,6 +1809,11 @@ export default function App() {
   const [answers, setAnswers] = useState({});
   const [filter, setFilter] = useState("all");
   const [submitState, setSubmitState] = useState("idle"); // idle | sending | sent | error
+  const [classStats, setClassStats] = useState(null); // { [questionId]: { correct, total } }
+  const [classStatsState, setClassStatsState] = useState("idle"); // idle | loading | loaded | error
+  const [startTime, setStartTime] = useState(null);
+  const [elapsedSec, setElapsedSec] = useState(0);
+  const [finalDurationSec, setFinalDurationSec] = useState(null);
 
   const subjectData = SUBJECTS[subject];
   const unit = unitIdx !== null ? subjectData.units[unitIdx] : null;
@@ -1866,7 +1879,48 @@ export default function App() {
   function submitStudentInfo() {
     if (!studentDraft.name.trim() || !studentDraft.email.trim()) return;
     setStudent(studentDraft);
+    setStartTime(Date.now());
+    setElapsedSec(0);
+    setFinalDurationSec(null);
     setScreen("quiz");
+  }
+
+  // Tick the timer once per second while the student is taking the quiz.
+  useEffect(() => {
+    if (screen !== "quiz" || !startTime) return;
+    const id = setInterval(() => {
+      setElapsedSec(Math.floor((Date.now() - startTime) / 1000));
+    }, 1000);
+    return () => clearInterval(id);
+  }, [screen, startTime]);
+
+  function formatDuration(totalSec) {
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  }
+
+  function submitQuiz() {
+    if (startTime) setFinalDurationSec(Math.floor((Date.now() - startTime) / 1000));
+    setScreen("report");
+  }
+
+  // JSONP helper — Apps Script GET responses aren't readable via plain fetch due to CORS,
+  // so we load them as a <script> tag instead (classic JSONP workaround).
+  function jsonp(url, params) {
+    return new Promise((resolve, reject) => {
+      const cbName = "__cb_" + Math.random().toString(36).slice(2);
+      const qs = new URLSearchParams({ ...params, callback: cbName }).toString();
+      const script = document.createElement("script");
+      window[cbName] = (data) => {
+        resolve(data);
+        delete window[cbName];
+        script.remove();
+      };
+      script.onerror = () => { reject(new Error("jsonp failed")); delete window[cbName]; script.remove(); };
+      script.src = `${url}?${qs}`;
+      document.body.appendChild(script);
+    });
   }
 
   // Auto-send the graded result to the teacher's Google Sheet when the report screen opens.
@@ -1874,17 +1928,22 @@ export default function App() {
     if (screen !== "report") return;
     if (!SHEET_ENDPOINT) { setSubmitState("idle"); return; }
     setSubmitState("sending");
+    const sectionKey = `${subject}__${unit.id}__${section.id}`;
+    const perQuestion = results.map((r) => ({ id: r.id, correct: !!r.correct }));
     const payload = {
       name: student.name,
       email: student.email,
       subject: subjectData.label,
       unit: `Unit ${unit.id} (${unit.title}) - ${section.id} ${section.title}`,
+      sectionKey,
       score: score,
       total: qs.length,
       percent: pct,
       correct: score,
       incorrect: wrong,
       unanswered: blank,
+      duration: finalDurationSec !== null ? formatDuration(finalDurationSec) : "",
+      perQuestion: JSON.stringify(perQuestion),
       timestamp: new Date().toLocaleString("ko-KR"),
     };
     fetch(SHEET_ENDPOINT, {
@@ -1895,26 +1954,34 @@ export default function App() {
     })
       .then(() => setSubmitState("sent"))
       .catch(() => setSubmitState("error"));
+
+    // Fetch class-wide per-question accuracy (includes this submission + everyone before it).
+    setClassStatsState("loading");
+    setTimeout(() => {
+      jsonp(SHEET_ENDPOINT, { mode: "stats", sectionKey })
+        .then((data) => { setClassStats(data); setClassStatsState("loaded"); })
+        .catch(() => setClassStatsState("error"));
+    }, 1500); // small delay so this submission's row is written before we read stats back
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screen]);
 
   return (
     <div style={{ background: PAPER, minHeight: "100vh", color: INK, fontFamily: "'Figtree', sans-serif" }}>
       <div className="max-w-3xl mx-auto px-6 py-10">
-        <div className="flex items-baseline justify-between mb-6 pb-4" style={{ borderBottom: `2px solid ${INK}` }}>
-          <div>
-            <div className="text-[11px] uppercase tracking-[0.2em]" style={{ fontFamily: "ui-monospace, monospace", color: GREEN }}>
+        <div className="mb-6 pb-4" style={{ borderBottom: `2px solid ${INK}` }}>
+          <div className="flex justify-center mb-3">
+            <div className="text-lg font-bold uppercase tracking-[0.15em] px-4 py-1.5" style={{ color: PAPER, background: GREEN, borderRadius: 999 }}>
               ChemBio with YOO
             </div>
-            <h1 className="text-3xl font-bold mt-1">
-              {screen === "landing" ? "Think. Why? How?" : (
-                <>
-                  {subjectData.label}
-                  {unit ? ` — Unit ${unit.id}: ${unit.title}` : ""}
-                </>
-              )}
-            </h1>
           </div>
+          <h1 className="text-xl font-bold text-center">
+            {screen === "landing" ? "Think. Why? How?" : (
+              <>
+                {subjectData.label}
+                {unit ? ` — Unit ${unit.id}: ${unit.title}` : ""}
+              </>
+            )}
+          </h1>
         </div>
 
         {screen === "landing" && (
@@ -1931,14 +1998,21 @@ export default function App() {
 
             <p className="mb-4 text-sm font-bold uppercase tracking-wide" style={{ color: GREEN }}>과목을 선택하세요</p>
             <div className="grid grid-cols-2 gap-4">
-              {Object.entries(SUBJECTS).map(([key, s]) => (
+              {Object.entries(SUBJECTS).map(([key, s]) => {
+                const cardColors = {
+                  chem: "#FBE4EC",   // AP Chemistry — light pink
+                  bio: "#EDE3F7",    // AP Biology — light purple
+                  hsChem: "#E3F3DD", // High School Chemistry — light green
+                  hsBio: "#FDF3D0",  // High School Biology — light yellow
+                };
+                return (
                 <button key={key} onClick={() => switchSubject(key)}
                   className="p-8 text-center"
-                  style={{ border: `2px solid ${INK}`, borderRadius: 6, background: "#FFFEFB" }}>
+                  style={{ border: `2px solid ${INK}`, borderRadius: 6, background: cardColors[key] || "#FFFEFB" }}>
                   <div className="text-2xl font-bold" style={{ color: INK }}>{s.label}</div>
                   <div className="text-xs mt-2 uppercase tracking-wide" style={{ color: GREEN }}>단원 선택하기 →</div>
                 </button>
-              ))}
+              );})}
             </div>
           </div>
         )}
@@ -1977,6 +2051,11 @@ export default function App() {
             <p className="mb-4 leading-relaxed" style={{ color: "#4A4438" }}>
               단원을 선택하세요. 준비중인 단원은 곧 추가됩니다.
             </p>
+            {subjectData.units.length === 0 ? (
+              <div className="p-6 text-center text-sm" style={{ border: `1px dashed ${LINE}`, borderRadius: 4, color: "#8A8270" }}>
+                아직 이 과목의 콘텐츠가 준비되지 않았어요. 단원 목록/문제를 알려주시면 바로 채워드릴게요.
+              </div>
+            ) : (
             <div className="grid grid-cols-2 gap-3">
               {subjectData.units.map((u, i) => {
                 const locked = !u.sections;
@@ -1998,6 +2077,7 @@ export default function App() {
                 );
               })}
             </div>
+            )}
           </div>
         )}
 
@@ -2026,9 +2106,14 @@ export default function App() {
         {screen === "student" && (
           <div>
             <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: GREEN }}>{subjectData.label} · Unit {unit.id} · {section.id} {section.title}</div>
-            <p className="mb-6 leading-relaxed" style={{ color: "#4A4438" }}>
+            <p className="mb-4 leading-relaxed" style={{ color: "#4A4438" }}>
               이 섹션을 풀기 전에 이름과 이메일을 입력해주세요. 채점 결과는 선생님께 자동으로 전달됩니다.
             </p>
+            <div className="mb-6 p-4 text-sm leading-relaxed" style={{ border: `1px solid ${RUST}`, borderRadius: 4, background: "rgba(179,64,44,0.06)", color: "#7A3020" }}>
+              <div className="font-bold mb-1">⚠️ 풀이 전 확인</div>
+              AI(챗봇), 인터넷 검색, 답지 검색 없이 <b>본인 실력으로만</b> 풀어주세요.<br />
+              지금 정직하게 틀리는 게, 시험장에서 실력 없이 틀리는 것보다 훨씬 낫습니다.
+            </div>
             <div className="space-y-4 max-w-sm">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: GREEN }}>이름</label>
@@ -2078,7 +2163,12 @@ export default function App() {
 
         {screen === "quiz" && (
           <div>
-            <div className="text-xs font-bold uppercase tracking-wide mb-4" style={{ color: GREEN }}>{subjectData.label} · Unit {unit.id} · {section.id} {section.title}</div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="text-xs font-bold uppercase tracking-wide" style={{ color: GREEN }}>{subjectData.label} · Unit {unit.id} · {section.id} {section.title}</div>
+              <div className="px-3 py-1.5 text-sm font-bold" style={{ background: INK, color: PAPER, borderRadius: 3, fontFamily: "ui-monospace, monospace" }}>
+                ⏱ {formatDuration(elapsedSec)}
+              </div>
+            </div>
             <div className="space-y-6 mb-8">
               {qs.map((q, i) => (
                 <div key={q.id} className="p-5" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
@@ -2108,7 +2198,7 @@ export default function App() {
             </div>
             <div className="flex gap-3">
               <button onClick={() => setScreen("sections")} className="px-5 py-2.5 text-sm font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 목록</button>
-              <button onClick={() => setScreen("report")} className="px-6 py-3 font-bold text-sm uppercase tracking-wide" style={{ background: INK, color: PAPER, borderRadius: 3 }}>제출하고 채점하기</button>
+              <button onClick={submitQuiz} className="px-6 py-3 font-bold text-sm uppercase tracking-wide" style={{ background: INK, color: PAPER, borderRadius: 3 }}>제출하고 채점하기</button>
             </div>
           </div>
         )}
@@ -2117,6 +2207,7 @@ export default function App() {
           <div>
             <div className="mb-4 text-xs font-bold uppercase tracking-wide" style={{ color: "#8A8270" }}>
               {student.name} · {student.email}
+              {finalDurationSec !== null && ` · 풀이 시간 ${formatDuration(finalDurationSec)}`}
             </div>
             {SHEET_ENDPOINT ? (
               <div className="mb-4 px-3 py-2 text-xs" style={{
@@ -2149,9 +2240,12 @@ export default function App() {
             </div>
 
             <div className="space-y-5">
-              {filtered.map((r) => (
+              {filtered.map((r) => {
+                const stat = classStats && classStats[r.id];
+                const classPct = stat && stat.total > 0 ? Math.round((stat.correct / stat.total) * 100) : null;
+                return (
                 <div key={r.id} className="p-5" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-2 mb-2 flex-wrap">
                     <span className="text-xs font-bold px-2 py-0.5" style={{
                       color: PAPER,
                       background: r.unanswered ? AMBER : r.correct ? GREEN : RUST,
@@ -2159,6 +2253,14 @@ export default function App() {
                     }}>
                       {r.unanswered ? "미응답" : r.correct ? "정답" : "오답"}
                     </span>
+                    {classPct !== null && (
+                      <span className="text-xs px-2 py-0.5" style={{ border: `1px solid ${GREEN}`, color: GREEN, borderRadius: 2 }}>
+                        전체 정답률 {classPct}%
+                      </span>
+                    )}
+                    {classStatsState === "loading" && !stat && (
+                      <span className="text-xs" style={{ color: "#8A8270" }}>전체 통계 불러오는 중...</span>
+                    )}
                   </div>
                   <p className="mb-3 leading-relaxed">{r.text}</p>
                   {r.image && (
@@ -2176,7 +2278,7 @@ export default function App() {
                   </div>
                   <div className="text-xs leading-relaxed whitespace-pre-line" style={{ color: "#5C5648", background: "#F1ECDD", padding: "10px 12px", borderRadius: 3 }}>{r.note}</div>
                 </div>
-              ))}
+              );})}
             </div>
 
             <button onClick={() => setScreen("sections")} className="mt-8 px-5 py-2.5 text-sm font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>↺ 다른 섹션 풀기</button>
