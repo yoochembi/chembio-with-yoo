@@ -1786,14 +1786,14 @@ function Ring({ pct, size = 140 }) {
       <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={GREEN} strokeWidth={stroke}
         strokeDasharray={c} strokeDashoffset={off} strokeLinecap="round"
         transform={`rotate(-90 ${size / 2} ${size / 2})`} style={{ transition: "stroke-dashoffset 0.8s ease" }} />
-      <text x="50%" y="50%" textAnchor="middle" dy="0.35em" style={{ fontFamily: "'Gaegu', sans-serif", fontSize: 26, fill: INK, fontWeight: 700 }}>{pct}%</text>
+      <text x="50%" y="50%" textAnchor="middle" dy="0.35em" style={{ fontFamily: "'Figtree', sans-serif", fontSize: 26, fill: INK, fontWeight: 700 }}>{pct}%</text>
     </svg>
   );
 }
 
 export default function App() {
   const [subject, setSubject] = useState("chem"); // chem | bio
-  const [screen, setScreen] = useState("landing"); // landing | units | sections | student | quiz | report
+  const [screen, setScreen] = useState("landing"); // landing | categories | units | sections | student | quiz | report
   const [unitIdx, setUnitIdx] = useState(null);
   const [student, setStudent] = useState({ name: "", email: "" });
   const [studentDraft, setStudentDraft] = useState({ name: "", email: "" });
@@ -1827,9 +1827,23 @@ export default function App() {
     return true;
   });
 
+  const CATEGORIES = [
+    { id: "unit-quiz", label: "Unit Quiz", desc: "단원별 퀴즈", available: true },
+    { id: "practice", label: "Practice Questions", desc: "단원별 연습문제", available: false },
+    { id: "mock1", label: "Mock Test 1", desc: "모의고사 1회", available: false },
+    { id: "mock2", label: "Mock Test 2", desc: "모의고사 2회", available: false },
+    { id: "mock3", label: "Mock Test 3", desc: "모의고사 3회", available: false },
+    { id: "frq", label: "Past Papers — FRQs", desc: "기출 서술형 문제", available: false },
+  ];
+
   function switchSubject(s) {
     setSubject(s);
     setUnitIdx(null);
+    setScreen("categories");
+  }
+
+  function openCategory(cat) {
+    if (!cat.available) return; // coming soon
     setScreen("units");
   }
 
@@ -1885,7 +1899,7 @@ export default function App() {
   }, [screen]);
 
   return (
-    <div style={{ background: PAPER, minHeight: "100vh", color: INK, fontFamily: "'Gaegu', sans-serif" }}>
+    <div style={{ background: PAPER, minHeight: "100vh", color: INK, fontFamily: "'Figtree', sans-serif" }}>
       <div className="max-w-3xl mx-auto px-6 py-10">
         <div className="flex items-baseline justify-between mb-6 pb-4" style={{ borderBottom: `2px solid ${INK}` }}>
           <div>
@@ -1929,9 +1943,37 @@ export default function App() {
           </div>
         )}
 
-        {screen === "units" && (
+        {screen === "categories" && (
           <div>
             <button onClick={() => setScreen("landing")} className="mb-5 px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 처음으로</button>
+            <p className="mb-4 leading-relaxed" style={{ color: "#4A4438" }}>
+              원하는 항목을 선택하세요. 준비중인 항목은 곧 추가됩니다.
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              {CATEGORIES.map((cat) => (
+                <button key={cat.id} onClick={() => openCategory(cat)} disabled={!cat.available}
+                  className="text-left p-5 flex flex-col justify-between"
+                  style={{
+                    border: `1px solid ${LINE}`,
+                    borderRadius: 4,
+                    background: cat.available ? "#FFFEFB" : "#EFEADC",
+                    opacity: cat.available ? 1 : 0.5,
+                    cursor: cat.available ? "pointer" : "not-allowed",
+                    minHeight: 96,
+                  }}>
+                  <div className="font-bold text-lg">{cat.label}</div>
+                  <div className="text-xs mt-1" style={{ color: cat.available ? GREEN : "#8A8270" }}>
+                    {cat.available ? cat.desc : "준비중"}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {screen === "units" && (
+          <div>
+            <button onClick={() => setScreen("categories")} className="mb-5 px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← Unit Quiz 카테고리</button>
             <p className="mb-4 leading-relaxed" style={{ color: "#4A4438" }}>
               단원을 선택하세요. 준비중인 단원은 곧 추가됩니다.
             </p>
