@@ -698,9 +698,536 @@ const BIO_SECTIONS = [
 ];
 
 
+const BIO_UNIT4_SECTIONS = [
+  {
+    id: "4-1",
+    title: "Cell Communication and Signal Transduction",
+    questions: [
+      {
+        id: "B4-1-Q1",
+        text: "Cells communicate using chemical signaling molecules called ligands. Which of the following correctly distinguishes local signaling from long-distance (endocrine) signaling?",
+        choices: [
+          "Local signaling uses ligands that travel through the bloodstream to reach distant target cells; endocrine signaling uses direct cell-to-cell contact only.",
+          "Local signaling requires ATP; endocrine signaling does not require any energy input.",
+          "Local signaling only occurs in plants; endocrine signaling only occurs in animals.",
+          "Local signaling involves ligands that act on nearby cells over short distances; endocrine (long-distance) signaling uses hormones that travel through the bloodstream to reach target cells throughout the body.",
+        ],
+        answer: 3,
+        note: "Local signaling = short-range ligands acting on nearby cells; endocrine signaling = hormones traveling through the bloodstream to distant targets.",
+      },
+      {
+        id: "B4-1-Q2",
+        text: "A signal transduction pathway involves three sequential stages. Which of the following correctly identifies these three stages in the correct order?",
+        choices: [
+          "Reception - Transduction - Response; the receptor binds the ligand, a series of chemical changes relay the signal, and a cellular response is activated.",
+          "Response - Transduction - Reception; the cell responds first, then transduces, then receives the signal.",
+          "Transduction - Reception - Response; the signal is amplified first, then the receptor binds the ligand, then a response occurs.",
+          "Reception - Response - Transduction; the receptor binds the ligand and the cell immediately responds before any intracellular relay occurs.",
+        ],
+        answer: 0,
+        note: "The three stages, in order: Reception (ligand binds receptor) → Transduction (relay cascade) → Response (cellular action).",
+      },
+      {
+        id: "B4-1-Q3",
+        text: "Steroid hormones such as testosterone pass directly through the plasma membrane and bind to intracellular receptors. Which of the following best explains why steroid hormones can cross the membrane while peptide hormones (like insulin) cannot?",
+        choices: [
+          "Steroid hormones are smaller than peptide hormones, so they can fit through the phospholipid pores in the membrane.",
+          "Steroid hormones have specific transport proteins that actively pump them through the membrane; peptide hormones lack these pumps.",
+          "Steroid hormones are lipid-soluble (nonpolar) and can pass through the hydrophobic core of the phospholipid bilayer; peptide hormones are hydrophilic (polar/charged) and cannot cross the hydrophobic membrane.",
+          "Steroid hormones are made of carbohydrates that interact with membrane carbohydrate chains; peptide hormones cannot interact with the membrane.",
+        ],
+        answer: 2,
+        note: "Steroids are lipid-soluble and cross the hydrophobic bilayer directly; peptide hormones are polar and need surface receptors instead.",
+      },
+      {
+        id: "B4-1-Q4",
+        text: "Negative feedback is described as a mechanism that maintains homeostasis. Which of the following correctly describes how negative feedback works?",
+        choices: [
+          "Negative feedback amplifies changes, moving the system further from the set point to create a stronger response.",
+          "Negative feedback reverses or counteracts deviations from a set point, returning the system to its normal level and maintaining homeostasis.",
+          "Negative feedback only operates in the immune system to prevent excessive immune responses.",
+          "Negative feedback requires the same hormone to both detect and correct a change, operating independently of other signaling molecules.",
+        ],
+        answer: 1,
+        note: "Negative feedback counteracts a deviation from the set point, restoring the system to normal — the core homeostatic mechanism.",
+      },
+      {
+        id: "B4-1-Q5",
+        text: "Epinephrine (adrenaline) triggers glycogen breakdown in liver cells through a cAMP signaling cascade: epinephrine binds receptor → G protein activated → adenylyl cyclase activated → ATP converted to cAMP → protein kinase A activated → phosphorylase kinase activated → glycogen phosphorylase activated → glycogen broken down to glucose. Which of the following best explains the biological advantage of this multi-step cascade compared to epinephrine directly activating glycogen phosphorylase?",
+        choices: [
+          "Each step in the cascade amplifies the signal: one epinephrine molecule can ultimately activate thousands of glycogen phosphorylase enzymes, producing a large cellular response from a small initial signal.",
+          "The cascade is slower, giving the cell more time to prepare for the response.",
+          "The cascade requires less energy than direct activation because each relay molecule is recycled.",
+          "The cascade ensures the response is limited to a very small number of molecules, preventing waste.",
+        ],
+        answer: 0,
+        note: "Each enzymatic step multiplies the number of activated downstream molecules — amplification is the key advantage of multi-step cascades.",
+      },
+      {
+        id: "B4-1-Q6",
+        text: "Quorum sensing in bacteria allows bacteria to coordinate group behavior based on population density. Which of the following best describes the molecular mechanism of quorum sensing?",
+        choices: [
+          "Bacteria directly share DNA through conjugation when the population is dense enough, allowing all cells to express the same genes simultaneously.",
+          "Bacteria use quorum sensing to detect oxygen levels in the environment, switching from aerobic to anaerobic respiration when the population becomes too large.",
+          "Dense bacterial populations release hormones into the bloodstream that signal the immune system to recognize the infection.",
+          "Bacteria constantly release small signaling molecules (autoinducers) into the environment; as population density increases, autoinducer concentration increases until it reaches a threshold that binds intracellular receptors and triggers coordinated gene expression.",
+        ],
+        answer: 3,
+        note: "Quorum sensing works via autoinducer molecules that accumulate with population density and trigger coordinated gene expression once a threshold is reached.",
+      },
+      {
+        id: "B4-1-Q7",
+        text: "A mutation prevents the receptor for a particular hormone from undergoing a conformational change after the hormone binds. Which of the following best predicts the effect of this mutation on the signal transduction pathway?",
+        choices: [
+          "The hormone will bind the receptor normally and the full signal transduction pathway will proceed, because receptor binding is sufficient for signal transmission.",
+          "The signal transduction pathway will proceed more slowly than normal, eventually producing a weaker cellular response.",
+          "The signal transduction pathway will not proceed past reception; without the conformational change, the receptor cannot activate the next step in transduction (such as activating a G protein or secondary messenger), so no cellular response occurs.",
+          "The mutation will increase the strength of the signal because the receptor will remain bound to the hormone permanently.",
+        ],
+        answer: 2,
+        note: "The conformational change is what activates the next relay step; without it, the pathway halts right after reception.",
+      },
+      {
+        id: "B4-1-Q8",
+        text: "Cholera toxin (from Vibrio cholerae) permanently activates G proteins in intestinal cells by preventing GTP hydrolysis (the mechanism that normally turns G proteins off). Which of the following best explains how this leads to severe diarrhea?",
+        choices: [
+          "Permanently active G proteins continuously stimulate adenylyl cyclase to produce cAMP, which keeps chloride ion channels permanently open, causing excess chloride and water secretion into the intestinal lumen, resulting in severe water loss (diarrhea).",
+          "Permanently active G proteins block all signal transduction in intestinal cells, preventing them from absorbing water.",
+          "Permanently active G proteins trigger apoptosis in intestinal cells, destroying the intestinal lining and causing water to leak out.",
+          "Permanently active G proteins overstimulate DNA replication in intestinal cells, causing uncontrolled cell division that disrupts normal intestinal function.",
+        ],
+        answer: 0,
+        note: "Locked-on G proteins → continuous cAMP production → chloride channels stay open → excess salt and water secretion → diarrhea.",
+      },
+      {
+        id: "B4-1-Q9",
+        text: "Blood glucose regulation involves both insulin and glucagon in a negative feedback system. After a meal, blood glucose rises. Which of the following correctly describes the sequence of events that returns blood glucose to normal?",
+        choices: [
+          "High blood glucose - glucagon released by pancreas - glycogen broken down in liver - blood glucose rises further (positive feedback).",
+          "High blood glucose - glucagon released by pancreas - glucagon binds receptors on pancreas - insulin synthesis stops - blood glucose remains elevated.",
+          "High blood glucose - insulin released by pancreas - glycogen broken down in liver to release more glucose - blood glucose further increases.",
+          "High blood glucose - insulin released by pancreas - insulin binds receptors on liver and muscle cells - increased glucose uptake, glycogen synthesis, and increased metabolism - blood glucose returns to normal set point.",
+        ],
+        answer: 3,
+        note: "High glucose → insulin released → liver/muscle uptake and glycogen synthesis increase → glucose falls back to the set point (classic negative feedback).",
+      },
+      {
+        id: "B4-1-Q10",
+        text: "Apoptosis is programmed cell death triggered by signal transduction. A student claims apoptosis is always harmful because it destroys cells. Which of the following best refutes this claim using two specific examples?",
+        choices: [
+          "Apoptosis is harmful because it removes cells from the immune system, making the organism more susceptible to disease.",
+          "Apoptosis only occurs in cancer cells; normal healthy cells never undergo programmed cell death.",
+          "Apoptosis is harmful because it reduces the total number of cells in the body, causing aging and organ failure over time.",
+          "Apoptosis is beneficial and essential: it removes cells with dangerous mutations (preventing cancer), and it removes cells no longer needed during development (such as the tissue between developing fingers and toes to create separate digits).",
+        ],
+        answer: 3,
+        note: "Apoptosis prevents cancer by removing mutated cells, and it sculpts developing tissue (e.g., separating fingers/toes) — both clearly beneficial.",
+      },
+    ],
+  },
+  {
+    id: "4-2",
+    title: "Cell Cycle",
+    questions: [
+      {
+        id: "B4-2-Q1",
+        text: "The cell cycle consists of interphase and the mitotic phase. Which of the following correctly describes what occurs during each stage of interphase (G1, S, G2)?",
+        choices: [
+          "G1: cell growth and preparation for DNA replication; S: DNA synthesis (replication); G2: continued growth and preparation for mitosis.",
+          "G1: DNA replication; S: cell growth and organelle production; G2: chromosome condensation.",
+          "G1: chromosome condensation and spindle formation; S: sister chromatids separate; G2: cytokinesis.",
+          "G1: cell growth; S: nuclear envelope breakdown; G2: DNA replication and chromosome condensation.",
+        ],
+        answer: 0,
+        note: "G1: growth + prep for replication. S: DNA replication. G2: growth + prep for mitosis.",
+      },
+      {
+        id: "B4-2-Q2",
+        text: "During which phase of mitosis do chromosomes line up along the cell equator (metaphase plate), and what is the significance of this alignment?",
+        choices: [
+          "Metaphase; chromosomes align at the metaphase plate, ensuring that each daughter cell will receive one copy of each chromosome when the sister chromatids are pulled apart in anaphase.",
+          "Anaphase; chromosomes align before being pulled to opposite poles to ensure equal distribution.",
+          "Telophase; chromosomes align at the metaphase plate as the nuclear envelope begins to reform around them.",
+          "Prophase; chromosomes align at the metaphase plate to allow the nuclear envelope to reform around each set of chromosomes.",
+        ],
+        answer: 0,
+        note: "Metaphase = chromosomes align at the metaphase plate, setting up equal chromosome distribution in the following anaphase.",
+      },
+      {
+        id: "B4-2-Q3",
+        text: "Cyclins and cyclin-dependent kinases (CDKs) regulate the cell cycle. Which of the following correctly describes the relationship between cyclins and CDKs?",
+        choices: [
+          "Cyclins are present at constant levels throughout the cell cycle; CDKs fluctuate and activate cyclins by phosphorylating them.",
+          "Both cyclins and CDKs fluctuate together; when both are at high levels the cell cycle stops; when both are low the cell cycle proceeds.",
+          "Cyclins directly phosphorylate target proteins to drive the cell cycle; CDKs are inhibitors that prevent cyclins from acting when not needed.",
+          "CDKs are present at constant levels throughout the cell cycle; cyclins fluctuate and activate CDKs by binding to them; the cyclin-CDK complex then phosphorylates target proteins to trigger the next stage.",
+        ],
+        answer: 3,
+        note: "CDK levels stay constant; cyclin levels fluctuate and, by binding CDK, form the active complex that phosphorylates target proteins.",
+      },
+      {
+        id: "B4-2-Q4",
+        text: "Cytokinesis differs between animal and plant cells. Which of the following correctly describes how cytokinesis occurs in each cell type?",
+        choices: [
+          "In animal cells, a cell plate forms from vesicles that fuse in the middle; in plant cells, a cleavage furrow pinches the cell membrane inward.",
+          "Both animal and plant cells use a cleavage furrow; plant cells just take longer because of the cell wall.",
+          "In animal cells, a cleavage furrow (contractile ring of microfilaments) pinches inward to divide the cytoplasm; in plant cells, a cell plate forms from vesicles that fuse at the center and expands outward to divide the cell.",
+          "Both animal and plant cells form a cell plate; animal cells do not have cell walls so the plate is made of protein instead of cellulose.",
+        ],
+        answer: 2,
+        note: "Animal cells: cleavage furrow pinches inward. Plant cells: cell plate forms from vesicles and expands outward (due to the rigid cell wall).",
+      },
+      {
+        id: "B4-2-Q5",
+        text: "The cell cycle has three major checkpoints: G1, G2, and M. A cell with damaged DNA attempts to enter S phase. Which of the following best describes what should happen at the G1 checkpoint and why it is critical?",
+        choices: [
+          "The G1 checkpoint should allow the cell to proceed because DNA repair enzymes in S phase will fix the damage during replication.",
+          "The G1 checkpoint should halt the cell cycle because the checkpoint verifies that DNA is undamaged before replication; allowing damaged DNA to replicate would pass mutations to all daughter cells.",
+          "The G1 checkpoint should direct the cell to immediately undergo cytokinesis to prevent the damage from spreading.",
+          "The G1 checkpoint only checks cell size, not DNA quality; DNA damage is checked at the G2 checkpoint instead.",
+        ],
+        answer: 1,
+        note: "The G1 checkpoint verifies DNA integrity before allowing entry into S phase, preventing damaged DNA from being replicated and passed on.",
+      },
+      {
+        id: "B4-2-Q6",
+        text: "In an experiment, cells are treated with a drug that specifically prevents the degradation of M-cyclin (the cyclin that triggers mitosis). Which of the following best predicts the effect on cell division?",
+        choices: [
+          "Cells will divide more rapidly because M-cyclin will continuously activate CDK, keeping mitosis going without stopping.",
+          "Cells will skip interphase and go directly from one mitosis to the next, speeding up the overall cell cycle.",
+          "Cells will remain in G1 permanently because M-cyclin degradation is required to enter S phase.",
+          "Cells will become arrested in mitosis and cannot exit it, because M-cyclin must be degraded to inactivate the M-cyclin-CDK complex and allow the cell to complete mitosis and enter G1.",
+        ],
+        answer: 3,
+        note: "M-cyclin must be degraded to shut off the M-cyclin-CDK complex; without degradation, cells get stuck in mitosis.",
+      },
+      {
+        id: "B4-2-Q7",
+        text: "A somatic human cell has 46 chromosomes (2n = 46). During S phase, DNA replication occurs. After S phase but before mitosis, how many chromosomes and chromatids does the cell contain, and what is the DNA content relative to a G1 cell?",
+        choices: [
+          "92 chromosomes, 92 chromatids; DNA content is doubled relative to G1.",
+          "23 chromosomes, 46 chromatids; DNA content is halved relative to G1.",
+          "46 chromosomes, 46 chromatids; DNA content is the same as G1 because chromosomes are just copied in place.",
+          "46 chromosomes, 92 chromatids (sister chromatids joined at centromere); DNA content is doubled relative to G1.",
+        ],
+        answer: 3,
+        note: "Replication doubles chromatid count (92) while chromosome count stays 46 (sister chromatids joined at the centromere still count as one chromosome); DNA content doubles.",
+      },
+      {
+        id: "B4-2-Q8",
+        text: "Proto-oncogenes are normal genes that regulate cell growth and division. Mutations can convert proto-oncogenes into oncogenes. Which of the following best explains how oncogenes lead to cancer, and provides the correct contrast with tumor suppressor genes?",
+        choices: [
+          "Oncogenes slow down the cell cycle; tumor suppressor genes speed up the cell cycle. Together, mutations in both lead to cancer by disrupting the balance.",
+          "Oncogenes are overactive versions of proto-oncogenes that overstimulate cell division (like a stuck accelerator); tumor suppressor genes normally brake cell division, and their loss (mutation) removes this check - both types of mutations together contribute to cancer.",
+          "Oncogenes cause apoptosis in tumor cells; tumor suppressor genes prevent apoptosis - loss of tumor suppressors causes cancer by keeping damaged cells alive.",
+          "Oncogenes are inherited from parents and always cause cancer; tumor suppressor mutations only develop during an organism's lifetime.",
+        ],
+        answer: 1,
+        note: "Oncogenes = stuck accelerator (overstimulate division). Tumor suppressors = brakes; losing them removes the check on division.",
+      },
+      {
+        id: "B4-2-Q9",
+        text: "Normal cells exhibit density-dependent inhibition and anchorage dependence. Cancer cells often lose both properties. Which of the following best explains what these two properties are and how losing them contributes to tumor formation?",
+        choices: [
+          "Density-dependent inhibition = cells stop dividing when nutrients run out; anchorage dependence = cells need oxygen to divide. Loss of these allows cancer cells to divide without nutrients or oxygen.",
+          "Density-dependent inhibition = cells require growth factors from dense tissue; anchorage dependence = cells must anchor to DNA before dividing. Loss of these properties allows uncontrolled DNA replication.",
+          "Both properties refer to the same phenomenon: cancer cells become more dense and anchor more firmly to surrounding tissue, preventing immune cells from destroying them.",
+          "Density-dependent inhibition = cells stop dividing when they contact neighboring cells (form a complete layer); anchorage dependence = cells must be attached to a surface to divide. Cancer cells lose both - they continue dividing beyond a single layer and can divide without attachment, forming a tumor mass.",
+        ],
+        answer: 3,
+        note: "Density-dependent inhibition = stop dividing upon contact with neighbors. Anchorage dependence = need surface attachment to divide. Cancer cells lose both, enabling tumor mass formation.",
+      },
+      {
+        id: "B4-2-Q10",
+        text: "A fibroblast growth factor receptor (FGFR) is a transmembrane protein kinase that normally requires ligand binding to dimerize and become active. A researcher identifies a mutation that causes FGFR proteins to permanently dimerize without ligand binding. Which of the following best predicts the consequence of this mutation for cell behavior?",
+        choices: [
+          "Cells will stop dividing because the receptor cannot receive external signals without ligand binding.",
+          "Cells will become more sensitive to FGFR ligands, requiring less growth factor to trigger a normal level of cell division.",
+          "Cells will undergo uncontrolled proliferation because the permanently dimerized FGFR continuously activates intracellular signaling pathways that stimulate cell division, even without a growth factor signal.",
+          "The mutation will have no effect because FGFR activity is regulated downstream by other signaling proteins, not by dimerization.",
+        ],
+        answer: 2,
+        note: "Constitutive (ligand-independent) dimerization keeps the receptor permanently 'on,' continuously driving cell division signals — a classic oncogenic receptor mutation mechanism.",
+      },
+    ],
+  },
+  {
+    id: "4-1-test",
+    title: "Unit 4 Test — Part 1 (Cell Communication)",
+    questions: [
+      {
+        id: "B4-1T-Q1",
+        text: "What is most likely to happen to an animal's target cells that lack receptors for local regulators?",
+        choices: [
+          "They could develop normally in response to neurotransmitters instead.",
+          "They could divide but never reach full size.",
+          "They might not be able to multiply in response to growth factors from nearby cells.",
+          "They might compensate by receiving nutrients via a factor.",
+        ],
+        answer: 2,
+        note: "Without receptors for local growth factors, target cells can't respond to the division-signal from those regulators.",
+      },
+      {
+        id: "B4-1T-Q2",
+        text: "The toxin of Vibrio cholerae causes profuse diarrhea because it",
+        choices: [
+          "modifies a G protein involved in regulating salt and water secretion.",
+          "decreases the cytosolic concentration of calcium ions, making the cells hypotonic.",
+          "binds with adenylyl cyclase and triggers the formation of cAMP.",
+          "signals IP3 to act as a second messenger for the release of calcium.",
+        ],
+        answer: 0,
+        note: "Cholera toxin modifies the G protein that controls salt/water secretion, locking it in the 'on' state.",
+      },
+      {
+        id: "B4-1T-Q3",
+        text: "If an adult person has a faulty version of the human analog to ced-4 of the nematode, which of the following is most likely to result? (ced-4 promotes apoptosis in C. elegans; its human analog is part of the apoptosome pathway.)",
+        choices: [
+          "neurodegeneration",
+          "activation of a developmental pathway found in the worm but not in humans",
+          "a form of cancer in which there is insufficient apoptosis",
+          "webbing of fingers or toes",
+        ],
+        answer: 2,
+        note: "ced-4 normally promotes apoptosis; a faulty (loss-of-function) analog means insufficient apoptosis, which is linked to cancer.",
+      },
+      {
+        id: "B4-1T-Q4",
+        text: "Dopamine binds to different receptors in different brain regions, resulting in diverse effects (e.g., motor activity in the striatum, mood in the prefrontal cortex). Which of the following best explains why dopamine has different effects in these two regions?",
+        choices: [
+          "Dopamine binds more tightly to receptors in the striatum than in the prefrontal cortex.",
+          "Dopamine binds to more receptors in the striatum than in the prefrontal cortex.",
+          "Dopamine binds with less affinity to receptors in the prefrontal cortex than in the striatum.",
+          "Dopamine binds to different types of receptors in the striatum and the prefrontal cortex.",
+        ],
+        answer: 3,
+        note: "The same ligand can trigger different responses if it binds different receptor types/downstream pathways in different tissues.",
+      },
+      {
+        id: "B4-1T-Q5",
+        text: "In individuals with type 2 diabetes, blood insulin levels are often normal, but glucose uptake by cells is reduced. Which of the following best explains this?",
+        choices: [
+          "A mutation in their insulin receptors increases insulin recognition, resulting in increased signaling.",
+          "A mutation in their insulin receptors decreases insulin recognition, resulting in increased signaling.",
+          "A mutation in their insulin receptors decreases insulin recognition, resulting in decreased signaling.",
+          "A mutation in their insulin receptors increases insulin recognition, resulting in decreased signaling.",
+        ],
+        answer: 2,
+        note: "Type 2 diabetes involves insulin resistance: receptors recognize insulin less well, so downstream signaling (and glucose uptake) decreases.",
+      },
+      {
+        id: "B4-1T-Q6",
+        text: "Cholera toxin modifies G proteins in intestinal cells, leading to overactivation of adenylyl cyclase and excessive cAMP. Which of the following best explains why intestinal cells lose water and ions in response?",
+        choices: [
+          "A mutation in adenylyl cyclase decreases cAMP production, resulting in reduced ion transport.",
+          "A mutation in adenylyl cyclase decreases cAMP production, resulting in excessive ion transport.",
+          "Cholera toxin modifies G proteins, decreasing their ability to activate adenylyl cyclase.",
+          "Cholera toxin modifies G proteins, causing overactivation of adenylyl cyclase and increased cAMP production.",
+        ],
+        answer: 3,
+        note: "Cholera toxin locks G proteins 'on,' overactivating adenylyl cyclase, spiking cAMP, and driving excess ion/water secretion.",
+      },
+      {
+        id: "B4-1T-Q7",
+        text: "In the MAPK/ERK cascade, EGF binding causes receptor dimerization and autophosphorylation, which activates Raf, which then activates MEK. Which toxin will most likely inhibit the activation of MEK?",
+        choices: [
+          "A toxin that blocks the phosphorylation of the EGF receptor.",
+          "A toxin that inhibits the dimerization of EGF receptors.",
+          "A toxin that prevents the activation of Raf.",
+          "A toxin that prevents the binding of EGF to its receptor.",
+        ],
+        answer: 2,
+        note: "Since Raf directly activates MEK, blocking Raf activation is the most direct way to stop MEK from being activated (all upstream blocks would also work, but the question asks about the step immediately before MEK).",
+      },
+      {
+        id: "B4-1T-Q8",
+        text: "Caffeine is an inhibitor of phosphodiesterase (the enzyme that normally breaks down cAMP). Therefore, cells of a person who has recently consumed coffee would have increased levels of",
+        choices: ["phosphorylated proteins.", "GTP", "cAMP", "adenylyl cyclase"],
+        answer: 2,
+        note: "Blocking phosphodiesterase prevents cAMP breakdown, so cAMP accumulates to higher-than-normal levels.",
+      },
+      {
+        id: "B4-1T-Q9",
+        text: "Which of the following best describes how the pancreas responds to high blood glucose levels?",
+        choices: [
+          "Insulin is released in response to high blood glucose levels. This triggers a positive feedback loop, increasing blood glucose further.",
+          "Insulin is released in response to high blood glucose levels. This triggers a negative feedback loop, returning blood glucose to normal levels.",
+          "Glucagon is released in response to high blood glucose levels. This triggers a negative feedback loop, reducing blood glucose levels.",
+          "Glucagon is released in response to high blood glucose levels. This triggers a positive feedback loop, increasing blood glucose further.",
+        ],
+        answer: 1,
+        note: "High glucose triggers insulin release, which lowers glucose back to the set point — classic negative feedback.",
+      },
+      {
+        id: "B4-1T-Q10",
+        text: "In the insulin signal transduction pathway in liver cells, a protein kinase phosphorylates target proteins, causing translocation of glucose transporters to the plasma membrane. Which best describes the role of this protein kinase?",
+        choices: [
+          "It acts as a ligand to activate glucose transporters.",
+          "It acts as a receptor to bind insulin.",
+          "It acts as a secondary messenger to relay the signal.",
+          "It adds phosphate groups to proteins, modifying their activity.",
+        ],
+        answer: 3,
+        note: "A protein kinase's defining function is adding phosphate groups (phosphorylation) to target proteins, changing their activity.",
+      },
+    ],
+  },
+  {
+    id: "4-2-test",
+    title: "Unit 4 Test — Part 2 (Cell Cycle)",
+    questions: [
+      {
+        id: "B4-2T-Q1",
+        text: "Which of the following statements about the purpose of the cell cycle is INCORRECT?",
+        choices: [
+          "The cell cycle ensures that daughter cells receive an identical set of chromosomes.",
+          "The cell cycle allows organisms to grow and repair damaged tissues.",
+          "The cell cycle produces genetic variation in daughter cells during mitosis.",
+          "The cell cycle regulates cell division to maintain homeostasis in multicellular organisms.",
+        ],
+        answer: 2,
+        note: "This is false — mitosis produces genetically IDENTICAL daughter cells; genetic variation comes from meiosis, not mitosis.",
+      },
+      {
+        id: "B4-2T-Q2",
+        text: "Which of the following best explains why cell division is most active in plant root tips (meristem)?",
+        choices: [
+          "To produce energy for photosynthesis.",
+          "To allow the root to grow deeper into the soil for water and nutrient absorption.",
+          "To repair damaged tissues in the stem and leaves.",
+          "To produce genetic variation during mitosis for adaptation to the environment.",
+        ],
+        answer: 1,
+        note: "Root tip meristem cell division drives root growth, which increases water/nutrient absorption capacity.",
+      },
+      {
+        id: "B4-2T-Q3",
+        text: "Which of the following correctly matches a step of mitosis with its description?",
+        choices: [
+          "Prophase: Sister chromatids separate and are pulled to opposite poles of the cell.",
+          "Metaphase: Chromosomes align at the center of the cell along the metaphase plate.",
+          "Anaphase: The nuclear envelope reforms around the chromosomes.",
+          "Telophase: Chromosomes condense and become visible under a microscope.",
+        ],
+        answer: 1,
+        note: "Metaphase = chromosomes align at the metaphase plate. (Sister chromatid separation is Anaphase; nuclear envelope reforms in Telophase; condensation happens in Prophase.)",
+      },
+      {
+        id: "B4-2T-Q4",
+        text: "Which of the following best explains why cells in the same organism might be at different stages of the cell cycle at any given time?",
+        choices: [
+          "Cells divide at the same time regardless of their function or location.",
+          "Different cells have specific roles, and their cell cycle stages depend on their function and need for division.",
+          "Cells in the same organism cannot enter the G0 phase.",
+          "All cells are synchronized in their cell cycle stages to maintain homeostasis.",
+        ],
+        answer: 1,
+        note: "Cell cycle timing is tied to a cell's role and division needs — e.g., skin cells divide often, neurons rarely (G0).",
+      },
+      {
+        id: "B4-2T-Q5",
+        text: "Which of the following best describes the role of cell cycle checkpoints?",
+        choices: [
+          "They allow the cell to bypass errors in DNA replication and continue dividing.",
+          "They ensure that the cell has accurately completed specific processes, such as DNA replication or spindle formation, before proceeding to the next stage.",
+          "They accelerate the cell cycle to increase the rate of cell division in response to damage.",
+          "They stop the cell cycle permanently whenever an error is detected.",
+        ],
+        answer: 1,
+        note: "Checkpoints verify that key processes (DNA replication, spindle attachment, etc.) completed correctly before allowing progression.",
+      },
+      {
+        id: "B4-2T-Q6",
+        text: "Which of the following statements about cell cycle checkpoints is INCORRECT?",
+        choices: [
+          "The G1 checkpoint ensures the cell has adequate energy and nutrients, and checks for DNA damage before entering the S phase.",
+          "The G2 checkpoint verifies the accuracy of DNA replication and checks for any DNA damage before the cell enters mitosis.",
+          "The M checkpoint ensures that all chromosomes are properly aligned and attached to spindle fibers before anaphase begins.",
+          "The M checkpoint stops the cell cycle if nutrients are insufficient or energy levels are low.",
+        ],
+        answer: 3,
+        note: "This is false — checking nutrients/energy is the G1 checkpoint's job, not the M (spindle assembly) checkpoint's.",
+      },
+      {
+        id: "B4-2T-Q7",
+        text: "Which of the following events is unique to meiosis and contributes to genetic diversity?",
+        choices: [
+          "The separation of sister chromatids during anaphase.",
+          "The alignment of chromosomes along the metaphase plate.",
+          "The pairing of homologous chromosomes and exchange of genetic material through crossing over.",
+          "The formation of the mitotic spindle to organize chromosome movement.",
+        ],
+        answer: 2,
+        note: "Crossing over (homologous chromosome pairing + exchange) is unique to meiosis and a key driver of genetic diversity.",
+      },
+      {
+        id: "B4-2T-Q8",
+        text: "Which of the following statements correctly compares mitosis and meiosis?",
+        choices: [
+          "Both mitosis and meiosis produce genetically identical daughter cells.",
+          "Mitosis involves one round of division, while meiosis involves two rounds of division.",
+          "Crossing over occurs in both mitosis and meiosis to ensure genetic diversity.",
+          "Mitosis produces haploid cells, while meiosis produces diploid cells.",
+        ],
+        answer: 1,
+        note: "Mitosis = 1 division round (2 identical diploid cells). Meiosis = 2 division rounds (4 unique haploid cells).",
+      },
+      {
+        id: "B4-2T-Q9",
+        text: "Which of the following best explains how mutations in tumor suppressor genes can lead to cancer?",
+        choices: [
+          "Mutations in tumor suppressor genes cause cells to permanently stop dividing, preventing tissue repair.",
+          "Mutations in tumor suppressor genes result in the overactivation of DNA repair mechanisms, leading to excessive cell death.",
+          "Mutations in tumor suppressor genes prevent the inhibition of cell division, allowing uncontrolled cell proliferation.",
+          "Mutations in tumor suppressor genes enhance the effectiveness of checkpoints, slowing down the cell cycle.",
+        ],
+        answer: 2,
+        note: "Tumor suppressors normally inhibit division; losing them (mutation) removes that brake, allowing uncontrolled proliferation.",
+      },
+      {
+        id: "B4-2T-Q10",
+        text: "Which of the following correctly describes the roles of proto-oncogenes and tumor suppressor genes?",
+        choices: [
+          "Proto-oncogenes inhibit cell division, while tumor suppressor genes promote cell division.",
+          "Proto-oncogenes promote cell division, while tumor suppressor genes inhibit cell division.",
+          "Both proto-oncogenes and tumor suppressor genes inhibit cell division to prevent cancer.",
+          "Mutations in proto-oncogenes cause a loss of function, while mutations in tumor suppressor genes lead to a gain of function.",
+        ],
+        answer: 1,
+        note: "Proto-oncogenes = accelerator (promote division). Tumor suppressors = brake (inhibit division). This is the correct, standard contrast.",
+      },
+    ],
+  },
+];
+
 const SUBJECTS = {
-  chem: { label: "AP Chemistry", unitLabel: "Unit 5: Kinetics", sections: CHEM_SECTIONS },
-  bio: { label: "AP Biology", unitLabel: "Unit 5: Heredity", sections: BIO_SECTIONS },
+  chem: {
+    label: "AP Chemistry",
+    units: [
+      { id: "1", title: "Atomic Structure and Properties", sections: null },
+      { id: "2", title: "Molecular and Ionic Compound Structure", sections: null },
+      { id: "3", title: "Intermolecular Forces and Properties", sections: null },
+      { id: "4", title: "Chemical Reactions", sections: null },
+      { id: "5", title: "Kinetics", sections: CHEM_SECTIONS },
+      { id: "6", title: "Thermodynamics", sections: null },
+      { id: "7", title: "Equilibrium", sections: null },
+      { id: "8", title: "Acid-Base Reactions", sections: null },
+      { id: "9", title: "Applications of Thermodynamics", sections: null },
+    ],
+  },
+  bio: {
+    label: "AP Biology",
+    units: [
+      { id: "1", title: "Chemistry of Life", sections: null },
+      { id: "2", title: "Cell Structure and Function", sections: null },
+      { id: "3", title: "Cellular Energetics", sections: null },
+      { id: "4", title: "Cell Communication and Cell Cycle", sections: BIO_UNIT4_SECTIONS },
+      { id: "5", title: "Heredity", sections: BIO_SECTIONS },
+      { id: "6", title: "Gene Expression and Regulation", sections: null },
+      { id: "7", title: "Natural Selection", sections: null },
+      { id: "8", title: "Ecology", sections: null },
+    ],
+  },
 };
 
 
@@ -729,7 +1256,8 @@ function Ring({ pct, size = 140 }) {
 
 export default function App() {
   const [subject, setSubject] = useState("chem"); // chem | bio
-  const [screen, setScreen] = useState("home"); // home | student | quiz | report
+  const [screen, setScreen] = useState("units"); // units | sections | student | quiz | report
+  const [unitIdx, setUnitIdx] = useState(null);
   const [student, setStudent] = useState({ name: "", email: "" });
   const [studentDraft, setStudentDraft] = useState({ name: "", email: "" });
   const [sectionIdx, setSectionIdx] = useState(0);
@@ -738,8 +1266,9 @@ export default function App() {
   const [submitState, setSubmitState] = useState("idle"); // idle | sending | sent | error
 
   const subjectData = SUBJECTS[subject];
-  const section = subjectData.sections[sectionIdx];
-  const qs = section.questions;
+  const unit = unitIdx !== null ? subjectData.units[unitIdx] : null;
+  const section = unit ? unit.sections[sectionIdx] : null;
+  const qs = section ? section.questions : [];
 
   function pick(id, idx) { setAnswers((a) => ({ ...a, [id]: idx })); }
 
@@ -753,7 +1282,7 @@ export default function App() {
   const score = results.filter((r) => r.correct).length;
   const wrong = results.filter((r) => !r.correct && !r.unanswered).length;
   const blank = results.filter((r) => r.unanswered).length;
-  const pct = Math.round((score / qs.length) * 100);
+  const pct = qs.length ? Math.round((score / qs.length) * 100) : 0;
 
   const filtered = results.filter((r) => {
     if (filter === "correct") return r.correct;
@@ -763,8 +1292,15 @@ export default function App() {
 
   function switchSubject(s) {
     setSubject(s);
-    setSectionIdx(0);
-    setScreen("home");
+    setUnitIdx(null);
+    setScreen("units");
+  }
+
+  function openUnit(i) {
+    const u = SUBJECTS[subject].units[i];
+    if (!u.sections) return; // locked / coming soon
+    setUnitIdx(i);
+    setScreen("sections");
   }
 
   function startSection(i) {
@@ -791,7 +1327,7 @@ export default function App() {
       name: student.name,
       email: student.email,
       subject: subjectData.label,
-      unit: `Unit ${section.id} - ${section.title}`,
+      unit: `Unit ${unit.id} (${unit.title}) - ${section.id} ${section.title}`,
       score: score,
       total: qs.length,
       percent: pct,
@@ -817,13 +1353,16 @@ export default function App() {
         <div className="flex items-baseline justify-between mb-6 pb-4" style={{ borderBottom: `2px solid ${INK}` }}>
           <div>
             <div className="text-[11px] uppercase tracking-[0.2em]" style={{ fontFamily: "ui-monospace, monospace", color: GREEN }}>
-              ChemBio with Yoo · Unit Quiz
+              ChemBio with Yoo
             </div>
-            <h1 className="text-3xl font-bold mt-1">{subjectData.label} — {subjectData.unitLabel}</h1>
+            <h1 className="text-3xl font-bold mt-1">
+              {subjectData.label}
+              {unit ? ` — Unit ${unit.id}: ${unit.title}` : ""}
+            </h1>
           </div>
         </div>
 
-        {screen === "home" && (
+        {screen === "units" && (
           <div>
             <div className="flex gap-2 mb-6">
               {Object.entries(SUBJECTS).map(([key, s]) => (
@@ -840,15 +1379,45 @@ export default function App() {
               ))}
             </div>
             <p className="mb-4 leading-relaxed" style={{ color: "#4A4438" }}>
+              단원을 선택하세요. 준비중인 단원은 곧 추가됩니다.
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              {subjectData.units.map((u, i) => {
+                const locked = !u.sections;
+                return (
+                  <button key={u.id} onClick={() => openUnit(i)} disabled={locked}
+                    className="text-left p-4 flex flex-col justify-between"
+                    style={{
+                      border: `1px solid ${LINE}`,
+                      borderRadius: 4,
+                      background: locked ? "#EFEADC" : "#FFFEFB",
+                      opacity: locked ? 0.5 : 1,
+                      cursor: locked ? "not-allowed" : "pointer",
+                      minHeight: 88,
+                    }}>
+                    <div className="text-xs font-bold uppercase tracking-wide" style={{ color: GREEN }}>Unit {u.id}</div>
+                    <div className="font-bold">{u.title}</div>
+                    <div className="text-xs mt-1" style={{ color: "#8A8270" }}>{locked ? "준비중" : `${u.sections.length}개 섹션 →`}</div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {screen === "sections" && unit && (
+          <div>
+            <button onClick={() => setScreen("units")} className="mb-5 px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 단원 목록</button>
+            <p className="mb-4 leading-relaxed" style={{ color: "#4A4438" }}>
               각 섹션 시작 시 이름/이메일을 입력합니다.
             </p>
             <div className="space-y-4">
-              {subjectData.sections.map((s, i) => (
+              {unit.sections.map((s, i) => (
                 <button key={s.id} onClick={() => startSection(i)}
                   className="w-full text-left p-5 flex justify-between items-center"
                   style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
                   <div>
-                    <div className="text-xs font-bold uppercase tracking-wide" style={{ color: GREEN }}>Unit {s.id}</div>
+                    <div className="text-xs font-bold uppercase tracking-wide" style={{ color: GREEN }}>{s.id}</div>
                     <div className="font-bold text-lg">{s.title}</div>
                   </div>
                   <span className="text-sm" style={{ color: "#8A8270" }}>{s.questions.length}문항 →</span>
@@ -860,7 +1429,7 @@ export default function App() {
 
         {screen === "student" && (
           <div>
-            <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: GREEN }}>{subjectData.label} · Unit {section.id} · {section.title}</div>
+            <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: GREEN }}>{subjectData.label} · Unit {unit.id} · {section.id} {section.title}</div>
             <p className="mb-6 leading-relaxed" style={{ color: "#4A4438" }}>
               이 섹션을 풀기 전에 이름과 이메일을 입력해주세요. 채점 결과는 선생님께 자동으로 전달됩니다.
             </p>
@@ -901,11 +1470,11 @@ export default function App() {
                 시작하기 →
               </button>
               <button
-                onClick={() => setScreen("home")}
+                onClick={() => setScreen("sections")}
                 className="ml-3 px-4 py-3 text-sm font-bold uppercase tracking-wide"
                 style={{ border: `1.5px solid ${INK}`, borderRadius: 3, background: "transparent" }}
               >
-                ← 목록으로
+                ← 섹션 목록
               </button>
             </div>
           </div>
@@ -913,7 +1482,7 @@ export default function App() {
 
         {screen === "quiz" && (
           <div>
-            <div className="text-xs font-bold uppercase tracking-wide mb-4" style={{ color: GREEN }}>{subjectData.label} · Unit {section.id} · {section.title}</div>
+            <div className="text-xs font-bold uppercase tracking-wide mb-4" style={{ color: GREEN }}>{subjectData.label} · Unit {unit.id} · {section.id} {section.title}</div>
             <div className="space-y-6 mb-8">
               {qs.map((q, i) => (
                 <div key={q.id} className="p-5" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
@@ -942,7 +1511,7 @@ export default function App() {
               ))}
             </div>
             <div className="flex gap-3">
-              <button onClick={() => setScreen("home")} className="px-5 py-2.5 text-sm font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 목록</button>
+              <button onClick={() => setScreen("sections")} className="px-5 py-2.5 text-sm font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 목록</button>
               <button onClick={() => setScreen("report")} className="px-6 py-3 font-bold text-sm uppercase tracking-wide" style={{ background: INK, color: PAPER, borderRadius: 3 }}>제출하고 채점하기</button>
             </div>
           </div>
@@ -1014,7 +1583,7 @@ export default function App() {
               ))}
             </div>
 
-            <button onClick={() => setScreen("home")} className="mt-8 px-5 py-2.5 text-sm font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>↺ 다른 섹션 풀기</button>
+            <button onClick={() => setScreen("sections")} className="mt-8 px-5 py-2.5 text-sm font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>↺ 다른 섹션 풀기</button>
           </div>
         )}
       </div>
