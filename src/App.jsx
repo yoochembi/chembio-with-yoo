@@ -1786,7 +1786,7 @@ function Ring({ pct, size = 140 }) {
       <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={GREEN} strokeWidth={stroke}
         strokeDasharray={c} strokeDashoffset={off} strokeLinecap="round"
         transform={`rotate(-90 ${size / 2} ${size / 2})`} style={{ transition: "stroke-dashoffset 0.8s ease" }} />
-      <text x="50%" y="50%" textAnchor="middle" dy="0.35em" style={{ fontFamily: "Georgia, serif", fontSize: 26, fill: INK, fontWeight: 700 }}>{pct}%</text>
+      <text x="50%" y="50%" textAnchor="middle" dy="0.35em" style={{ fontFamily: "'Gaegu', sans-serif", fontSize: 26, fill: INK, fontWeight: 700 }}>{pct}%</text>
     </svg>
   );
 }
@@ -1885,7 +1885,7 @@ export default function App() {
   }, [screen]);
 
   return (
-    <div style={{ background: PAPER, minHeight: "100vh", color: INK, fontFamily: "Georgia, 'Times New Roman', serif" }}>
+    <div style={{ background: PAPER, minHeight: "100vh", color: INK, fontFamily: "'Gaegu', sans-serif" }}>
       <div className="max-w-3xl mx-auto px-6 py-10">
         <div className="flex items-baseline justify-between mb-6 pb-4" style={{ borderBottom: `2px solid ${INK}` }}>
           <div>
@@ -1893,7 +1893,7 @@ export default function App() {
               ChemBio with YOO
             </div>
             <h1 className="text-3xl font-bold mt-1">
-              {screen === "landing" ? "현정쌤과 함께하는 AP 학습" : (
+              {screen === "landing" ? "Think. Why? How?" : (
                 <>
                   {subjectData.label}
                   {unit ? ` — Unit ${unit.id}: ${unit.title}` : ""}
