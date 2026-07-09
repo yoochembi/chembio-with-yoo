@@ -2227,6 +2227,31 @@ function Ring({ pct, size = 140 }) {
   );
 }
 
+// A 3-segment donut (correct / incorrect / unanswered), similar to the "Result Analysis" chart in Zestia's report card.
+function DonutChart({ correct, incorrect, unanswered, size = 150 }) {
+  const total = correct + incorrect + unanswered || 1;
+  const pCorrect = (correct / total) * 100;
+  const pIncorrect = (incorrect / total) * 100;
+  const gradient = `conic-gradient(${GREEN} 0% ${pCorrect}%, ${RUST} ${pCorrect}% ${pCorrect + pIncorrect}%, ${AMBER} ${pCorrect + pIncorrect}% 100%)`;
+  const scorePct = Math.round((correct / total) * 100);
+  return (
+    <div className="flex items-center gap-6 flex-wrap">
+      <div style={{ position: "relative", width: size, height: size, borderRadius: "50%", background: gradient, flexShrink: 0 }}>
+        <div style={{
+          position: "absolute", top: size * 0.16, left: size * 0.16, right: size * 0.16, bottom: size * 0.16,
+          borderRadius: "50%", background: PAPER, display: "flex", alignItems: "center", justifyContent: "center",
+          fontFamily: "'Figtree', sans-serif", fontSize: 24, fontWeight: 700, color: INK,
+        }}>{scorePct}%</div>
+      </div>
+      <div className="space-y-1.5 text-sm">
+        <div className="flex items-center gap-2"><span style={{ width: 10, height: 10, borderRadius: 2, background: GREEN, display: "inline-block" }} />정답 {correct}</div>
+        <div className="flex items-center gap-2"><span style={{ width: 10, height: 10, borderRadius: 2, background: RUST, display: "inline-block" }} />오답 {incorrect}</div>
+        <div className="flex items-center gap-2"><span style={{ width: 10, height: 10, borderRadius: 2, background: AMBER, display: "inline-block" }} />미응답 {unanswered}</div>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [subject, setSubject] = useState("chem"); // chem | bio
   const [screen, setScreen] = useState("landing"); // landing | categories | units | sections | student | quiz | report
@@ -2420,9 +2445,15 @@ export default function App() {
   }, [screen]);
 
   return (
-    <div style={{ background: PAPER, minHeight: "100vh", color: INK, fontFamily: "'Figtree', sans-serif" }}>
+    <div className="print-page" style={{ background: PAPER, minHeight: "100vh", color: INK, fontFamily: "'Figtree', sans-serif" }}>
+      <style>{`
+        @media print {
+          .no-print { display: none !important; }
+          .print-page { background: #fff !important; }
+        }
+      `}</style>
       <div className="max-w-3xl mx-auto px-6 py-10">
-        <div className="mb-6 pb-4" style={{ borderBottom: `2px solid ${INK}` }}>
+        <div className="no-print mb-6 pb-4" style={{ borderBottom: `2px solid ${INK}` }}>
           <div className="flex justify-center mb-3">
             <div className="text-lg font-bold uppercase tracking-[0.15em] px-4 py-1.5" style={{ color: PAPER, background: GREEN, borderRadius: 999 }}>
               ChemBio with YOO
@@ -2513,6 +2544,7 @@ export default function App() {
             <div className="grid grid-cols-2 gap-3">
               {subjectData.units.map((u, i) => {
                 const locked = !u.sections;
+                const totalQ = locked ? 0 : u.sections.reduce((acc, s) => acc + s.questions.length, 0);
                 return (
                   <button key={u.id} onClick={() => openUnit(i)} disabled={locked}
                     className="text-left p-4 flex flex-col justify-between"
@@ -2526,7 +2558,9 @@ export default function App() {
                     }}>
                     <div className="text-xs font-bold uppercase tracking-wide" style={{ color: GREEN }}>Unit {u.id}</div>
                     <div className="font-bold">{u.title}</div>
-                    <div className="text-xs mt-1" style={{ color: "#8A8270" }}>{locked ? "준비중" : `${u.sections.length}개 섹션 →`}</div>
+                    <div className="text-xs mt-1" style={{ color: "#8A8270" }}>
+                      {locked ? "준비중" : `${u.sections.length}개 섹션 · ${totalQ}문항 →`}
+                    </div>
                   </button>
                 );
               })}
@@ -2681,7 +2715,7 @@ export default function App() {
               {finalDurationSec !== null && ` · 풀이 시간 ${formatDuration(finalDurationSec)}`}
             </div>
             {SHEET_ENDPOINT ? (
-              <div className="mb-4 px-3 py-2 text-xs" style={{
+              <div className="no-print mb-4 px-3 py-2 text-xs" style={{
                 borderRadius: 3,
                 background: submitState === "sent" ? "rgba(47,111,94,0.1)" : submitState === "error" ? "rgba(166,67,45,0.1)" : "#F1ECDD",
                 color: submitState === "sent" ? GREEN : submitState === "error" ? RUST : "#8A8270",
@@ -2691,16 +2725,16 @@ export default function App() {
                 {submitState === "error" && "전송 실패 — 네트워크를 확인해주세요. (화면 점수는 그대로 유효합니다)"}
               </div>
             ) : null}
-            <div className="flex items-center gap-8 mb-8 p-6" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
-              <Ring pct={pct} />
-              <div className="flex gap-6">
-                <div><div className="text-2xl font-bold" style={{ color: GREEN }}>{score}</div><div className="text-xs uppercase" style={{ color: "#8A8270" }}>정답</div></div>
-                <div><div className="text-2xl font-bold" style={{ color: RUST }}>{wrong}</div><div className="text-xs uppercase" style={{ color: "#8A8270" }}>오답</div></div>
-                <div><div className="text-2xl font-bold" style={{ color: AMBER }}>{blank}</div><div className="text-xs uppercase" style={{ color: "#8A8270" }}>미응답</div></div>
+            <div className="flex items-center justify-between gap-4 mb-8 p-6 flex-wrap" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
+              <DonutChart correct={score} incorrect={wrong} unanswered={blank} />
+              <div className="no-print flex gap-2 flex-wrap">
+                <button onClick={() => window.print()} className="px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ background: INK, color: PAPER, borderRadius: 3 }}>
+                  ⬇ 결과 PDF로 저장
+                </button>
               </div>
             </div>
 
-            <div className="flex gap-2 mb-5 flex-wrap">
+            <div className="no-print flex gap-2 mb-5 flex-wrap">
               {["all", "correct", "incorrect"].map((f) => (
                 <button key={f} onClick={() => setFilter(f)}
                   className="px-3 py-1.5 text-xs font-bold uppercase tracking-wide"
@@ -2752,9 +2786,12 @@ export default function App() {
               );})}
             </div>
 
-            <button onClick={() => setScreen("sections")} className="mt-8 px-5 py-2.5 text-sm font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>↺ 다른 섹션 풀기</button>
+            <div className="no-print flex gap-3 flex-wrap mt-8">
+              <button onClick={() => setScreen("sections")} className="px-5 py-2.5 text-sm font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>↺ 다른 섹션 풀기</button>
+            </div>
           </div>
         )}
+
       </div>
     </div>
   );
