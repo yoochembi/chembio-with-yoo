@@ -119,6 +119,66 @@ const CHEM_SECTIONS = [
         answer: 1,
         note: "Step 1: Pre-equilibrium → forward rate = reverse rate: k₁[Br₂] = k₋₁[Br]²\n[Br]² = (k₁/k₋₁)[Br₂] → [Br] = √(k₁/k₋₁) × [Br₂]^(1/2)\nStep 2: Substitute into RDS rate law:\nrate = k₂[H₂][Br] = k₂[H₂] × √(k₁/k₋₁) × [Br₂]^(1/2) = k[H₂][Br₂]^(1/2), where k = k₂√(k₁/k₋₁)\nThe ½ order in [Br₂] is the hallmark of a pre-equilibrium mechanism. Fractional orders always indicate a multi-step mechanism with a fast equilibrium before the RDS.",
       },
+      {
+        id: "5-2-Q6",
+        text: "A catalyst is added to a reaction at constant temperature. How does this affect the Maxwell–Boltzmann distribution curve, and why does the rate increase?",
+        choices: [
+          "The curve itself shifts right, since particles gain kinetic energy from the catalyst",
+          "The curve does not change; the catalyst lowers Ea via an alternate pathway, so a larger fraction of the SAME distribution now exceeds the (lower) energy threshold",
+          "The curve becomes narrower and taller, concentrating particles near the average energy",
+          "The total area under the curve increases, meaning more total particles are present",
+        ],
+        answer: 1,
+        note: "A catalyst does NOT change the temperature or the kinetic energy distribution of particles — the Maxwell–Boltzmann curve itself is unchanged. Instead, it opens an alternate pathway with a LOWER Ea, so a larger fraction of the unchanged distribution already has enough energy to react. This is different from raising T, which actually shifts/flattens the curve.",
+      },
+      {
+        id: "5-2-Q7",
+        text: "Proposed mechanism — Step 1 (slow): NO₂(g) + F₂(g) → NO₂F(g) + F(g). Step 2 (fast): F(g) + NO₂(g) → NO₂F(g). Overall: 2 NO₂(g) + F₂(g) → 2 NO₂F(g). What is the correct rate law?",
+        choices: [
+          "Rate = k[NO₂]²[F₂], based directly on the overall equation's coefficients",
+          "Rate = k[NO₂][F₂], based on the elementary (bimolecular) rate-determining step",
+          "Rate = k[F₂], since F₂ appears only once in the mechanism",
+          "Rate = k[NO₂][F], using the reactive intermediate F",
+        ],
+        answer: 1,
+        note: "Rate laws can NEVER be determined from the overall balanced equation's coefficients — only from the mechanism. The RDS (Step 1) is elementary and bimolecular between NO₂ and F₂, so Rate = k[NO₂][F₂]. F is a reactive intermediate (produced then consumed) and must not appear in the final rate law.",
+      },
+      {
+        id: "5-2-Q8",
+        text: "Two reactions run at the same temperature have the same frequency factor A, but Reaction 1 has Ea = 50 kJ/mol and Reaction 2 has Ea = 90 kJ/mol. Without calculating, which reaction has the larger rate constant k, and why?",
+        choices: [
+          "Reaction 2, because a higher Ea means a more energetic and therefore faster reaction",
+          "Reaction 1, because a larger fraction of collisions have enough energy to clear its lower energy barrier",
+          "Both are equal, since k depends only on A when comparing two reactions",
+          "Cannot be determined without knowing ΔH for each reaction",
+        ],
+        answer: 1,
+        note: "From the Arrhenius equation, k = Ae^(−Ea/RT): at the same T, a SMALLER Ea gives a larger (less negative) exponent, so e^(−Ea/RT) is larger → k is larger. Reaction 1's lower energy barrier means a greater fraction of the Maxwell–Boltzmann distribution exceeds it, giving more successful collisions per second.",
+      },
+      {
+        id: "5-2-Q9",
+        text: "For the elementary step 2 NO(g) + Cl₂(g) → 2 NOCl(g), which statement is correct?",
+        choices: [
+          "Rate = k[NO]²[Cl₂] can be written directly from the coefficients, since this step is elementary; it is termolecular (3 particles must collide simultaneously)",
+          "The rate law cannot be written without experimental data, even though the step is elementary",
+          "Because [NO] has coefficient 2, the OVERALL reaction must also be second order in NO regardless of mechanism",
+          "This step is bimolecular, since only two distinct chemical species (NO and Cl₂) are involved",
+        ],
+        answer: 0,
+        note: "Only for an ELEMENTARY step can the rate law be read directly from stoichiometry: Rate = k[NO]²[Cl₂]. Molecularity counts colliding PARTICLES, not distinct species — 2 NO + 1 Cl₂ = 3 particles must collide at once, making this termolecular. Termolecular steps are rare/slow because a 3-way simultaneous collision with correct energy and orientation is statistically unlikely.",
+      },
+      {
+        id: "5-2-Q10",
+        text: "Which statement correctly distinguishes HOW a catalyst increases rate from HOW increasing the surface area of a solid reactant increases rate?",
+        choices: [
+          "Catalyst: increases collision frequency. Surface area: lowers Ea.",
+          "Catalyst: provides an alternate pathway with lower Ea. Surface area: increases the number of effective collisions per second by exposing more reactive sites — Ea is unchanged.",
+          "Both work by lowering Ea through an identical mechanism.",
+          "Catalyst: locally decreases temperature. Surface area: locally increases temperature.",
+        ],
+        answer: 1,
+        note: "A catalyst changes the REACTION PATHWAY (lower Ea, same T). Increasing surface area does NOT change Ea at all — it simply exposes more particles for collision, increasing the frequency of collisions (and thus successful collisions), which is a purely physical/geometric effect rather than an energetic one.",
+      },
     ],
   },
   {
@@ -185,6 +245,66 @@ const CHEM_SECTIONS = [
         ],
         answer: 1,
         note: "Step 1 — Order: ln(A) vs t linear → A ∝ [dye] → ln[dye] vs t linear → first order\nStep 2 — k: = |slope| = 0.0115 s⁻¹\nStep 3 — t₁/₂: = 0.693/0.0115 = 60.3 s\nData verification: At t = 0, A = 0.800. At t = 60 s, A = 0.400 = 0.800/2 → halved in 60 s ✓ — confirms constant half-life = first order\nPseudo-first-order: [OCl⁻] constant (large excess) → k_obs = k_true × [OCl⁻]_constant",
+      },
+      {
+        id: "5-3-Q6",
+        text: "An energy profile shows an UNCATALYZED pathway with Ea = 150 kJ/mol and a CATALYZED pathway with Ea = 90 kJ/mol, for the same reaction: same reactants at 60 kJ/mol, same products at 30 kJ/mol. Which statement is correct?",
+        choices: [
+          "ΔH is different for each pathway, since the catalyst releases extra energy",
+          "ΔH is the SAME for both pathways (products − reactants = 30 − 60 = −30 kJ/mol); only Ea differs, since a catalyst changes the kinetic pathway, not the thermodynamics",
+          "The catalyzed pathway has a smaller ΔH because its Ea is smaller",
+          "Since Ea decreases, the reaction becomes more exothermic overall",
+        ],
+        answer: 1,
+        note: "ΔH depends ONLY on the energies of reactants and products (state function) — it is identical for both pathways: 30 − 60 = −30 kJ/mol. A catalyst provides an alternate route with a lower Ea but never changes ΔH, ΔG, or the equilibrium position.",
+      },
+      {
+        id: "5-3-Q7",
+        text: "A two-step reaction energy profile: Step 1: Reactants (30 kJ) → Intermediate (70 kJ), peak 1 at 90 kJ. Step 2: Intermediate (70 kJ) → Products (10 kJ), peak 2 at 170 kJ. Identify the RDS, the overall Ea, and whether the overall reaction is exo- or endothermic.",
+        choices: [
+          "Step 1 is RDS; overall Ea = 60 kJ/mol; reaction is endothermic",
+          "Step 2 is RDS; overall Ea = 170 − 30 = 140 kJ/mol; reaction is exothermic (ΔH = 10 − 30 = −20 kJ/mol)",
+          "Step 2 is RDS; overall Ea = 100 kJ/mol (its own local barrier only); reaction is exothermic",
+          "Step 1 is RDS since it occurs first in time; overall Ea = 90 − 30 = 60 kJ/mol",
+        ],
+        answer: 1,
+        note: "Local barriers: Step 1 = 90 − 30 = 60 kJ; Step 2 = 170 − 70 = 100 kJ → Step 2 has the larger barrier → Step 2 is the RDS. Overall Ea is measured from the reactants to the HIGHEST point on the entire profile: 170 − 30 = 140 kJ/mol. ΔH = products − reactants = 10 − 30 = −20 kJ/mol → exothermic overall, even though the reaction requires a large activation energy to get started.",
+      },
+      {
+        id: "5-3-Q8",
+        text: "A gas-phase reaction's rate increases when the volume of its container is decreased at constant temperature and constant moles of gas. Which best explains why?",
+        choices: [
+          "Decreasing volume lowers Ea, allowing more collisions to succeed",
+          "Decreasing volume increases the concentration (mol/L) of gas particles, increasing the frequency of collisions — Ea is unchanged",
+          "Decreasing volume increases the average kinetic energy of the gas particles",
+          "Decreasing volume changes the mechanism to a lower-order pathway",
+        ],
+        answer: 1,
+        note: "Compressing a gas at constant T and constant moles increases concentration (n/V), so particles are packed more densely and collide more often per second. This raises the rate purely through collision FREQUENCY — temperature (and therefore average KE and Ea) is unaffected.",
+      },
+      {
+        id: "5-3-Q9",
+        text: "Ester hydrolysis, CH₃COOCH₃(aq) + H₂O(l) --H⁺(aq)--> CH₃COOH(aq) + CH₃OH(aq), is catalyzed by H⁺(aq) ions dissolved in the SAME aqueous solution as the reactants. What type of catalysis is this, and how does it differ mechanistically from the Fe surface catalysis in the Haber process (Q4)?",
+        choices: [
+          "Heterogeneous catalysis — identical mechanism to Fe/Haber, since both simply lower Ea",
+          "Homogeneous catalysis — the catalyst (H⁺) is in the SAME phase as the reactants (all aqueous), forming a reactive intermediate in solution, unlike Fe which provides a solid surface for gas adsorption",
+          "Enzyme catalysis — H⁺ functions as a biological catalyst here",
+          "Autocatalysis — one of the reaction's own products catalyzes further reaction",
+        ],
+        answer: 1,
+        note: "Homogeneous catalysis: catalyst and reactants share the same phase (here, all aqueous); the catalyst typically forms a bonded intermediate directly with a reactant in solution. Heterogeneous catalysis (Fe/Haber): catalyst is a different phase (solid) and works via surface adsorption. Both lower Ea, but through very different physical mechanisms.",
+      },
+      {
+        id: "5-3-Q10",
+        text: "For a reaction A → products, a plot of [A] vs. time is perfectly LINEAR, while ln[A] vs. time and 1/[A] vs. time are both curved. What is the reaction order, and what does the constant slope of [A] vs. time represent?",
+        choices: [
+          "First order; slope = −k",
+          "Zero order; slope = −k, where k is the rate constant (units of M·s⁻¹)",
+          "Second order; slope = k[A]₀",
+          "Zero order; slope = +k, since the reaction produces products over time",
+        ],
+        answer: 1,
+        note: "The integrated rate law for zero order is [A]t = [A]₀ − kt, which is linear when [A] is plotted directly against time (not ln[A] or 1/[A]). The slope of that line equals −k, with k carrying units of M·s⁻¹ for a zero-order process. Since only the [A]-vs-time plot is linear here (not the ln or reciprocal plots), the reaction must be zero order.",
       },
     ],
   },
@@ -2445,15 +2565,9 @@ export default function App() {
   }, [screen]);
 
   return (
-    <div className="print-page" style={{ background: PAPER, minHeight: "100vh", color: INK, fontFamily: "'Figtree', sans-serif" }}>
-      <style>{`
-        @media print {
-          .no-print { display: none !important; }
-          .print-page { background: #fff !important; }
-        }
-      `}</style>
+    <div style={{ background: PAPER, minHeight: "100vh", color: INK, fontFamily: "'Figtree', sans-serif" }}>
       <div className="max-w-3xl mx-auto px-6 py-10">
-        <div className="no-print mb-6 pb-4" style={{ borderBottom: `2px solid ${INK}` }}>
+        <div className="mb-6 pb-4" style={{ borderBottom: `2px solid ${INK}` }}>
           <div className="flex justify-center mb-3">
             <div className="text-lg font-bold uppercase tracking-[0.15em] px-4 py-1.5" style={{ color: PAPER, background: GREEN, borderRadius: 999 }}>
               ChemBio with YOO
@@ -2715,7 +2829,7 @@ export default function App() {
               {finalDurationSec !== null && ` · 풀이 시간 ${formatDuration(finalDurationSec)}`}
             </div>
             {SHEET_ENDPOINT ? (
-              <div className="no-print mb-4 px-3 py-2 text-xs" style={{
+              <div className="mb-4 px-3 py-2 text-xs" style={{
                 borderRadius: 3,
                 background: submitState === "sent" ? "rgba(47,111,94,0.1)" : submitState === "error" ? "rgba(166,67,45,0.1)" : "#F1ECDD",
                 color: submitState === "sent" ? GREEN : submitState === "error" ? RUST : "#8A8270",
@@ -2725,16 +2839,11 @@ export default function App() {
                 {submitState === "error" && "전송 실패 — 네트워크를 확인해주세요. (화면 점수는 그대로 유효합니다)"}
               </div>
             ) : null}
-            <div className="flex items-center justify-between gap-4 mb-8 p-6 flex-wrap" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
+            <div className="flex items-center gap-4 mb-8 p-6 flex-wrap" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
               <DonutChart correct={score} incorrect={wrong} unanswered={blank} />
-              <div className="no-print flex gap-2 flex-wrap">
-                <button onClick={() => window.print()} className="px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ background: INK, color: PAPER, borderRadius: 3 }}>
-                  ⬇ 결과 PDF로 저장
-                </button>
-              </div>
             </div>
 
-            <div className="no-print flex gap-2 mb-5 flex-wrap">
+            <div className="flex gap-2 mb-5 flex-wrap">
               {["all", "correct", "incorrect"].map((f) => (
                 <button key={f} onClick={() => setFilter(f)}
                   className="px-3 py-1.5 text-xs font-bold uppercase tracking-wide"
@@ -2786,7 +2895,7 @@ export default function App() {
               );})}
             </div>
 
-            <div className="no-print flex gap-3 flex-wrap mt-8">
+            <div className="flex gap-3 flex-wrap mt-8">
               <button onClick={() => setScreen("sections")} className="px-5 py-2.5 text-sm font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>↺ 다른 섹션 풀기</button>
             </div>
           </div>
