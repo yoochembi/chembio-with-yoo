@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 
 const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbxSzvXrJ-uAqyRR9TNMIBv_p1r-c8beyXFGdgaNlaWpnETgUiOZg_6oBTcgzeMB3mOP/exec";
 
@@ -2233,6 +2233,12 @@ export default function App() {
   const [unitIdx, setUnitIdx] = useState(null);
   const [student, setStudent] = useState({ name: "", email: "" });
   const [studentDraft, setStudentDraft] = useState({ name: "", email: "" });
+  const NAME_REGEX = /^[a-zA-Z가-힣]+(?:[\s.]?[a-zA-Z가-힣]+)*$/;
+  const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const nameTrimmed = studentDraft.name.trim();
+  const emailTrimmed = studentDraft.email.trim();
+  const isNameValid = nameTrimmed.length >= 2 && nameTrimmed.length <= 30 && NAME_REGEX.test(nameTrimmed);
+  const isEmailValid = EMAIL_REGEX.test(emailTrimmed);
   const [sectionIdx, setSectionIdx] = useState(0);
   const [answers, setAnswers] = useState({});
   const [filter, setFilter] = useState("all");
@@ -2242,6 +2248,8 @@ export default function App() {
   const [startTime, setStartTime] = useState(null);
   const [elapsedSec, setElapsedSec] = useState(0);
   const [finalDurationSec, setFinalDurationSec] = useState(null);
+  const [showValidation, setShowValidation] = useState(false);
+  const questionRefs = useRef({});
 
   const subjectData = SUBJECTS[subject];
   const unit = unitIdx !== null ? subjectData.units[unitIdx] : null;
@@ -2299,19 +2307,25 @@ export default function App() {
     setSectionIdx(i);
     setAnswers({});
     setSubmitState("idle");
+    setShowValidation(false);
     setStudentDraft({ name: "", email: "" });
     setStudent({ name: "", email: "" });
     setScreen("student");
   }
 
   function submitStudentInfo() {
-    if (!studentDraft.name.trim() || !studentDraft.email.trim()) return;
+    if (!isNameValid || !isEmailValid) return;
     setStudent(studentDraft);
     setStartTime(Date.now());
     setElapsedSec(0);
     setFinalDurationSec(null);
     setScreen("quiz");
   }
+
+  // Scroll to the top of the page whenever the screen changes (e.g. after submitting the quiz).
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [screen]);
 
   // Tick the timer once per second while the student is taking the quiz.
   useEffect(() => {
@@ -2329,6 +2343,14 @@ export default function App() {
   }
 
   function submitQuiz() {
+    const unansweredQ = qs.find((q) => answers[q.id] === undefined);
+    if (unansweredQ) {
+      setShowValidation(true);
+      const node = questionRefs.current[unansweredQ.id];
+      if (node) node.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    setShowValidation(false);
     if (startTime) setFinalDurationSec(Math.floor((Date.now() - startTime) / 1000));
     setScreen("report");
   }
@@ -2555,8 +2577,11 @@ export default function App() {
                   onChange={(e) => setStudentDraft((s) => ({ ...s, name: e.target.value }))}
                   placeholder="Enter name"
                   className="w-full px-3 py-2 text-sm"
-                  style={{ border: `1.5px solid ${LINE}`, borderRadius: 3, background: "#FFFEFB" }}
+                  style={{ border: `1.5px solid ${nameTrimmed && !isNameValid ? RUST : LINE}`, borderRadius: 3, background: "#FFFEFB" }}
                 />
+                {nameTrimmed && !isNameValid && (
+                  <p className="mt-1 text-xs" style={{ color: RUST }}>이름은 한글/영문 2~30자로 입력해주세요. (숫자·특수문자 불가)</p>
+                )}
               </div>
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: GREEN }}>이메일</label>
@@ -2566,18 +2591,21 @@ export default function App() {
                   onChange={(e) => setStudentDraft((s) => ({ ...s, email: e.target.value }))}
                   placeholder="name@example.com"
                   className="w-full px-3 py-2 text-sm"
-                  style={{ border: `1.5px solid ${LINE}`, borderRadius: 3, background: "#FFFEFB" }}
+                  style={{ border: `1.5px solid ${emailTrimmed && !isEmailValid ? RUST : LINE}`, borderRadius: 3, background: "#FFFEFB" }}
                 />
+                {emailTrimmed && !isEmailValid && (
+                  <p className="mt-1 text-xs" style={{ color: RUST }}>올바른 이메일 형식이 아닙니다. (예: name@example.com)</p>
+                )}
               </div>
               <button
                 onClick={submitStudentInfo}
-                disabled={!studentDraft.name.trim() || !studentDraft.email.trim()}
+                disabled={!isNameValid || !isEmailValid}
                 className="px-6 py-3 font-bold text-sm uppercase tracking-wide"
                 style={{
-                  background: studentDraft.name.trim() && studentDraft.email.trim() ? INK : LINE,
+                  background: isNameValid && isEmailValid ? INK : LINE,
                   color: PAPER,
                   borderRadius: 3,
-                  cursor: studentDraft.name.trim() && studentDraft.email.trim() ? "pointer" : "not-allowed",
+                  cursor: isNameValid && isEmailValid ? "pointer" : "not-allowed",
                 }}
               >
                 시작하기 →
@@ -2601,11 +2629,21 @@ export default function App() {
                 ⏱ {formatDuration(elapsedSec)}
               </div>
             </div>
+            {showValidation && qs.some((q) => answers[q.id] === undefined) && (
+              <div className="mb-5 px-4 py-3 text-sm font-bold" style={{ background: "rgba(179,64,45,0.08)", border: `1.5px solid ${RUST}`, color: RUST, borderRadius: 4 }}>
+                ⚠ 아직 답하지 않은 문항이 있습니다. 모든 문항에 답한 후 제출할 수 있어요. (미응답 {qs.filter((q) => answers[q.id] === undefined).length}문항)
+              </div>
+            )}
             <div className="space-y-6 mb-8">
-              {qs.map((q, i) => (
-                <div key={q.id} className="p-5" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
+              {qs.map((q, i) => {
+                const isUnanswered = answers[q.id] === undefined;
+                return (
+                <div key={q.id} ref={(el) => { questionRefs.current[q.id] = el; }} className="p-5" style={{ border: `1px solid ${showValidation && isUnanswered ? RUST : LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-xs font-bold" style={{ fontFamily: "ui-monospace, monospace", color: GREEN }}>Q{i + 1}</span>
+                    {showValidation && isUnanswered && (
+                      <span className="text-xs font-bold" style={{ color: RUST }}>· 미응답</span>
+                    )}
                   </div>
                   <p className="mb-3 leading-relaxed">{q.text}</p>
                   {q.image && (
@@ -2626,7 +2664,8 @@ export default function App() {
                     ))}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
             <div className="flex gap-3">
               <button onClick={() => setScreen("sections")} className="px-5 py-2.5 text-sm font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 목록</button>
