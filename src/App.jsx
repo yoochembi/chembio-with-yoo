@@ -3491,6 +3491,7 @@ export default function App() {
   const [sectionIdx, setSectionIdx] = useState(0);
   const [answers, setAnswers] = useState({});
   const [crossedOut, setCrossedOut] = useState({}); // { [qId]: { [choiceIdx]: true } }
+  const [retryAnswers, setRetryAnswers] = useState({}); // { [qId]: chosenIdx } — for reviewing wrong questions after grading, without affecting the submitted score
   const [filter, setFilter] = useState("all");
   const [submitState, setSubmitState] = useState("idle"); // idle | sending | sent | error
   const [classStats, setClassStats] = useState(null); // { [questionId]: { correct, total } }
@@ -3526,6 +3527,16 @@ export default function App() {
       return { ...prev, [qId]: forQ };
     });
     setAnswers((a) => (a[qId] === idx ? { ...a, [qId]: undefined } : a));
+  }
+
+  // Pick an answer while reviewing wrong questions after grading (separate from the submitted attempt).
+  function pickRetry(qId, idx) {
+    setRetryAnswers((a) => (a[qId] !== undefined ? a : { ...a, [qId]: idx })); // lock in first choice, like the real quiz
+  }
+
+  function openRetryWrong() {
+    setRetryAnswers({});
+    setScreen("retryWrong");
   }
 
   // Save/remove a question in the bookmark list (persisted to localStorage, per-device).
@@ -3607,6 +3618,7 @@ export default function App() {
     setSectionIdx(i);
     setAnswers({});
     setCrossedOut({});
+    setRetryAnswers({});
     setSubmitState("idle");
     setShowValidation(false);
     setStudentDraft({ name: "", email: "" });
@@ -4093,6 +4105,68 @@ export default function App() {
             </div>
 
             <div className="flex gap-3 flex-wrap mt-8">
+              <button onClick={() => setScreen("sections")} className="px-5 py-2.5 text-sm font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>↺ 다른 섹션 풀기</button>
+              {results.some((r) => !r.correct) && (
+                <button onClick={openRetryWrong} className="px-5 py-2.5 text-sm font-bold uppercase tracking-wide" style={{ background: GREEN, color: PAPER, borderRadius: 3 }}>
+                  ↻ 틀린 문제만 다시 풀기
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {screen === "retryWrong" && (
+          <div>
+            <div className="mb-6 text-xs font-bold uppercase tracking-wide" style={{ color: GREEN }}>
+              {subjectData.label} · Unit {unit.id} · 틀린 문제 복습
+            </div>
+            <div className="space-y-6 mb-8">
+              {results.filter((r) => !r.correct).map((q, i) => {
+                const given = retryAnswers[q.id];
+                const answered = given !== undefined;
+                const correct = answered && given === q.answer;
+                return (
+                  <div key={q.id} className="p-5" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs font-bold" style={{ fontFamily: "ui-monospace, monospace", color: GREEN }}>복습 {i + 1}</span>
+                      {answered && (
+                        <span className="text-xs font-bold px-2 py-0.5" style={{ color: PAPER, background: correct ? GREEN : RUST, borderRadius: 2 }}>
+                          {correct ? "정답" : "오답"}
+                        </span>
+                      )}
+                    </div>
+                    <p className="mb-3 leading-relaxed whitespace-pre-line">{q.text}</p>
+                    {q.image && (
+                      <img src={q.image} alt={`${q.id} data`} className="mb-4 max-w-full rounded" style={{ border: `1px solid ${LINE}` }} />
+                    )}
+                    <div className="space-y-2 mb-3">
+                      {q.choices.map((c, ci) => {
+                        let border = LINE, bg = "transparent";
+                        if (answered) {
+                          if (ci === q.answer) { border = GREEN; bg = "rgba(47,111,94,0.08)"; }
+                          else if (ci === given) { border = RUST; bg = "rgba(166,67,45,0.08)"; }
+                        }
+                        return (
+                          <button key={ci} onClick={() => pickRetry(q.id, ci)} disabled={answered}
+                            className="w-full text-left px-4 py-2 text-sm flex gap-3"
+                            style={{ border: `1.5px solid ${border}`, background: bg, borderRadius: 3, cursor: answered ? "default" : "pointer" }}>
+                            <span className="font-bold" style={{ color: GREEN }}>{String.fromCharCode(65 + ci)}</span>
+                            <span>{c}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {answered && (
+                      <div className="text-xs leading-relaxed whitespace-pre-line" style={{ color: "#5C5648", background: "#F1ECDD", padding: "10px 12px", borderRadius: 3 }}>
+                        {q.note}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex gap-3">
+              <button onClick={() => setScreen("report")} className="px-5 py-2.5 text-sm font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 리포트로 돌아가기</button>
               <button onClick={() => setScreen("sections")} className="px-5 py-2.5 text-sm font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>↺ 다른 섹션 풀기</button>
             </div>
           </div>
