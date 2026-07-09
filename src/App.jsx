@@ -3490,6 +3490,7 @@ export default function App() {
   const isEmailValid = EMAIL_REGEX.test(emailTrimmed);
   const [sectionIdx, setSectionIdx] = useState(0);
   const [answers, setAnswers] = useState({});
+  const [crossedOut, setCrossedOut] = useState({}); // { [qId]: { [choiceIdx]: true } }
   const [filter, setFilter] = useState("all");
   const [submitState, setSubmitState] = useState("idle"); // idle | sending | sent | error
   const [classStats, setClassStats] = useState(null); // { [questionId]: { correct, total } }
@@ -3514,6 +3515,18 @@ export default function App() {
   const qs = section ? section.questions : [];
 
   function pick(id, idx) { setAnswers((a) => ({ ...a, [id]: idx })); }
+
+  // Toggle "crossed out" (eliminated) state for a choice, independent of selecting an answer — mirrors the AP digital exam's strikethrough tool.
+  function toggleCrossOut(qId, idx, e) {
+    e.stopPropagation();
+    setCrossedOut((prev) => {
+      const forQ = { ...(prev[qId] || {}) };
+      if (forQ[idx]) delete forQ[idx];
+      else forQ[idx] = true;
+      return { ...prev, [qId]: forQ };
+    });
+    setAnswers((a) => (a[qId] === idx ? { ...a, [qId]: undefined } : a));
+  }
 
   // Save/remove a question in the bookmark list (persisted to localStorage, per-device).
   function isBookmarked(qId) {
@@ -3593,6 +3606,7 @@ export default function App() {
   function startSection(i) {
     setSectionIdx(i);
     setAnswers({});
+    setCrossedOut({});
     setSubmitState("idle");
     setShowValidation(false);
     setStudentDraft({ name: "", email: "" });
@@ -3958,18 +3972,32 @@ export default function App() {
                     <img src={q.image} alt={`${q.id} data`} className="mb-4 max-w-full rounded" style={{ border: `1px solid ${LINE}` }} />
                   )}
                   <div className="space-y-2">
-                    {q.choices.map((c, ci) => (
-                      <button key={ci} onClick={() => pick(q.id, ci)}
-                        className="w-full text-left px-4 py-2 text-sm flex gap-3"
-                        style={{
-                          border: `1.5px solid ${answers[q.id] === ci ? GREEN : LINE}`,
-                          background: answers[q.id] === ci ? "rgba(47,111,94,0.08)" : "transparent",
-                          borderRadius: 3,
-                        }}>
-                        <span className="font-bold" style={{ color: GREEN }}>{String.fromCharCode(65 + ci)}</span>
-                        <span>{c}</span>
-                      </button>
-                    ))}
+                    {q.choices.map((c, ci) => {
+                      const isCrossed = !!(crossedOut[q.id] && crossedOut[q.id][ci]);
+                      return (
+                      <div key={ci} className="w-full flex gap-2 items-stretch">
+                        <button onClick={() => !isCrossed && pick(q.id, ci)}
+                          disabled={isCrossed}
+                          className="flex-1 text-left px-4 py-2 text-sm flex gap-3"
+                          style={{
+                            border: `1.5px solid ${answers[q.id] === ci ? GREEN : LINE}`,
+                            background: answers[q.id] === ci ? "rgba(47,111,94,0.08)" : isCrossed ? "#F1ECDD" : "transparent",
+                            borderRadius: 3,
+                            opacity: isCrossed ? 0.55 : 1,
+                            textDecoration: isCrossed ? "line-through" : "none",
+                            cursor: isCrossed ? "default" : "pointer",
+                          }}>
+                          <span className="font-bold" style={{ color: GREEN }}>{String.fromCharCode(65 + ci)}</span>
+                          <span>{c}</span>
+                        </button>
+                        <button onClick={(e) => toggleCrossOut(q.id, ci, e)} title={isCrossed ? "제거 취소" : "이 선택지 제거하기"}
+                          className="px-2 text-xs font-bold flex-shrink-0"
+                          style={{ border: `1.5px solid ${LINE}`, borderRadius: 3, color: isCrossed ? GREEN : "#8A8270", background: "#FFFEFB" }}>
+                          {isCrossed ? "↺" : "✕"}
+                        </button>
+                      </div>
+                      );
+                    })}
                   </div>
                 </div>
                 );
@@ -4089,18 +4117,32 @@ export default function App() {
                     <img src={q.image} alt={`${q.id} data`} className="mb-4 max-w-full rounded" style={{ border: `1px solid ${LINE}` }} />
                   )}
                   <div className="space-y-2">
-                    {q.choices.map((c, ci) => (
-                      <button key={ci} onClick={() => pick(q.id, ci)}
-                        className="w-full text-left px-4 py-2 text-sm flex gap-3"
-                        style={{
-                          border: `1.5px solid ${answers[q.id] === ci ? GREEN : LINE}`,
-                          background: answers[q.id] === ci ? "rgba(47,111,94,0.08)" : "transparent",
-                          borderRadius: 3,
-                        }}>
-                        <span className="font-bold" style={{ color: GREEN }}>{String.fromCharCode(65 + ci)}</span>
-                        <span>{c}</span>
-                      </button>
-                    ))}
+                    {q.choices.map((c, ci) => {
+                      const isCrossed = !!(crossedOut[q.id] && crossedOut[q.id][ci]);
+                      return (
+                      <div key={ci} className="w-full flex gap-2 items-stretch">
+                        <button onClick={() => !isCrossed && pick(q.id, ci)}
+                          disabled={isCrossed}
+                          className="flex-1 text-left px-4 py-2 text-sm flex gap-3"
+                          style={{
+                            border: `1.5px solid ${answers[q.id] === ci ? GREEN : LINE}`,
+                            background: answers[q.id] === ci ? "rgba(47,111,94,0.08)" : isCrossed ? "#F1ECDD" : "transparent",
+                            borderRadius: 3,
+                            opacity: isCrossed ? 0.55 : 1,
+                            textDecoration: isCrossed ? "line-through" : "none",
+                            cursor: isCrossed ? "default" : "pointer",
+                          }}>
+                          <span className="font-bold" style={{ color: GREEN }}>{String.fromCharCode(65 + ci)}</span>
+                          <span>{c}</span>
+                        </button>
+                        <button onClick={(e) => toggleCrossOut(q.id, ci, e)} title={isCrossed ? "제거 취소" : "이 선택지 제거하기"}
+                          className="px-2 text-xs font-bold flex-shrink-0"
+                          style={{ border: `1.5px solid ${LINE}`, borderRadius: 3, color: isCrossed ? GREEN : "#8A8270", background: "#FFFEFB" }}>
+                          {isCrossed ? "↺" : "✕"}
+                        </button>
+                      </div>
+                      );
+                    })}
                   </div>
                 </div>
               ))}
