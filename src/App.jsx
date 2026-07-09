@@ -818,6 +818,1020 @@ const BIO_SECTIONS = [
 ];
 
 
+const BIO_UNIT2_SECTIONS = [
+  {
+    id: "2-1",
+    title: "Cell Structure and Function",
+    questions: [
+      {
+        id: "B2-1-Q1",
+        text: "Which of the following correctly describes a feature shared by ALL living cells, both prokaryotic and eukaryotic?",
+        choices: [
+          "All living cells have a membrane-bound nucleus that stores genetic material.",
+          "All living cells have a plasma membrane, ribosomes, cytosol, chromosomes, and carry out glycolysis.",
+          "All living cells have membrane-bound organelles such as mitochondria and the endoplasmic reticulum.",
+          "All living cells have a cell wall made of peptidoglycan for structural support.",
+        ],
+        answer: 1,
+        note: "Only eukaryotes have a membrane-bound nucleus and organelles, and only some cells (e.g., bacteria, plants, fungi) have peptidoglycan/other cell walls. But every cell — prokaryotic or eukaryotic — shares a plasma membrane, ribosomes, cytosol, DNA (chromosomes), and glycolysis.",
+      },
+      {
+        id: "B2-1-Q2",
+        text: "A bacterium is observed under a microscope. Which of the following correctly describes the location of its genetic material?",
+        choices: [
+          "Inside a membrane-bound nucleus located in the center of the cell.",
+          "In the nucleoid region, a region within the cytoplasm not enclosed by a membrane.",
+          "Distributed throughout the cytoplasm attached to ribosomes.",
+          "Inside the mitochondria as circular DNA molecules.",
+        ],
+        answer: 1,
+        note: "Prokaryotes lack a nucleus. Their DNA is concentrated in the nucleoid — a region of cytoplasm, not membrane-bound.",
+      },
+      {
+        id: "B2-1-Q3",
+        text: "The Golgi apparatus is described as the cell's distribution and processing center. Which of the following best describes its function?",
+        choices: [
+          "It synthesizes proteins by reading mRNA sequences and assembling amino acids.",
+          "It produces ATP through aerobic cellular respiration using oxygen.",
+          "It modifies, sorts, and packages proteins and lipids received from the ER into vesicles for transport to their final destinations.",
+          "It breaks down worn-out organelles and macromolecules using hydrolytic enzymes.",
+        ],
+        answer: 2,
+        note: "Ribosomes synthesize proteins, mitochondria make ATP, and lysosomes degrade material — the Golgi's unique job is modifying, sorting, and packaging.",
+      },
+      {
+        id: "B2-1-Q4",
+        text: "Mitochondria have a folded inner membrane called cristae. Which of the following best explains why this structural feature is important for the function of mitochondria?",
+        choices: [
+          "The folds protect the mitochondrial DNA from being degraded by hydrolytic enzymes.",
+          "The cristae increase the surface area of the inner membrane, providing more space for the enzymes and proteins that produce ATP.",
+          "The cristae store glucose molecules that are used as fuel for cellular respiration.",
+          "The folds allow ribosomes to attach and synthesize mitochondrial proteins more efficiently.",
+        ],
+        answer: 1,
+        note: "This is a classic structure-function relationship: more folding = more surface area = more room for the electron transport chain proteins that generate ATP.",
+      },
+      {
+        id: "B2-1-Q5",
+        text: "A cell produces a hormone (a secretory protein) for export out of the cell. Which of the following correctly describes the pathway this protein takes from synthesis to secretion?",
+        choices: [
+          "Free ribosome → nucleus → Golgi apparatus → vesicle → exocytosis",
+          "Bound ribosome on rough ER → lumen of rough ER → Golgi apparatus → vesicle → exocytosis",
+          "Free ribosome → lysosome → Golgi apparatus → vesicle → exocytosis",
+          "Bound ribosome on rough ER → smooth ER → nucleus → vesicle → exocytosis",
+        ],
+        answer: 1,
+        note: "Secretory (exported) proteins are made on ribosomes bound to the rough ER, enter its lumen for initial folding, move to the Golgi for modification/sorting, then leave in vesicles that fuse with the plasma membrane (exocytosis).",
+      },
+      {
+        id: "B2-1-Q6",
+        text: "A student compares a sperm cell and a liver cell from the same organism. The sperm cell has many more mitochondria per unit volume than the liver cell. Which of the following best explains this difference?",
+        choices: [
+          "Sperm cells need more mitochondria to store genetic information for the offspring.",
+          "Sperm cells require large amounts of ATP to power flagella movement toward the egg, so more mitochondria are needed for energy production.",
+          "Sperm cells lack a nucleus, so mitochondria must take over the role of gene expression.",
+          "Sperm cells have more mitochondria because they are larger and require more organelles overall.",
+        ],
+        answer: 1,
+        note: "Structure follows function: swimming a flagellum toward the egg is energetically expensive, so sperm are packed with mitochondria to supply that ATP.",
+      },
+      {
+        id: "B2-1-Q7",
+        text: "Lysosomes are formed from the Golgi apparatus and contain hydrolytic enzymes at a low pH. A student hypothesizes that if a lysosome membrane ruptures inside the cell, it would cause significant damage. Which of the following best supports this hypothesis?",
+        choices: [
+          "The enzymes would lower the cell's pH, causing the nucleus to dissolve and releasing DNA into the cytoplasm.",
+          "The hydrolytic enzymes would be released into the cytoplasm and could break down proteins, lipids, carbohydrates, and other organelles within the cell.",
+          "The enzymes would travel to the mitochondria and disrupt ATP production, stopping all cellular activity.",
+          "The ruptured membrane would trigger the cell to stop producing ribosomes, halting protein synthesis.",
+        ],
+        answer: 1,
+        note: "Lysosomal hydrolytic enzymes are non-specific digesters — released into the cytoplasm, they would break down whatever macromolecules and organelles they encounter, which is exactly why they're normally kept isolated inside the lysosome.",
+      },
+      {
+        id: "B2-1-Q8",
+        text: "A bacteriophage infects a bacterium and accidentally transfers some bacterial DNA to a new host bacterium, where it is integrated into the host's genome. Which mechanism of genetic variation does this describe, and what is a likely consequence?",
+        choices: [
+          "Transformation; the bacterium absorbs free DNA from the environment, potentially gaining new traits such as antibiotic resistance.",
+          "Conjugation; two bacteria directly exchange DNA through a pilus, spreading traits such as antibiotic resistance.",
+          "Transduction; a bacteriophage transfers bacterial DNA between cells, potentially changing the genotype and phenotype of the recipient bacterium.",
+          "Mutation; random changes in DNA sequence during replication create a new trait in the recipient bacterium.",
+        ],
+        answer: 2,
+        note: "The three ways bacteria acquire foreign DNA: transformation (uptake of free DNA), conjugation (direct transfer via pilus), and transduction (virus-mediated transfer). A bacteriophage moving DNA between cells is, by definition, transduction.",
+      },
+      {
+        id: "B2-1-Q9",
+        text: "The rough endoplasmic reticulum (rough ER) and smooth ER are both parts of the endomembrane system, yet they have distinct functions. A student claims the structural difference between them directly explains their different roles. Which of the following best supports this claim?",
+        choices: [
+          "The rough ER has a larger lumen than the smooth ER, allowing it to store more lipids for membrane synthesis.",
+          "The rough ER has ribosomes attached to its surface, enabling it to synthesize proteins that enter the ER for processing; the smooth ER lacks ribosomes and instead specializes in lipid synthesis and detoxification.",
+          "The rough ER is located closer to the nucleus, allowing faster DNA replication; the smooth ER is located near the plasma membrane for faster secretion.",
+          "The rough ER produces ATP for protein synthesis; the smooth ER uses that ATP to synthesize lipids and steroid hormones.",
+        ],
+        answer: 1,
+        note: "The defining structural difference — ribosomes studding the rough ER's surface — is exactly what gives it its protein-synthesis role; the smooth ER's lack of ribosomes frees it for lipid synthesis and detox functions instead.",
+      },
+      {
+        id: "B2-1-Q10",
+        text: "A retrovirus such as HIV infects a host cell. Unlike typical viruses, retroviruses use reverse transcriptase as part of their replication cycle. Which of the following correctly describes the role of reverse transcriptase and explains why retroviruses have a high mutation rate?",
+        choices: [
+          "Reverse transcriptase converts host cell DNA into viral RNA; it has a high mutation rate because it replicates DNA faster than normal DNA polymerase.",
+          "Reverse transcriptase converts viral RNA into DNA that is integrated into the host genome; retroviruses have a high mutation rate because RNA replication lacks the proofreading mechanisms found in DNA replication.",
+          "Reverse transcriptase breaks down the host cell's DNA so the virus can insert its own genome; the high mutation rate allows the virus to escape the host immune system faster.",
+          "Reverse transcriptase directly produces new viral proteins from the viral RNA; mutations arise because proteins are synthesized without a template.",
+        ],
+        answer: 1,
+        note: "Reverse transcriptase runs the central dogma backwards: RNA → DNA. It (like most RNA-handling enzymes) lacks proofreading, so errors accumulate quickly — this is why HIV mutates and evolves drug resistance so rapidly.",
+      },
+    ],
+  },
+  {
+    id: "2-2",
+    title: "Cell Size and Plasma Membrane",
+    questions: [
+      {
+        id: "B2-2-Q1",
+        text: "Why must cells remain small rather than growing very large? Which of the following best explains the relationship between cell size and function?",
+        choices: [
+          "Larger cells have more DNA and therefore produce too many proteins, disrupting cell function.",
+          "As a cell grows larger, its surface area to volume ratio decreases, making it less efficient at exchanging nutrients, oxygen, and waste with its environment.",
+          "Larger cells require more ribosomes, which are too large to fit inside a small cell membrane.",
+          "Cells must remain small because the plasma membrane can only stretch to a limited size before it ruptures.",
+        ],
+        answer: 1,
+        note: "Volume grows with the cube of radius while surface area only grows with the square, so as a cell enlarges its SA:V ratio falls — eventually the membrane can't keep up with the cell's exchange needs.",
+      },
+      {
+        id: "B2-2-Q2",
+        text: "A student compares one large cube (30 micrometers per side) with 27 smaller cubes (10 micrometers per side) that together have the same total volume. Which of the following correctly describes the difference in surface area to volume ratio?",
+        choices: [
+          "The large cube has a higher SA:V ratio because it has a larger total surface area.",
+          "The 27 small cubes together have a higher total surface area and therefore a higher SA:V ratio than the single large cube.",
+          "Both arrangements have the same SA:V ratio because they have the same total volume.",
+          "The large cube has a higher SA:V ratio because the membrane surface is thicker in larger cells.",
+        ],
+        answer: 1,
+        note: "Splitting one large volume into many smaller units always increases total surface area (each small cube contributes its own full surface), so many small cells have a much higher combined SA:V than one big cell of equal volume.",
+      },
+      {
+        id: "B2-2-Q3",
+        text: "The plasma membrane is described using the Fluid Mosaic Model. Which of the following best describes what this model proposes about the structure of the membrane?",
+        choices: [
+          "The membrane is a rigid, solid structure made entirely of protein with lipid molecules attached on the outer surface only.",
+          "The membrane consists of a phospholipid bilayer in which proteins are embedded or attached, and both lipids and proteins can move laterally within the membrane.",
+          "The membrane is a single layer of phospholipids with proteins arranged in a fixed mosaic pattern that never changes.",
+          "The membrane is made of a carbohydrate layer on the outside and a protein layer on the inside, with no lipids present.",
+        ],
+        answer: 1,
+        note: "\"Fluid\" = components can drift laterally; \"mosaic\" = many different proteins are scattered throughout the phospholipid bilayer, not fixed in place.",
+      },
+      {
+        id: "B2-2-Q4",
+        text: "Which of the following correctly distinguishes integral proteins from peripheral proteins in the plasma membrane?",
+        choices: [
+          "Integral proteins are found only on the outer surface; peripheral proteins span the entire membrane.",
+          "Integral proteins are fully or partially embedded in the phospholipid bilayer and are usually used for transport; peripheral proteins are attached to the membrane surface and are usually used for cell signaling.",
+          "Integral proteins are made of carbohydrates; peripheral proteins are made of lipids.",
+          "Both types span the full membrane but integral proteins face inward and peripheral proteins face outward.",
+        ],
+        answer: 1,
+        note: "Integral proteins are embedded within (often spanning) the bilayer — many act as channels/transporters. Peripheral proteins sit on the membrane surface, often involved in signaling or structural support.",
+      },
+      {
+        id: "B2-2-Q5",
+        text: "A researcher increases the proportion of unsaturated fatty acids in the phospholipids of a cell membrane. Which of the following best predicts the effect on membrane properties, and why?",
+        choices: [
+          "Membrane fluidity will decrease because unsaturated fatty acids have more hydrogen atoms, making the membrane more rigid.",
+          "Membrane fluidity will increase because the double bonds in unsaturated fatty acids create kinks that prevent tight packing of phospholipid tails, keeping the membrane more fluid.",
+          "Membrane fluidity will not change because only cholesterol affects membrane fluidity, not the type of fatty acid.",
+          "Membrane fluidity will decrease because unsaturated fatty acids are longer, causing the bilayer to become thicker and more viscous.",
+        ],
+        answer: 1,
+        note: "Double bonds put a kink in the fatty acid tail, so unsaturated tails can't pack as tightly as straight, saturated tails — the looser packing keeps the membrane more fluid, especially at lower temperatures.",
+      },
+      {
+        id: "B2-2-Q6",
+        text: "Cholesterol is found in animal cell membranes. Based on the lecture notes, which of the following best describes cholesterol's role in regulating membrane fluidity?",
+        choices: [
+          "Cholesterol always increases membrane fluidity regardless of temperature by adding extra space between phospholipids.",
+          "Cholesterol always decreases membrane fluidity by replacing phospholipids in the bilayer.",
+          "Cholesterol acts as a fluidity buffer: at moderate temperatures it reduces fluidity by restricting phospholipid movement, but at low temperatures it prevents solidification by disrupting tight phospholipid packing.",
+          "Cholesterol has no effect on membrane fluidity; it only functions as a signaling molecule in the membrane.",
+        ],
+        answer: 2,
+        note: "Cholesterol is a temperature buffer, not a one-directional fluidity changer: it restrains excess movement at warm temperatures but wedges between phospholipids to prevent solidifying at cold temperatures.",
+      },
+      {
+        id: "B2-2-Q7",
+        text: "A scientist uses a transmission electron microscope (TEM) and a light microscope (LM) to study a cell. Which of the following correctly describes a key difference between these two types of microscopy relevant to studying cell ultrastructure?",
+        choices: [
+          "The light microscope has higher resolution than the TEM and can show individual organelles more clearly.",
+          "The TEM provides much higher resolution than the LM, allowing visualization of internal cell structures such as membranes, ribosomes, and organelle ultrastructure that cannot be seen with a light microscope.",
+          "The TEM can only be used to view living cells, while the LM requires cells to be fixed and stained.",
+          "The light microscope uses electrons to form an image, while the TEM uses visible light to achieve higher magnification.",
+        ],
+        answer: 1,
+        note: "Electrons have a much shorter wavelength than visible light, giving TEM far higher resolution — fine enough to resolve membranes and ribosomes, well beyond what an LM can show. (Also, TEM requires fixed, non-living samples — the opposite of choice C.)",
+      },
+      {
+        id: "B2-2-Q8",
+        text: "A cell that specializes in secreting large quantities of digestive enzymes is expected to have an unusually large amount of rough endoplasmic reticulum. A student claims this is because the SA:V ratio of organelles matters just as much as the SA:V ratio of the whole cell. Which of the following best supports this claim?",
+        choices: [
+          "A larger rough ER provides more membrane surface area with ribosomes, allowing more simultaneous protein synthesis and processing for secretion.",
+          "A larger rough ER increases the cell's overall SA:V ratio, helping the cell exchange materials more efficiently with the extracellular environment.",
+          "A larger rough ER stores more ATP, providing the energy needed for the high rate of enzyme secretion.",
+          "A larger rough ER contains more DNA, allowing the cell to produce more genes coding for digestive enzymes.",
+        ],
+        answer: 0,
+        note: "More rough ER membrane = more ribosome-studded surface = more simultaneous protein (enzyme) synthesis capacity. This mirrors the whole-cell SA:V idea, just applied at the organelle level.",
+      },
+      {
+        id: "B2-2-Q9",
+        text: "A membrane protein has a region with mostly nonpolar (hydrophobic) amino acids in the middle and polar (hydrophilic) amino acids at both ends. Which of the following best predicts how this protein is oriented in the plasma membrane, and why?",
+        choices: [
+          "The protein floats on the outer surface of the membrane because polar amino acids repel the hydrophobic core.",
+          "The protein spans the entire membrane (integral/transmembrane protein): the hydrophobic middle region is embedded in the hydrophobic lipid bilayer core, while the hydrophilic ends extend into the aqueous environments on both sides of the membrane.",
+          "The protein is entirely inside the cell because hydrophilic ends cannot cross the hydrophobic membrane.",
+          "The protein attaches to the outer surface only because peripheral proteins must be entirely hydrophilic.",
+        ],
+        answer: 1,
+        note: "'Like dissolves like': the hydrophobic middle segment nestles into the bilayer's fatty acid tail region, while the hydrophilic ends stick out into the watery cytoplasm and extracellular fluid — the classic transmembrane protein arrangement.",
+      },
+      {
+        id: "B2-2-Q10",
+        text: "Two cells of the same type but different sizes are compared. Cell A has a diameter of 10 micrometers and Cell B has a diameter of 30 micrometers. A student predicts that Cell A will survive longer when deprived of oxygen. Which of the following best justifies this prediction?",
+        choices: [
+          "Cell A has less DNA than Cell B, so it requires less oxygen to replicate its genome.",
+          "Cell A has a higher surface area to volume ratio than Cell B, meaning oxygen can diffuse more efficiently relative to the cell's needs, allowing it to function longer before oxygen is depleted.",
+          "Cell A has more mitochondria than Cell B, allowing it to produce ATP more efficiently without oxygen.",
+          "Cell A has a thinner plasma membrane, allowing gases to cross the membrane faster than in Cell B.",
+        ],
+        answer: 1,
+        note: "Smaller cells have a higher SA:V ratio, so whatever oxygen remains in the environment can diffuse in more efficiently relative to the cell's (smaller) volume of oxygen-consuming cytoplasm.",
+      },
+    ],
+  },
+  {
+    id: "2-3",
+    title: "Membrane Transport and Osmosis",
+    questions: [
+      {
+        id: "B2-3-Q1",
+        text: "Which of the following molecules can cross the plasma membrane most easily by simple diffusion, without the help of transport proteins?",
+        choices: [
+          "Glucose, because it is a small molecule commonly needed by cells.",
+          "Sodium ions (Na+), because ions are very small and pass through the hydrophobic core easily.",
+          "Oxygen gas (O2), because it is a small nonpolar molecule that passes freely through the hydrophobic lipid bilayer.",
+          "Amino acids, because they are polar molecules that are attracted to the phosphate heads of the bilayer.",
+        ],
+        answer: 2,
+        note: "Small, nonpolar molecules (O2, CO2) slip through the hydrophobic bilayer core with ease. Ions and polar/charged solutes (Na+, glucose, amino acids) need channel or carrier proteins.",
+      },
+      {
+        id: "B2-3-Q2",
+        text: "Which of the following correctly distinguishes passive transport from active transport?",
+        choices: [
+          "Passive transport requires ATP and moves molecules against the concentration gradient; active transport does not require ATP and moves molecules down the gradient.",
+          "Passive transport moves molecules down the concentration gradient without ATP; active transport moves molecules against the concentration gradient and requires ATP (metabolic energy).",
+          "Both types move molecules down the concentration gradient, but only active transport uses transport proteins.",
+          "Passive transport is only used for gases; active transport is only used for large molecules like proteins.",
+        ],
+        answer: 1,
+        note: "Passive = downhill, no energy cost. Active = uphill (against the gradient), and therefore requires an energy input, usually ATP.",
+      },
+      {
+        id: "B2-3-Q3",
+        text: "Osmosis is defined as the movement of water across a selectively permeable membrane. Which of the following correctly describes the direction water moves during osmosis?",
+        choices: [
+          "Water moves from a region of higher solute concentration to a region of lower solute concentration.",
+          "Water moves from a region of lower solute concentration (higher water potential) to a region of higher solute concentration (lower water potential).",
+          "Water moves from a region of lower water concentration to a region of higher water concentration, following its concentration gradient toward solute.",
+          "Water moves in the same direction as solute molecules, both moving toward equilibrium simultaneously.",
+        ],
+        answer: 1,
+        note: "Water follows ITS OWN concentration gradient: it moves from where water is more concentrated (less solute, higher water potential) to where water is less concentrated (more solute, lower water potential).",
+      },
+      {
+        id: "B2-3-Q4",
+        text: "A red blood cell is placed in a hypertonic solution. Which of the following correctly predicts what will happen to the cell, and why?",
+        choices: [
+          "The cell will swell and lyse because water moves into the cell from the hypertonic solution by osmosis.",
+          "The cell will shrivel (crenate) because water moves out of the cell into the hypertonic solution, which has a higher solute concentration.",
+          "The cell will remain unchanged because animal cells have cell walls that prevent water loss.",
+          "The cell will swell and become turgid because the cell wall resists the outward movement of water.",
+          ],
+        answer: 1,
+        note: "Hypertonic = MORE solute outside than inside → water leaves the cell by osmosis → the cell shrinks/crenates. (Animal cells have no cell wall, ruling out C and D.)",
+      },
+      {
+        id: "B2-3-Q5",
+        text: "Glucose is a large polar molecule that cannot pass directly through the lipid bilayer, yet it enters cells rapidly. Which of the following best explains how glucose crosses the plasma membrane?",
+        choices: [
+          "Glucose enters by simple diffusion because cells have a high demand for glucose, creating a strong concentration gradient that forces it through the membrane.",
+          "Glucose enters by facilitated diffusion through specific carrier proteins (glucose transporters) that change shape to move glucose down its concentration gradient without requiring ATP.",
+          "Glucose enters by active transport using ATP, which provides energy to force the large molecule through the hydrophobic core of the membrane.",
+          "Glucose enters by endocytosis, where the membrane engulfs individual glucose molecules in vesicles.",
+        ],
+        answer: 1,
+        note: "Facilitated diffusion: still passive (down the gradient, no ATP), but requires a specific transport protein because the molecule (glucose) is too large/polar to cross the bilayer unaided.",
+      },
+      {
+        id: "B2-3-Q6",
+        text: "A plant cell is placed in a hypotonic solution. Which of the following correctly predicts the outcome for the plant cell compared to an animal cell in the same solution?",
+        choices: [
+          "Both the plant cell and animal cell will lyse because water enters both cells by osmosis in a hypotonic solution.",
+          "The animal cell will lyse, but the plant cell will become turgid (firm) because the cell wall provides structural support and resists further water uptake once turgor pressure builds up.",
+          "The plant cell will lyse because plant cells lack the cholesterol needed to strengthen the membrane against osmotic pressure.",
+          "Both cells will shrivel because hypotonic solutions always cause water to leave cells.",
+        ],
+        answer: 1,
+        note: "The plant cell wall is the key difference: it lets water in but resists further expansion once turgor pressure builds, protecting against lysis. Animal cells, lacking a wall, can burst under the same conditions.",
+      },
+      {
+        id: "B2-3-Q7",
+        text: "The proton pump in plant cells uses ATP to pump H+ ions out of the cell against their concentration gradient. This creates a proton gradient across the membrane. Which of the following best explains how this proton gradient is then used to transport sucrose into the cell?",
+        choices: [
+          "The proton gradient provides electrical energy that directly breaks down sucrose into glucose and fructose for easy entry into the cell.",
+          "The H+ gradient drives cotransport: H+ ions flow back into the cell down their gradient through a sucrose-H+ cotransporter protein, and the energy released from H+ movement is used to simultaneously pull sucrose into the cell against its gradient.",
+          "The high H+ concentration outside the cell lowers the external pH, which breaks down the membrane and allows sucrose to enter by simple diffusion.",
+          "The proton pump directly transports sucrose out of the cell while simultaneously pumping H+ in, creating a recycling mechanism.",
+        ],
+        answer: 1,
+        note: "This is chemiosmotic cotransport: the potential energy stored in the H+ gradient (built using ATP) is 'spent' as H+ flows back downhill through a cotransporter, and that energy release is coupled to pulling sucrose in against its own gradient.",
+      },
+      {
+        id: "B2-3-Q8",
+        text: "Paramecia are freshwater unicellular protists that have contractile vacuoles to pump excess water out of the cell. In an experiment, paramecia are placed in salt solutions of increasing osmolarity. As the salt concentration increases, the rate of contractile vacuole contraction decreases. Which of the following best explains this result?",
+        choices: [
+          "Higher salt concentration increases ATP production, causing the contractile vacuole to work more efficiently and contract less often.",
+          "As external salt concentration increases toward the cell's internal concentration, the osmotic gradient driving water into the cell decreases, so less water enters and the contractile vacuole needs to pump less.",
+          "High salt concentration damages the contractile vacuole membrane, reducing its ability to contract.",
+          "Paramecia absorb salt ions to maintain turgor pressure, reducing the need for the contractile vacuole to function.",
+        ],
+        answer: 1,
+        note: "The contractile vacuole exists to bail out water that constantly enters by osmosis in a hypotonic (freshwater) environment. As the outside solution approaches the cell's own solute concentration, the osmotic pull of water into the cell weakens, so there's simply less water to pump out.",
+      },
+      {
+        id: "B2-3-Q9",
+        text: "Aquaporins are specialized channel proteins that facilitate the rapid movement of water across cell membranes. A student predicts that cells with more aquaporins will respond more quickly to changes in external solute concentration. Which of the following best supports or refutes this prediction?",
+        choices: [
+          "This prediction is incorrect; aquaporins transport solutes, not water, so they would not affect the rate of osmosis.",
+          "This prediction is correct; aquaporins allow large quantities of water to move rapidly across the membrane, so cells with more aquaporins will gain or lose water faster in response to changes in the osmotic environment.",
+          "This prediction is incorrect; water crosses membranes only by simple diffusion through the lipid bilayer, so aquaporins have no effect on the rate of water movement.",
+          "This prediction is correct; aquaporins actively pump water against the osmotic gradient, allowing cells to respond to changes regardless of concentration.",
+        ],
+        answer: 1,
+        note: "Aquaporins are passive water channels — they don't pump water uphill (ruling out D), but they do dramatically speed up water's passive movement down its gradient, so more aquaporins = faster osmotic response.",
+      },
+      {
+        id: "B2-3-Q10",
+        text: "Cyanide is a poison that binds to and blocks a protein in the mitochondria involved in ATP production. A researcher predicts that exposing a cell to cyanide will disrupt active transport across the plasma membrane but will NOT affect facilitated diffusion. Which of the following best justifies this prediction?",
+        choices: [
+          "Cyanide directly destroys transport proteins, but channel proteins are made of a different material and are unaffected.",
+          "Active transport requires ATP hydrolysis as an energy input to move substances against their concentration gradient; without ATP (due to cyanide blocking mitochondria), active transport stops. Facilitated diffusion is passive and moves substances down the gradient without ATP, so it continues normally.",
+          "Cyanide only affects the outer mitochondrial membrane, so the inner membrane proteins that produce small amounts of ATP for facilitated diffusion are unaffected.",
+          "Facilitated diffusion uses a different type of ATP produced in the cytoplasm (glycolysis), which cyanide does not affect.",
+        ],
+        answer: 1,
+        note: "This tests the ATP-dependence distinction directly: cut off ATP production (cyanide blocks the ETC) and any ATP-requiring process (active transport) halts, while ATP-independent passive processes (facilitated diffusion) keep running.",
+      },
+    ],
+  },
+  {
+    id: "2-test",
+    title: "Unit 2 Test",
+    questions: [
+      {
+        id: "B2T-Q1",
+        text: "Which of the following statements about prokaryotes is INCORRECT?",
+        choices: [
+          "Prokaryotes do not have membrane-bound organelles.",
+          "Prokaryotes lack a nuclear membrane, so their DNA is located in the cytoplasm.",
+          "Prokaryotes primarily reproduce through binary fission.",
+          "Prokaryotes do not have ribosomes.",
+        ],
+        answer: 3,
+        note: "This question asks for the FALSE statement. Prokaryotes DO have ribosomes (needed for protein synthesis in every living cell) — they simply lack a nucleus and other membrane-bound organelles. So D is the incorrect statement.",
+      },
+      {
+        id: "B2T-Q2",
+        text: "Which of the following correctly matches a eukaryotic organelle with its function?",
+        choices: [
+          "Mitochondria – Synthesizes proteins for cellular functions.",
+          "Golgi apparatus – Modifies, sorts, and packages proteins and lipids for secretion or use within the cell.",
+          "Rough Endoplasmic Reticulum – Produces ATP through cellular respiration.",
+          "Lysosome – Synthesizes lipids and detoxifies harmful substances.",
+        ],
+        answer: 1,
+        note: "The other three are mismatched: mitochondria make ATP (not proteins), rough ER makes proteins (not ATP), and lysosomes digest material (smooth ER handles lipid synthesis/detox).",
+      },
+      {
+        id: "B2T-Q3",
+        text: "Which of the following best describes the process by which a secretory protein, such as an antibody, is produced and secreted by a B lymphocyte during an infection?",
+        choices: [
+          "The antibody gene is transcribed in the nucleus, translated in free ribosomes, and directly released into the bloodstream.",
+          "Antibodies are produced by the smooth endoplasmic reticulum, packaged in lysosomes, and secreted through exocytosis.",
+          "The antibody is synthesized by ribosomes attached to the rough endoplasmic reticulum, transported to the Golgi apparatus for modification, and then secreted via vesicles.",
+          "The antibody protein is synthesized in the cytoplasm, folded in the mitochondria, and secreted into the extracellular space.",
+        ],
+        answer: 2,
+        note: "The standard secretory pathway: bound ribosome on rough ER → Golgi (modify/sort) → secretory vesicle → exocytosis. Antibodies are secreted proteins, so they follow this route exactly.",
+      },
+      {
+        id: "B2T-Q4",
+        text: "Which of the following statements about lysosomes and their role in apoptosis is correct?",
+        choices: [
+          "Lysosomes release digestive enzymes into the extracellular space to induce apoptosis in neighboring cells.",
+          "Apoptosis is triggered solely by mitochondria and does not involve lysosomes.",
+          "Lysosomes store ATP required for apoptotic processes in the cell.",
+          "When a death signal binds to a receptor, lysosomal enzymes such as proteases and nucleases can be released into the cytoplasm, initiating apoptosis by damaging cellular components.",
+        ],
+        answer: 3,
+        note: "Lysosomes play a direct, internal role in apoptosis: a death signal can trigger release of their hydrolytic enzymes into the cytosol, helping dismantle the cell from within — this is one of several apoptotic pathways alongside mitochondrial signaling.",
+      },
+      {
+        id: "B2T-Q5",
+        text: "Which of the following correctly matches a cytoskeletal structure or its components with its function?",
+        choices: [
+          "Microtubules – Composed of actin, responsible for forming the cleavage furrow during cell division.",
+          "Microfilaments – Composed of actin, responsible for forming the cleavage furrow during cytokinesis and enabling pseudopod formation for cell movement.",
+          "Flagella and cilia – Composed of actin, enable whip-like movement of the cell.",
+          "Spindle fibers – Made of actin, assist in separating chromosomes during cell division.",
+        ],
+        answer: 1,
+        note: "Microfilaments are built from actin, and actin is exactly what pinches the cleavage furrow shut during cytokinesis and drives pseudopod extension. The other options swap their components: microtubules (tubulin) form spindle fibers and make up flagella/cilia — not actin.",
+      },
+      {
+        id: "B2T-Q6",
+        text: "Which of the following statements about the plasma membrane is correct?",
+        choices: [
+          "The plasma membrane allows all molecules to pass freely, ensuring equal concentrations inside and outside the cell.",
+          "The plasma membrane's structure is based on a static arrangement of proteins and lipids, known as the fluid mosaic model.",
+          "The plasma membrane is rigid and immobile, ensuring strong compartmentalization of cellular components.",
+          "The plasma membrane's selective permeability enables the cell to regulate the movement of substances in and out, maintaining homeostasis.",
+        ],
+        answer: 3,
+        note: "The membrane is selectively permeable (not freely permeable, not rigid) and its fluid mosaic structure is dynamic, not static — its key job is regulating what enters/exits to maintain internal homeostasis.",
+      },
+      {
+        id: "B2T-Q7",
+        text: "Which of the following statements about passive transport is correct?",
+        choices: [
+          "Passive transport moves molecules up their concentration gradient, from low to high concentration, without using energy.",
+          "Passive transport requires energy in the form of ATP to move molecules across the membrane.",
+          "Passive transport moves molecules down their concentration gradient, from high to low concentration, without the use of energy.",
+          "Passive transport is used to move large molecules like proteins across the plasma membrane through endocytosis.",
+        ],
+        answer: 2,
+        note: "Passive transport is defined by movement DOWN the gradient (high → low) with no energy input — endocytosis and moving 'uphill' both describe active processes, not passive ones.",
+      },
+      {
+        id: "B2T-Q8",
+        text: "Which of the following statements about active transport is correct?",
+        choices: [
+          "Active transport moves molecules down their concentration gradient, from high to low concentration, without using energy.",
+          "Active transport can only occur in the presence of a concentration gradient.",
+          "Active transport uses channel proteins to allow passive movement of ions across the membrane.",
+          "Active transport requires energy, often in the form of ATP, to move molecules against their concentration gradient.",
+        ],
+        answer: 3,
+        note: "Active transport's defining feature is moving substances AGAINST their gradient, which necessarily costs energy (usually ATP) — the opposite of passive transport.",
+      },
+      {
+        id: "B2T-Q9",
+        text: "Which of the following statements about the function of the contractile vacuole in freshwater organisms like paramecium is correct?",
+        choices: [
+          "The contractile vacuole removes excess water from the cell using passive transport, which does not require energy.",
+          "The contractile vacuole stores nutrients and expels waste products using passive diffusion.",
+          "The contractile vacuole expels excess water by active transport, which requires energy, to maintain osmotic balance in freshwater environments.",
+          "The contractile vacuole is inactive in freshwater environments because water naturally diffuses out of the cell.",
+        ],
+        answer: 2,
+        note: "In a hypotonic (freshwater) environment, water constantly diffuses INTO the cell. The contractile vacuole actively (using energy) pumps that excess water back out to prevent the cell from bursting.",
+      },
+      {
+        id: "B2T-Q10",
+        text: "Leucine aminopeptidases (LAPs) are enzymes that remove N-terminal amino acids from proteins and release the free amino acids into the cytosol. LAPs are found in all living organisms and have been associated with the response of the marine mussel, Mytilus edulis, to changes in salinity. Which of the following statements about osmosis and LAPs in response to salinity changes is correct?",
+        choices: [
+          "LAPs directly regulate the movement of water in and out of the mussel cells by controlling osmosis.",
+          "An increase in LAP activity in M. edulis likely helps the mussels adapt to varying salinity by altering the concentration of free amino acids, affecting osmotic balance.",
+          "Osmosis only occurs in M. edulis cells if LAPs are present, as they are the primary drivers of water movement.",
+          "LAPs reduce the osmotic pressure in M. edulis cells by actively transporting water out of the cell.",
+        ],
+        answer: 1,
+        note: "LAPs don't move water directly — they release free amino acids (solutes) into the cytosol. By adjusting the internal solute concentration, the cell can match external osmolarity and control the osmotic gradient indirectly, which is the classic AP Bio 'osmoregulation via solute concentration' reasoning.",
+      },
+    ],
+  },
+];
+
+const BIO_UNIT3_SECTIONS = [
+  {
+    id: "3-1",
+    title: "Enzymes and Cellular Energy",
+    questions: [
+      {
+        id: "B3-1-Q1",
+        text: "Enzymes are described as biological catalysts. Which of the following best explains how enzymes speed up chemical reactions?",
+        choices: [
+          "Enzymes provide energy to reactants, forcing them to form products.",
+          "Enzymes lower the activation energy required for a reaction, providing an alternative energy pathway so that reactions proceed more quickly.",
+          "Enzymes increase the temperature of the reaction, causing molecules to collide more frequently.",
+          "Enzymes permanently bond to substrates, converting them directly into products without releasing energy.",
+        ],
+        answer: 1,
+        note: "Enzymes work by lowering Ea (an alternate, lower-energy pathway) — they do NOT add energy, raise temperature, or get consumed/permanently bonded to substrate.",
+      },
+      {
+        id: "B3-1-Q2",
+        text: "An enzyme has high specificity for its substrate. Which of the following best explains the molecular basis for this specificity?",
+        choices: [
+          "The active site of the enzyme has a specific shape and charge complementary to the substrate; only the correct substrate fits the active site to form an enzyme-substrate complex.",
+          "Enzymes are specific because each enzyme contains only one type of amino acid that matches the substrate.",
+          "The enzyme is specific because it covalently bonds to only one type of substrate, permanently linking them together.",
+          "Enzymes are made of DNA, which contains a specific code for each substrate molecule it can bind.",
+        ],
+        answer: 0,
+        note: "Specificity comes from the 3D shape and chemical (charge/polarity) complementarity of the active site to its substrate — a 'lock and key' (with induced fit) relationship, not amino acid composition, permanent covalent bonding, or DNA.",
+      },
+      {
+        id: "B3-1-Q3",
+        text: "Which of the following correctly distinguishes an exergonic reaction from an endergonic reaction?",
+        choices: [
+          "Exergonic reactions require a net input of energy; endergonic reactions release a net amount of energy.",
+          "Exergonic reactions occur only in animals; endergonic reactions occur only in plants.",
+          "Exergonic reactions always require enzymes; endergonic reactions never require enzymes.",
+          "Exergonic reactions release a net amount of free energy and are spontaneous; endergonic reactions require a net input of energy and are non-spontaneous.",
+        ],
+        answer: 3,
+        note: "Exergonic = energy OUT, spontaneous (ΔG negative). Endergonic = energy IN required, non-spontaneous (ΔG positive). This has nothing to do with which organisms or whether enzymes are involved.",
+      },
+      {
+        id: "B3-1-Q4",
+        text: "A competitive inhibitor is added to an enzyme solution. Which of the following correctly describes how a competitive inhibitor reduces enzyme activity, and how its effect can be overcome?",
+        choices: [
+          "A competitive inhibitor binds to the allosteric site, changing the shape of the active site permanently; its effect cannot be reversed.",
+          "A competitive inhibitor binds to the substrate, preventing it from entering the active site; removing the inhibitor reverses the effect.",
+          "A competitive inhibitor has a similar shape to the substrate and competes for the active site; its effect can be overcome by increasing substrate concentration.",
+          "A competitive inhibitor permanently bonds to the active site via a covalent bond; increasing substrate concentration has no effect.",
+        ],
+        answer: 2,
+        note: "Competitive inhibitors resemble the substrate and physically compete for the SAME active site — since it's a competition, flooding the reaction with more substrate can out-compete the inhibitor and restore activity.",
+      },
+      {
+        id: "B3-1-Q5",
+        text: "A student increases the substrate concentration in an enzyme-catalyzed reaction and observes that the reaction rate initially increases but then plateaus. Which of the following best explains why the reaction rate stops increasing beyond a certain substrate concentration?",
+        choices: [
+          "At high substrate concentrations, the substrate molecules begin to inhibit the enzyme by blocking the active site.",
+          "All enzyme active sites become saturated with substrate at high concentrations; adding more substrate has no effect because no free active sites are available.",
+          "At high substrate concentrations, the temperature of the solution rises, denaturing the enzyme and reducing the rate.",
+          "The substrates begin to compete with each other for the active site at high concentrations, reducing the effective rate of reaction.",
+        ],
+        answer: 1,
+        note: "The plateau reflects enzyme SATURATION: with a fixed amount of enzyme, every active site is already occupied at high [substrate], so adding more substrate can't increase the rate any further.",
+      },
+      {
+        id: "B3-1-Q6",
+        text: "The first and second laws of thermodynamics apply to all living organisms. Which of the following correctly describes how living organisms maintain order despite the second law of thermodynamics?",
+        choices: [
+          "Living organisms violate the second law by creating order without any energy input, as biological systems are exempt from thermodynamic laws.",
+          "Living organisms maintain order by constantly inputting energy (from food or sunlight) to counteract the tendency toward disorder; energy transfer always results in some heat loss to the surroundings, increasing overall entropy.",
+          "Living organisms create energy from nothing through metabolic reactions, which allows them to maintain order indefinitely.",
+          "Living organisms reduce entropy to zero within their cells by perfectly organizing all molecules through evolution.",
+        ],
+        answer: 1,
+        note: "Organisms are open systems: they use a constant energy input (food/sunlight) to build local order, but every energy transfer loses some as heat — so overall (organism + surroundings) entropy still increases, obeying the 2nd law.",
+      },
+      {
+        id: "B3-1-Q7",
+        text: "A noncompetitive inhibitor binds to an allosteric site on an enzyme. A researcher adds a large amount of substrate to the reaction. Which of the following correctly predicts the outcome and justifies the prediction?",
+        choices: [
+          "The reaction rate will return to normal because excess substrate will displace the noncompetitive inhibitor from the allosteric site.",
+          "The reaction rate will remain reduced because the noncompetitive inhibitor changes the shape of the active site regardless of substrate concentration; adding more substrate cannot overcome allosteric inhibition.",
+          "The reaction rate will increase slightly because some substrate molecules will bond to the allosteric site, removing the inhibitor.",
+          "The reaction rate will stop completely because the combination of high substrate and inhibitor will permanently denature the enzyme.",
+        ],
+        answer: 1,
+        note: "Because a noncompetitive/allosteric inhibitor doesn't compete for the active site itself (it binds elsewhere and distorts the active site's shape), adding more substrate can't 'out-compete' it — unlike competitive inhibition, this effect is NOT overcome by excess substrate.",
+      },
+      {
+        id: "B3-1-Q8",
+        text: "Pepsin is a digestive enzyme that works optimally at pH 2 (the stomach). Trypsin is another digestive enzyme that works optimally at pH 8 (the small intestine). A student places both enzymes in a solution at pH 2. Which of the following best predicts the outcome and provides the correct molecular explanation?",
+        choices: [
+          "Both enzymes will work equally well because they are both digestive enzymes with the same substrate specificity.",
+          "Pepsin will function normally; trypsin will be denatured because the extreme pH (far from trypsin's optimum of pH 8) breaks the hydrogen and ionic bonds maintaining trypsin's tertiary structure, altering its active site shape.",
+          "Both enzymes will be denatured at pH 2 because no enzyme can function in an acidic environment.",
+          "Trypsin will function better than pepsin at pH 2 because the extra H+ ions provide additional energy for the reaction.",
+        ],
+        answer: 1,
+        note: "Each enzyme has its own optimal pH matching its normal environment. Far from that optimum, the H-bonds/ionic bonds that hold its 3D (tertiary) structure together break down, denaturing the enzyme and destroying its active site shape — this happens to trypsin at pH 2, while pepsin (built for that acidity) is fine.",
+      },
+      {
+        id: "B3-1-Q9",
+        text: "In a metabolic pathway, the product of reaction 1 becomes the substrate for reaction 2, and the product of reaction 2 becomes the substrate for reaction 3. The final product of this pathway is a competitive inhibitor of the enzyme that catalyzes reaction 1. Which of the following best explains the biological significance of this arrangement?",
+        choices: [
+          "This arrangement ensures that the pathway always runs at maximum speed, producing as much final product as possible.",
+          "This arrangement causes the pathway to run in reverse, converting products back into the original substrates to conserve energy.",
+          "This is a form of allosteric activation: the final product activates the first enzyme, creating a positive feedback loop that increases production.",
+          "This is feedback inhibition: when the final product accumulates, it inhibits the first enzyme in the pathway, slowing production. This prevents waste of resources and maintains appropriate product levels.",
+        ],
+        answer: 3,
+        note: "This is the classic feedback inhibition (negative feedback) loop: once enough end product has built up, it loops back to shut down the pathway's first step, conserving resources and keeping product levels appropriate rather than wasting materials making excess.",
+      },
+      {
+        id: "B3-1-Q10",
+        text: "A researcher is studying an enzyme-catalyzed reaction. At a fixed enzyme concentration, they observe that the reaction rate increases linearly as substrate concentration increases, but then plateaus. They then add an irreversible inhibitor to the saturated reaction. Which of the following best predicts the new maximum reaction rate and explains why?",
+        choices: [
+          "The maximum rate will remain the same because the plateau is determined by substrate concentration, not enzyme activity.",
+          "The maximum rate will increase because the irreversible inhibitor activates the remaining enzyme molecules, making them work faster.",
+          "The maximum rate will decrease permanently because the irreversible inhibitor forms a covalent bond with some active sites, permanently inactivating those enzyme molecules. Adding more substrate cannot restore those active sites.",
+          "The maximum rate will decrease temporarily, then return to normal as the cell produces new enzyme molecules to replace those inhibited.",
+        ],
+        answer: 2,
+        note: "An irreversible inhibitor permanently disables whatever enzyme molecules it binds (often via a covalent bond) — effectively reducing the total amount of FUNCTIONAL enzyme, so the maximum rate (Vmax) permanently drops, and no amount of extra substrate can fix already-inactivated enzymes.",
+      },
+    ],
+  },
+  {
+    id: "3-2",
+    title: "Photosynthesis",
+    questions: [
+      {
+        id: "B3-2-Q1",
+        text: "Which of the following correctly summarizes the overall equation for photosynthesis and identifies where each stage takes place in the chloroplast?",
+        choices: [
+          "6CO2 + 6H2O + light → C6H12O6 + 6O2; both stages occur in the stroma.",
+          "C6H12O6 + 6O2 → 6CO2 + 6H2O + energy; both stages occur on the inner mitochondrial membrane.",
+          "6CO2 + 6H2O + light → C6H12O6 + 6O2; both stages occur on the thylakoid membrane.",
+          "6CO2 + 12H2O + light → C6H12O6 + 6O2 + 6H2O; the light reactions occur in the thylakoid membrane and the Calvin cycle occurs in the stroma.",
+        ],
+        answer: 3,
+        note: "This is the full, balanced photosynthesis equation (using 12 H2O to show water's true role) with correct locations: light reactions on the thylakoid membrane, Calvin cycle in the stroma.",
+      },
+      {
+        id: "B3-2-Q2",
+        text: "During the light reactions, water molecules are split. Which of the following correctly identifies where this splitting occurs and what products are generated?",
+        choices: [
+          "Water is split in the stroma by Rubisco; this releases CO2 and electrons that enter the Calvin cycle.",
+          "Water is split at Photosystem I (P700) in the thylakoid membrane; the electrons released go directly to NADP+ reductase to form NADPH.",
+          "Water is split at Photosystem II (P680) in the thylakoid membrane by photolysis; this releases O2 as a byproduct and provides electrons and H+ ions to replace those lost from PSII.",
+          "Water is split in the thylakoid lumen by ATP synthase; the energy released is used directly to produce ATP.",
+        ],
+        answer: 2,
+        note: "Photolysis (splitting of water) happens at PSII, replacing the electrons PSII loses to light excitation, and releasing O2 as a byproduct — this is the source of the oxygen we breathe.",
+      },
+      {
+        id: "B3-2-Q3",
+        text: "The Calvin cycle is described as light-independent, yet it cannot occur in complete darkness for extended periods. Which of the following best explains this apparent contradiction?",
+        choices: [
+          "The Calvin cycle uses ATP and NADPH produced by the light reactions; without light, these molecules are not regenerated and the Calvin cycle eventually stops.",
+          "The Calvin cycle requires light directly to activate Rubisco, the enzyme that fixes CO2.",
+          "The Calvin cycle occurs in the thylakoid membrane, which requires light to maintain its structure.",
+          "The Calvin cycle directly absorbs light energy at a different wavelength than the light reactions.",
+        ],
+        answer: 0,
+        note: "'Light-independent' means the Calvin cycle doesn't directly use light — but it's still dependent on the ATP/NADPH supply the light reactions produce, so it grinds to a halt once that supply runs out in the dark.",
+      },
+      {
+        id: "B3-2-Q4",
+        text: "Which of the following correctly describes the three phases of the Calvin cycle in order?",
+        choices: [
+          "Carbon fixation (CO2 + RuBP → 3-PGA) → Reduction (3-PGA + ATP + NADPH → G3P) → Regeneration of RuBP (G3P + ATP → RuBP)",
+          "Reduction (CO2 + ATP → G3P) → Carbon fixation (G3P + RuBP → 3-PGA) → Regeneration of RuBP (NADPH → RuBP)",
+          "Carbon fixation (CO2 + H2O → glucose) → Reduction (glucose + ATP → G3P) → Regeneration (G3P → RuBP + O2)",
+          "Regeneration of RuBP → Reduction → Carbon fixation; the cycle runs in reverse during the day",
+        ],
+        answer: 0,
+        note: "The correct order and chemistry: (1) Carbon fixation — CO2 attaches to RuBP via Rubisco to form 3-PGA; (2) Reduction — 3-PGA is reduced using ATP and NADPH to form G3P; (3) Regeneration — most G3P is used (with ATP) to regenerate RuBP so the cycle can continue.",
+      },
+      {
+        id: "B3-2-Q5",
+        text: "During the light reactions, ATP is synthesized by chemiosmosis. Which of the following correctly describes the sequence of events that leads to ATP synthesis in the thylakoid membrane?",
+        choices: [
+          "Light excites electrons in PSII; electrons pass through the ETC and release energy that directly phosphorylates ADP to ATP without any proton gradient.",
+          "Light excites electrons in PSII; electrons pass through the ETC in the thylakoid membrane, pumping H+ ions into the thylakoid lumen; the resulting proton gradient drives H+ back through ATP synthase, powering ATP synthesis (chemiosmosis).",
+          "Light directly splits water into ATP and NADPH; ATP synthase is used only in the Calvin cycle to power carbon fixation.",
+          "Light excites electrons in PSI; these electrons are used to pump H+ from the thylakoid lumen into the stroma, creating a gradient that drives ATP synthesis.",
+        ],
+        answer: 1,
+        note: "Chemiosmosis in the light reactions: excited electrons flow through the ETC, pumping H+ INTO the thylakoid lumen (building up a gradient); H+ then flows back OUT through ATP synthase, powering ATP production — the same basic principle as in mitochondria.",
+      },
+      {
+        id: "B3-2-Q6",
+        text: "Chlorophyll absorbs light most efficiently at blue (430-450 nm) and red (640-680 nm) wavelengths, but reflects green light. A researcher measures O2 production from spinach leaves under different wavelengths. Which of the following correctly predicts the results and explains why?",
+        choices: [
+          "O2 production will be highest at green wavelengths (500-600 nm) because chlorophyll is green and absorbs green light most efficiently.",
+          "O2 production will be equal at all wavelengths because photosynthesis uses all colors of light with equal efficiency.",
+          "O2 production will be highest at green wavelengths because green light has the highest energy of visible light.",
+          "O2 production will be highest at blue (~430 nm) and red (~680 nm) wavelengths because chlorophyll absorbs these wavelengths most efficiently, driving the light reactions and photolysis of water.",
+        ],
+        answer: 3,
+        note: "Chlorophyll's absorption spectrum peaks at blue and red — it reflects (doesn't absorb) green light, which is why leaves LOOK green. More absorption at blue/red = more excited electrons = more O2-releasing photolysis at those wavelengths.",
+      },
+      {
+        id: "B3-2-Q7",
+        text: "Cyclic electron flow involves only Photosystem I and does not produce NADPH or O2. Which of the following best explains when and why a cell would use cyclic electron flow instead of linear (noncyclic) electron flow?",
+        choices: [
+          "Cyclic electron flow is used when CO2 concentration is low, allowing the cell to produce O2 without using CO2 in the Calvin cycle.",
+          "Cyclic electron flow is used at night when light is unavailable; it allows ATP to be made from glucose without the light reactions.",
+          "Cyclic electron flow is used when the cell needs extra ATP but already has sufficient NADPH; electrons from PSI cycle back through the cytochrome complex to produce additional ATP via chemiosmosis without generating more NADPH or O2.",
+          "Cyclic electron flow produces more NADPH than linear flow, making it more efficient for the Calvin cycle when CO2 is abundant.",
+          ],
+        answer: 2,
+        note: "Cyclic flow is a 'top-up' mechanism: when the chloroplast's ATP:NADPH ratio gets skewed (too much NADPH relative to ATP, since the Calvin cycle uses more ATP than NADPH), electrons recycle through PSI and the cytochrome complex to make extra ATP alone.",
+      },
+      {
+        id: "B3-2-Q8",
+        text: "Isolated thylakoid membranes were placed in a solution at pH 4 (high H+ concentration). After equilibration, they were transferred to a solution at pH 8 (low H+ concentration). Even in the dark and without any light, ATP was produced. Which of the following best explains this experimental result?",
+        choices: [
+          "The pH difference activated Rubisco in the thylakoid membrane, directly synthesizing ATP from CO2 and water.",
+          "When thylakoids moved from pH 4 to pH 8, a steep H+ gradient was created across the thylakoid membrane (high H+ inside, low H+ outside). H+ flowed out through ATP synthase down the gradient, driving ATP synthesis — demonstrating that the proton gradient, not light directly, powers ATP synthase.",
+          "The pH change caused the thylakoid membrane to break down, releasing stored ATP that had been produced earlier in the light.",
+          "The transition from acidic to basic pH activated photosystem II, which split water molecules and released energy for ATP synthesis even without light.",
+        ],
+        answer: 1,
+        note: "This is the famous Jagendorf acid-bath experiment: it proved that ATP synthase only 'cares' about the H+ gradient itself, not light directly — an artificially created gradient is just as good at powering ATP synthesis as one built by the light reactions.",
+      },
+      {
+        id: "B3-2-Q9",
+        text: "A plant is exposed to light containing only green wavelengths (500-600 nm). Which of the following best predicts what will happen to the rate of the Calvin cycle over time, and why?",
+        choices: [
+          "The Calvin cycle rate will increase because green light is reflected, causing less heat stress on the enzyme Rubisco, allowing it to work faster.",
+          "The Calvin cycle rate will decrease and eventually stop because chlorophyll poorly absorbs green light, so the light reactions will slow or stop, depleting the ATP and NADPH required for the Calvin cycle.",
+          "The Calvin cycle rate will be unaffected because it is light-independent and uses only CO2, not light energy.",
+          "The Calvin cycle rate will increase because green light is specifically absorbed by Rubisco to power carbon fixation directly.",
+        ],
+        answer: 1,
+        note: "Since chlorophyll poorly absorbs green light, the light reactions barely run under green-only light — starving the Calvin cycle of the ATP/NADPH it depends on, so its rate falls and eventually stops (same logic as Q3 above).",
+      },
+      {
+        id: "B3-2-Q10",
+        text: "A researcher blocks the function of ATP synthase in isolated chloroplasts while providing light. Which of the following best predicts the effect on BOTH the proton gradient across the thylakoid membrane and the rate of the Calvin cycle?",
+        choices: [
+          "The proton gradient will decrease and the Calvin cycle will increase, because blocking ATP synthase forces electrons to move faster through the ETC.",
+          "The proton gradient will remain unchanged and the Calvin cycle will continue at the same rate, because cyclic electron flow compensates for the loss of ATP synthase activity.",
+          "The proton gradient will increase (H+ will accumulate in the thylakoid lumen) and the Calvin cycle will slow and stop, because ATP cannot be synthesized so neither ATP nor NADPH will be available for carbon fixation.",
+          "The proton gradient will decrease and the Calvin cycle will stop, because water splitting (photolysis) also stops when ATP synthase is blocked.",
+        ],
+        answer: 2,
+        note: "With no ATP synthase to let H+ flow back out, H+ just keeps piling up in the lumen (gradient INCREASES, doesn't decrease) as the ETC keeps pumping — but without a working ATP synthase, no new ATP is made, so the Calvin cycle (which needs ATP) shuts down.",
+      },
+    ],
+  },
+  {
+    id: "3-3",
+    title: "Cellular Respiration and Fermentation",
+    questions: [
+      {
+        id: "B3-3-Q1",
+        text: "Which of the following correctly identifies where glycolysis takes place and what its net products are per glucose molecule?",
+        choices: [
+          "Glycolysis occurs in the mitochondria; it produces 2 ATP, 2 NADH, and 2 acetyl CoA.",
+          "Glycolysis occurs in the mitochondrial matrix; it produces 2 ATP, 2 FADH2, and 2 pyruvate molecules.",
+          "Glycolysis occurs in the cytosol; it produces 4 ATP, 4 NADH, and 2 pyruvate molecules with no ATP investment.",
+          "Glycolysis occurs in the cytosol; it produces a net of 2 ATP, 2 NADH, and 2 pyruvate molecules.",
+        ],
+        answer: 3,
+        note: "Glycolysis happens in the cytosol (not the mitochondria) and nets 2 ATP (4 produced − 2 invested), 2 NADH, and 2 pyruvate per glucose.",
+      },
+      {
+        id: "B3-3-Q2",
+        text: "After glycolysis, pyruvate enters the mitochondria for further oxidation. Which of the following correctly describes what happens during pyruvate oxidation?",
+        choices: [
+          "Pyruvate is oxidized in the mitochondrial matrix: CO2 is released, NAD+ is reduced to NADH, and the remaining 2-carbon acetyl group is attached to coenzyme A, forming acetyl CoA.",
+          "Pyruvate is directly used in the Krebs cycle without any modification.",
+          "Pyruvate is oxidized in the cytosol and converted into glucose during gluconeogenesis.",
+          "Pyruvate is split into two acetyl CoA molecules and one CO2 in the intermembrane space.",
+        ],
+        answer: 0,
+        note: "Pyruvate oxidation (the 'bridge' step) happens in the mitochondrial matrix: one carbon leaves as CO2, NAD+ is reduced to NADH, and the remaining 2-carbon fragment attaches to coenzyme A to become acetyl CoA — the actual fuel entering the Krebs cycle.",
+      },
+      {
+        id: "B3-3-Q3",
+        text: "The electron transport chain (ETC) in cellular respiration uses oxygen as the final electron acceptor. Which of the following correctly explains why oxygen is essential for the ETC and what happens when it is absent?",
+        choices: [
+          "Oxygen is required to split water in the mitochondria, providing electrons for the ETC; without oxygen, no electrons are available.",
+          "Oxygen accepts electrons at the end of the ETC, combining with H+ to form water; without oxygen, the ETC stops because electrons cannot be passed along the chain, and NADH and FADH2 cannot be re-oxidized.",
+          "Oxygen directly phosphorylates ADP to ATP; without oxygen, ATP synthesis stops but the ETC continues to function.",
+          "Oxygen is required only for glycolysis; the Krebs cycle and ETC can function without oxygen.",
+        ],
+        answer: 1,
+        note: "Oxygen is the FINAL electron acceptor of the ETC — without it, electrons back up the whole chain, NADH/FADH2 can't be re-oxidized back to NAD+/FAD, and the entire ETC (and oxidative phosphorylation) grinds to a halt.",
+      },
+      {
+        id: "B3-3-Q4",
+        text: "Fermentation allows cells to produce ATP in the absence of oxygen. Which of the following correctly explains the PRIMARY purpose of fermentation in cells?",
+        choices: [
+          "Fermentation produces large amounts of ATP more efficiently than cellular respiration.",
+          "Fermentation produces O2 as a byproduct that can be used for aerobic respiration in other cells.",
+          "Fermentation breaks down pyruvate into CO2 and water, releasing energy stored in the Krebs cycle.",
+          "Fermentation regenerates NAD+ from NADH, allowing glycolysis to continue producing ATP when oxygen is absent.",
+        ],
+        answer: 3,
+        note: "Fermentation's whole purpose is to recycle NADH back to NAD+ (by dumping electrons onto pyruvate or its derivatives), so glycolysis — the ONLY ATP-producing pathway that still works without oxygen — can keep running.",
+      },
+      {
+        id: "B3-3-Q5",
+        text: "The Krebs cycle occurs in the mitochondrial matrix. Which of the following correctly describes the primary outputs of the Krebs cycle per acetyl CoA that enters?",
+        choices: [
+          "1 ATP, 3 NADH, 1 FADH2, and 2 CO2 per acetyl CoA; NADH and FADH2 carry electrons to the ETC.",
+          "2 ATP, 2 NADH, 2 FADH2, and 4 CO2 per acetyl CoA; all ATP is produced by oxidative phosphorylation.",
+          "4 ATP, 4 NADH, and 2 CO2 per acetyl CoA; no FADH2 is produced in the Krebs cycle.",
+          "1 ATP, 1 NADH, 3 FADH2, and 1 CO2 per acetyl CoA; FADH2 is the main electron carrier in the Krebs cycle.",
+        ],
+        answer: 0,
+        note: "Per acetyl CoA (per turn of the cycle), the Krebs cycle yields 3 NADH, 1 FADH2, 1 ATP (via substrate-level phosphorylation), and releases 2 CO2 — these electron carriers then feed the ETC for the bulk of ATP production.",
+      },
+      {
+        id: "B3-3-Q6",
+        text: "Oxidative phosphorylation involves both the electron transport chain and chemiosmosis. Which of the following correctly describes how the ETC generates the proton gradient that drives ATP synthesis in mitochondria?",
+        choices: [
+          "The ETC pumps H+ ions from the intermembrane space into the matrix; H+ flows back out through ATP synthase into the intermembrane space, producing ATP.",
+          "The ETC pumps H+ ions from the mitochondrial matrix into the intermembrane space; the resulting gradient drives H+ back through ATP synthase into the matrix, producing ATP.",
+          "The ETC directly phosphorylates ADP to ATP without any proton gradient; the proton gradient is only used in photosynthesis.",
+          "The ETC pumps electrons (not H+) across the inner membrane; electrons flow back through ATP synthase, generating a current that produces ATP.",
+        ],
+        answer: 1,
+        note: "In mitochondria, H+ is pumped FROM the matrix INTO the intermembrane space (opposite direction from thylakoids, but same principle) — then flows back into the matrix through ATP synthase, powering ATP production.",
+      },
+      {
+        id: "B3-3-Q7",
+        text: "Yeast cells produce ethanol and CO2 during fermentation. Muscle cells produce lactic acid during intense exercise. Both processes serve the same fundamental cellular purpose. Which of the following correctly identifies this shared purpose and distinguishes the two pathways?",
+        choices: [
+          "Both regenerate ATP directly; yeast use glucose while muscle cells use lactate as the carbon source.",
+          "Both produce O2 as a byproduct; yeast release O2 during ethanol production and muscle cells release O2 during lactic acid production.",
+          "Both regenerate NAD+ from NADH to allow glycolysis to continue; in yeast, pyruvate is converted to ethanol + CO2, while in muscle cells, pyruvate is converted to lactate, in both cases oxidizing NADH to NAD+.",
+          "Both convert glucose to ATP using the Krebs cycle; the difference is that yeast use aerobic respiration and muscle cells use anaerobic respiration.",
+        ],
+        answer: 2,
+        note: "Both fermentation pathways exist for the SAME reason — regenerating NAD+ so glycolysis doesn't stall — they just dump electrons onto a different final molecule (acetaldehyde→ethanol in yeast, pyruvate→lactate in muscle).",
+      },
+      {
+        id: "B3-3-Q8",
+        text: "A researcher exposes actively respiring cells to a compound that makes the inner mitochondrial membrane freely permeable to H+ ions (a proton uncoupler). Which of the following best predicts the effect on ATP production and O2 consumption?",
+        choices: [
+          "ATP production will increase and O2 consumption will decrease, because uncoupling allows the ETC to run faster without the back pressure from the proton gradient.",
+          "ATP production will decrease significantly but O2 consumption will increase, because H+ leaks back across the membrane without going through ATP synthase, so the ETC runs faster to compensate but produces less ATP per electron transferred.",
+          "Both ATP production and O2 consumption will decrease, because uncoupling destroys the membrane potential needed for the ETC to function.",
+          "ATP production will remain the same but O2 consumption will decrease, because cyclic electron flow compensates for the loss of the proton gradient.",
+        ],
+        answer: 1,
+        note: "An uncoupler lets H+ 'leak' back across the membrane WITHOUT passing through ATP synthase, wasting the gradient as heat. The cell senses low ATP and speeds up the ETC (more O2 consumed) trying to compensate, but each electron now yields less ATP overall.",
+      },
+      {
+        id: "B3-3-Q9",
+        text: "A cell is provided with normal (16O) water but radioactively labeled oxygen-18 in O2 gas. After cellular respiration, where would the labeled 18O atoms be found?",
+        choices: [
+          "In the CO2 released during the Krebs cycle, because O2 is used to oxidize acetyl CoA directly.",
+          "In the CO2 released during the Krebs cycle and also in water, because 18O2 enters a Krebs cycle intermediate before being released.",
+          "In the water produced at the ETC, because 18O2 accepts electrons and H+ at the ETC to form H2O.",
+          "Only in O2 gas released, because cellular respiration produces O2 as a byproduct just like photosynthesis.",
+        ],
+        answer: 2,
+        note: "This mirrors the classic isotope-tracing logic used in photosynthesis (but reversed): in respiration, O2 is consumed (not released) and ends up specifically in the water formed at the very end of the ETC, where O2 accepts electrons and H+.",
+      },
+      {
+        id: "B3-3-Q10",
+        text: "In aerobic cellular respiration, approximately 30-32 ATP are produced per glucose. The majority of this ATP comes from oxidative phosphorylation, not from substrate-level phosphorylation. Which of the following best explains why oxidative phosphorylation produces so much more ATP than substrate-level phosphorylation?",
+        choices: [
+          "Oxidative phosphorylation directly breaks more covalent bonds in glucose, releasing more energy per reaction than substrate-level phosphorylation.",
+          "Oxidative phosphorylation occurs in the cytosol where glucose is most concentrated, giving it access to more substrate than substrate-level phosphorylation in the mitochondria.",
+          "Oxidative phosphorylation is more efficient because it uses CO2 as an energy source, while substrate-level phosphorylation wastes CO2 as a byproduct.",
+          "Oxidative phosphorylation uses the large number of NADH and FADH2 molecules from glycolysis, pyruvate oxidation, and the Krebs cycle to drive the ETC and generate a large proton gradient; the gradient powers ATP synthase to produce many ATP molecules per glucose.",
+        ],
+        answer: 3,
+        note: "Substrate-level phosphorylation directly transfers a phosphate group in just a few reactions (small, fixed ATP yield). Oxidative phosphorylation instead pools ALL the NADH/FADH2 collected across glycolysis, pyruvate oxidation, and the Krebs cycle to build one large proton gradient, which the ATP synthase 'turbine' converts into many more ATP.",
+      },
+    ],
+  },
+  {
+    id: "3-test",
+    title: "Unit 3 Test",
+    questions: [
+      {
+        id: "B3T-Q1",
+        text: "Which of the following statements correctly describes the processes of metabolism, catabolism, and anabolism with examples?",
+        choices: [
+          "Photosynthesis is an example of catabolism because it breaks down glucose to release energy.",
+          "Cellular respiration is an anabolic process because it builds glucose molecules for storage.",
+          "Photosynthesis is an anabolic process that synthesizes glucose from carbon dioxide and water, requiring energy from sunlight.",
+          "Cellular respiration is a catabolic process that builds ATP from sunlight energy without breaking down molecules.",
+        ],
+        answer: 2,
+        note: "Anabolic = building complex molecules (photosynthesis builds glucose from CO2/H2O using light energy). Catabolic = breaking down complex molecules for energy (cellular respiration breaks DOWN glucose) — the other options swap these definitions.",
+      },
+      {
+        id: "B3T-Q2",
+        text: "Which of the following statements correctly describes the structure and function of enzymes?",
+        choices: [
+          "Enzymes are made of lipids and provide structural support to cells.",
+          "Enzymes have a specific active site where substrates bind, allowing the enzyme to catalyze a reaction.",
+          "The structure of an enzyme is rigid and does not change when it binds to a substrate.",
+          "Enzymes are consumed in the reactions they catalyze and must be constantly replenished.",
+        ],
+        answer: 1,
+        note: "Enzymes are proteins (not lipids) with a specific active site for substrate binding; they change shape slightly upon binding (induced fit, not rigid) and are NOT consumed — they're reused again and again.",
+      },
+      {
+        id: "B3T-Q3",
+        text: "Which of the following statements best describes the induced fit model of enzyme action?",
+        choices: [
+          "The active site of an enzyme is a rigid structure that perfectly matches the substrate's shape and does not change during binding.",
+          "The induced fit model suggests that substrates change shape to fit the enzyme's active site without affecting the enzyme structure.",
+          "Enzymes bind to substrates only through covalent bonds, making the enzyme-substrate complex highly stable.",
+          "When the substrate binds to the enzyme's active site, the enzyme changes shape slightly to fit the substrate better, forming weak interactions such as hydrogen bonds and ionic bonds.",
+        ],
+        answer: 3,
+        note: "'Induced fit' means the ENZYME (not the substrate) adjusts its shape slightly upon binding, forming a snugger fit through weak, reversible interactions (H-bonds, ionic bonds) — this is different from the older rigid 'lock and key' idea.",
+      },
+      {
+        id: "B3T-Q4",
+        text: "Which of the following statements best describes allosteric inhibition?",
+        choices: [
+          "Allosteric inhibition occurs when an inhibitor binds to the active site of an enzyme, directly blocking the substrate.",
+          "In allosteric inhibition, the inhibitor binds permanently to the enzyme, making it impossible for the enzyme to function again.",
+          "Allosteric inhibition involves an inhibitor binding to a site other than the active site, causing a change in enzyme shape that reduces its activity.",
+          "Allosteric inhibition happens only when the substrate concentration is extremely high, preventing enzyme activity.",
+        ],
+        answer: 2,
+        note: "'Allosteric' literally means 'other site' — the defining feature is binding somewhere OTHER than the active site, which indirectly distorts the active site's shape and lowers activity (and this binding is often reversible, not permanent).",
+      },
+      {
+        id: "B3T-Q5",
+        text: "Which of the following best explains why aerobic respiration is more efficient than anaerobic respiration?",
+        choices: [
+          "Aerobic respiration requires less energy input than anaerobic respiration.",
+          "Aerobic respiration does not produce any waste products, unlike anaerobic respiration.",
+          "Aerobic respiration occurs only in eukaryotic organisms, making it more advanced than anaerobic respiration.",
+          "Aerobic respiration produces more ATP per glucose molecule because it fully oxidizes glucose in the presence of oxygen.",
+        ],
+        answer: 3,
+        note: "Aerobic respiration fully oxidizes glucose all the way to CO2 and H2O (via the Krebs cycle + ETC using O2), harvesting far more of glucose's stored energy as ATP than anaerobic pathways, which stop early and leave most of the energy locked in molecules like lactate or ethanol.",
+      },
+      {
+        id: "B3T-Q6",
+        text: "A toxic compound is introduced to a cell, targeting the electron transport chain (ETC) in the mitochondria. The compound specifically inhibits Complex IV (cytochrome c oxidase). What is the most likely effect on oxygen consumption in the cell?",
+        choices: [
+          "Oxygen consumption will increase significantly.",
+          "Oxygen consumption will remain unchanged.",
+          "Oxygen consumption will decrease significantly.",
+          "Oxygen consumption will stop completely.",
+        ],
+        answer: 3,
+        note: "Complex IV is the ONLY complex in the ETC that actually reacts with O2 (combining it with electrons and H+ to form water). Block Complex IV entirely, and there is no other route for O2 to be consumed — oxygen use stops completely (this is exactly how cyanide poisoning works).",
+      },
+      {
+        id: "B3T-Q7",
+        text: "In an experiment, chloroplasts are exposed to light in the presence of water but without carbon dioxide. The researcher observes that oxygen gas is released and ATP is synthesized. However, no glucose is produced. Based on your understanding of the light-dependent reactions, which of the following statements best explains these observations?",
+        choices: [
+          "The light-dependent reactions are inhibited because carbon dioxide is required for the production of ATP.",
+          "The ATP produced in the light-dependent reactions is used in the Calvin cycle to produce glucose, but oxygen is not released.",
+          "The light-dependent reactions cannot occur without carbon dioxide, preventing oxygen production and ATP synthesis.",
+          "The light-dependent reactions occur, producing oxygen and ATP, but since carbon dioxide is not available, the Calvin cycle cannot proceed, and glucose is not produced.",
+        ],
+        answer: 3,
+        note: "The light reactions don't need CO2 at all — they run fine and still make O2 (from water splitting) and ATP/NADPH. It's the Calvin cycle (which needs CO2 as its carbon source) that's blocked, so no glucose forms even though the light reactions work perfectly.",
+      },
+      {
+        id: "B3T-Q8",
+        text: "A plant is grown under controlled conditions with sufficient light, water, and nutrients. During the experiment, the plant's biomass is measured periodically. Researchers also monitor the activity of the enzyme RuBisCO and the incorporation of carbon from 14C-labeled CO2 into the plant's tissues. Which of the following best explains how carbon fixation in the Calvin cycle contributes to the increase in plant biomass?",
+        choices: [
+          "RuBisCO facilitates the splitting of water molecules, producing oxygen and glucose, which directly increases biomass.",
+          "Carbon fixation by RuBisCO incorporates inorganic carbon (CO2) into organic molecules, which are eventually used to build macromolecules such as carbohydrates, lipids, and proteins, leading to an increase in biomass.",
+          "RuBisCO fixes oxygen instead of carbon dioxide in the Calvin cycle, producing glucose and oxygen, which increases biomass.",
+          "The Calvin cycle operates independently of carbon fixation, producing ATP and NADPH, which are used to increase biomass directly.",
+        ],
+        answer: 1,
+        note: "RuBisCO's job is carbon fixation — attaching inorganic CO2 to RuBP to start building organic molecules. Those organic carbon skeletons are eventually assembled into the carbohydrates, lipids, and proteins that make up the plant's actual biomass.",
+      },
+      {
+        id: "B3T-Q9",
+        text: "Which statement correctly describes the location and function of the electron transport chain (ETC) in photosynthesis and cellular respiration?",
+        choices: [
+          "The ETC in cellular respiration occurs in the chloroplast stroma and fixes carbon dioxide into organic molecules.",
+          "The ETC in cellular respiration is located in the mitochondrial matrix and generates oxygen as a by-product.",
+          "The ETC in photosynthesis occurs in the cytoplasm and directly produces glucose.",
+          "The ETC in photosynthesis is located in the thylakoid membrane and produces ATP and NADPH for the Calvin cycle.",
+        ],
+        answer: 3,
+        note: "The photosynthetic ETC is embedded in the thylakoid membrane and its job is generating ATP and NADPH to fuel the Calvin cycle — the other options misplace the respiration ETC (which is on the inner mitochondrial membrane, not the matrix or chloroplast) and misassign its products.",
+      },
+      {
+        id: "B3T-Q10",
+        text: "A student conducts an experiment to measure the rate of oxygen production in an aquatic plant under different light conditions, counting O2 bubbles released per minute.\n\nCondition — Oxygen Bubbles per Minute\nBright Light — 15\nDarkness — 0\n\nWhich of the following best explains this data?",
+        choices: [
+          "Photosynthesis occurs in the light and produces oxygen, while cellular respiration in the dark consumes all the available oxygen.",
+          "Photosynthesis and cellular respiration occur equally in the light, but only respiration occurs in the dark, resulting in no net oxygen production.",
+          "In bright light, the rate of photosynthesis exceeds cellular respiration, producing a net release of oxygen. In darkness, only cellular respiration occurs, consuming oxygen but not producing visible bubbles.",
+          "Photosynthesis and cellular respiration both stop in the dark, leading to no oxygen production or consumption.",
+        ],
+        answer: 2,
+        note: "Both photosynthesis and respiration run simultaneously in a plant. In bright light, photosynthesis's O2 output far exceeds what respiration consumes, so there's a net release visible as bubbles. In darkness, only respiration continues — consuming O2, but that doesn't produce any bubbles to count.",
+      },
+    ],
+  },
+];
+
 const BIO_UNIT4_SECTIONS = [
   {
     id: "4-1",
@@ -2285,8 +3299,8 @@ const SUBJECTS = {
     label: "AP Biology",
     units: [
       { id: "1", title: "Chemistry of Life", sections: BIO_UNIT1_SECTIONS },
-      { id: "2", title: "Cell Structure and Function", sections: null },
-      { id: "3", title: "Cellular Energetics", sections: null },
+      { id: "2", title: "Cell Structure and Function", sections: BIO_UNIT2_SECTIONS },
+      { id: "3", title: "Cellular Energetics", sections: BIO_UNIT3_SECTIONS },
       { id: "4", title: "Cell Communication and Cell Cycle", sections: BIO_UNIT4_SECTIONS },
       { id: "5", title: "Heredity", sections: BIO_SECTIONS },
       { id: "6", title: "Gene Expression and Regulation", sections: null },
@@ -2849,7 +3863,7 @@ export default function App() {
                       {isBookmarked(q.id) ? "★" : "☆"}
                     </button>
                   </div>
-                  <p className="mb-3 leading-relaxed">{q.text}</p>
+                  <p className="mb-3 leading-relaxed whitespace-pre-line">{q.text}</p>
                   {q.image && (
                     <img src={q.image} alt={`${q.id} data`} className="mb-4 max-w-full rounded" style={{ border: `1px solid ${LINE}` }} />
                   )}
@@ -2941,7 +3955,7 @@ export default function App() {
                       {isBookmarked(r.id) ? "★" : "☆"}
                     </button>
                   </div>
-                  <p className="mb-3 leading-relaxed">{r.text}</p>
+                  <p className="mb-3 leading-relaxed whitespace-pre-line">{r.text}</p>
                   {r.image && (
                     <img src={r.image} alt={`${r.id} data`} className="mb-3 max-w-full rounded" style={{ border: `1px solid ${LINE}` }} />
                   )}
@@ -2980,7 +3994,7 @@ export default function App() {
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-xs font-bold" style={{ fontFamily: "ui-monospace, monospace", color: GREEN }}>★ {i + 1}</span>
                   </div>
-                  <p className="mb-3 leading-relaxed">{q.text}</p>
+                  <p className="mb-3 leading-relaxed whitespace-pre-line">{q.text}</p>
                   {q.image && (
                     <img src={q.image} alt={`${q.id} data`} className="mb-4 max-w-full rounded" style={{ border: `1px solid ${LINE}` }} />
                   )}
