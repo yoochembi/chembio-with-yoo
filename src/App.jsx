@@ -2390,6 +2390,14 @@ export default function App() {
   const [submitState, setSubmitState] = useState("idle"); // idle | sending | sent | error
   const [classStats, setClassStats] = useState(null); // { [questionId]: { correct, total } }
   const [classStatsState, setClassStatsState] = useState("idle"); // idle | loading | loaded | error
+  const [bookmarks, setBookmarks] = useState(() => {
+    try {
+      const raw = localStorage.getItem("cby_bookmarks");
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  });
   const [startTime, setStartTime] = useState(null);
   const [elapsedSec, setElapsedSec] = useState(0);
   const [finalDurationSec, setFinalDurationSec] = useState(null);
@@ -2402,6 +2410,36 @@ export default function App() {
   const qs = section ? section.questions : [];
 
   function pick(id, idx) { setAnswers((a) => ({ ...a, [id]: idx })); }
+
+  // Save/remove a question in the bookmark list (persisted to localStorage, per-device).
+  function isBookmarked(qId) {
+    return bookmarks.some((b) => b.id === qId);
+  }
+  function toggleBookmark(q, ctx) {
+    setBookmarks((prev) => {
+      const next = isBookmarked(q.id)
+        ? prev.filter((b) => b.id !== q.id)
+        : [...prev, {
+            id: q.id,
+            text: q.text,
+            choices: q.choices,
+            answer: q.answer,
+            note: q.note,
+            image: q.image || null,
+            subjectLabel: ctx.subjectLabel,
+            unitLabel: `Unit ${ctx.unitId} · ${ctx.sectionId} ${ctx.sectionTitle}`,
+          }];
+      try { localStorage.setItem("cby_bookmarks", JSON.stringify(next)); } catch {}
+      return next;
+    });
+  }
+  function removeBookmark(qId) {
+    setBookmarks((prev) => {
+      const next = prev.filter((b) => b.id !== qId);
+      try { localStorage.setItem("cby_bookmarks", JSON.stringify(next)); } catch {}
+      return next;
+    });
+  }
 
   const results = useMemo(() => qs.map((q) => {
     const given = answers[q.id];
@@ -2496,6 +2534,15 @@ export default function App() {
       return;
     }
     setShowValidation(false);
+    const hasBookmarked = qs.some((q) => isBookmarked(q.id));
+    if (hasBookmarked) {
+      setScreen("reviewBookmarks");
+      return;
+    }
+    finalizeSubmit();
+  }
+
+  function finalizeSubmit() {
     if (startTime) setFinalDurationSec(Math.floor((Date.now() - startTime) / 1000));
     setScreen("report");
   }
@@ -2787,11 +2834,20 @@ export default function App() {
                 const isUnanswered = answers[q.id] === undefined;
                 return (
                 <div key={q.id} ref={(el) => { questionRefs.current[q.id] = el; }} className="p-5" style={{ border: `1px solid ${showValidation && isUnanswered ? RUST : LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xs font-bold" style={{ fontFamily: "ui-monospace, monospace", color: GREEN }}>Q{i + 1}</span>
-                    {showValidation && isUnanswered && (
-                      <span className="text-xs font-bold" style={{ color: RUST }}>· 미응답</span>
-                    )}
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold" style={{ fontFamily: "ui-monospace, monospace", color: GREEN }}>Q{i + 1}</span>
+                      {showValidation && isUnanswered && (
+                        <span className="text-xs font-bold" style={{ color: RUST }}>· 미응답</span>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => toggleBookmark(q, { subjectLabel: subjectData.label, unitId: unit.id, sectionId: section.id, sectionTitle: section.title })}
+                      className="text-lg leading-none"
+                      title={isBookmarked(q.id) ? "북마크 해제" : "북마크에 저장"}
+                      style={{ color: isBookmarked(q.id) ? AMBER : "#C9C2AE" }}>
+                      {isBookmarked(q.id) ? "★" : "☆"}
+                    </button>
                   </div>
                   <p className="mb-3 leading-relaxed">{q.text}</p>
                   {q.image && (
@@ -2859,22 +2915,31 @@ export default function App() {
                 const classPct = stat && stat.total > 0 ? Math.round((stat.correct / stat.total) * 100) : null;
                 return (
                 <div key={r.id} className="p-5" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
-                  <div className="flex items-center gap-2 mb-2 flex-wrap">
-                    <span className="text-xs font-bold px-2 py-0.5" style={{
-                      color: PAPER,
-                      background: r.unanswered ? AMBER : r.correct ? GREEN : RUST,
-                      borderRadius: 2,
-                    }}>
-                      {r.unanswered ? "미응답" : r.correct ? "정답" : "오답"}
-                    </span>
-                    {classPct !== null && (
-                      <span className="text-xs px-2 py-0.5" style={{ border: `1px solid ${GREEN}`, color: GREEN, borderRadius: 2 }}>
-                        전체 정답률 {classPct}%
+                  <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-xs font-bold px-2 py-0.5" style={{
+                        color: PAPER,
+                        background: r.unanswered ? AMBER : r.correct ? GREEN : RUST,
+                        borderRadius: 2,
+                      }}>
+                        {r.unanswered ? "미응답" : r.correct ? "정답" : "오답"}
                       </span>
-                    )}
-                    {classStatsState === "loading" && !stat && (
-                      <span className="text-xs" style={{ color: "#8A8270" }}>전체 통계 불러오는 중...</span>
-                    )}
+                      {classPct !== null && (
+                        <span className="text-xs px-2 py-0.5" style={{ border: `1px solid ${GREEN}`, color: GREEN, borderRadius: 2 }}>
+                          전체 정답률 {classPct}%
+                        </span>
+                      )}
+                      {classStatsState === "loading" && !stat && (
+                        <span className="text-xs" style={{ color: "#8A8270" }}>전체 통계 불러오는 중...</span>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => toggleBookmark(r, { subjectLabel: subjectData.label, unitId: unit.id, sectionId: section.id, sectionTitle: section.title })}
+                      className="text-lg leading-none"
+                      title={isBookmarked(r.id) ? "북마크 해제" : "북마크에 저장"}
+                      style={{ color: isBookmarked(r.id) ? AMBER : "#C9C2AE" }}>
+                      {isBookmarked(r.id) ? "★" : "☆"}
+                    </button>
                   </div>
                   <p className="mb-3 leading-relaxed">{r.text}</p>
                   {r.image && (
@@ -2897,6 +2962,48 @@ export default function App() {
 
             <div className="flex gap-3 flex-wrap mt-8">
               <button onClick={() => setScreen("sections")} className="px-5 py-2.5 text-sm font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>↺ 다른 섹션 풀기</button>
+            </div>
+          </div>
+        )}
+
+        {screen === "reviewBookmarks" && (
+          <div>
+            <div className="mb-6 text-xs font-bold uppercase tracking-wide" style={{ color: AMBER }}>
+              ★ 북마크한 문제 다시 확인하기
+            </div>
+            <p className="mb-6 leading-relaxed" style={{ color: "#4A4438" }}>
+              이번 퀴즈에서 어려워서 표시해둔 문제들이에요. 제출 전에 답을 한 번 더 확인해보세요.
+            </p>
+            <div className="space-y-6 mb-8">
+              {qs.filter((q) => isBookmarked(q.id)).map((q, i) => (
+                <div key={q.id} className="p-5" style={{ border: `1.5px solid ${AMBER}`, borderRadius: 4, background: "#FFFEFB" }}>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-xs font-bold" style={{ fontFamily: "ui-monospace, monospace", color: GREEN }}>★ {i + 1}</span>
+                  </div>
+                  <p className="mb-3 leading-relaxed">{q.text}</p>
+                  {q.image && (
+                    <img src={q.image} alt={`${q.id} data`} className="mb-4 max-w-full rounded" style={{ border: `1px solid ${LINE}` }} />
+                  )}
+                  <div className="space-y-2">
+                    {q.choices.map((c, ci) => (
+                      <button key={ci} onClick={() => pick(q.id, ci)}
+                        className="w-full text-left px-4 py-2 text-sm flex gap-3"
+                        style={{
+                          border: `1.5px solid ${answers[q.id] === ci ? GREEN : LINE}`,
+                          background: answers[q.id] === ci ? "rgba(47,111,94,0.08)" : "transparent",
+                          borderRadius: 3,
+                        }}>
+                        <span className="font-bold" style={{ color: GREEN }}>{String.fromCharCode(65 + ci)}</span>
+                        <span>{c}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-3">
+              <button onClick={() => setScreen("quiz")} className="px-5 py-2.5 text-sm font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 다시 풀기</button>
+              <button onClick={finalizeSubmit} className="px-6 py-3 font-bold text-sm uppercase tracking-wide" style={{ background: INK, color: PAPER, borderRadius: 3 }}>제출 확정하기</button>
             </div>
           </div>
         )}
