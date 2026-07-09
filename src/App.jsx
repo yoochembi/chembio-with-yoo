@@ -3509,6 +3509,8 @@ export default function App() {
   const [finalDurationSec, setFinalDurationSec] = useState(null);
   const [showValidation, setShowValidation] = useState(false);
   const questionRefs = useRef({});
+  const reportPrintRef = useRef(null);
+  const [pdfGenerating, setPdfGenerating] = useState(false);
 
   const subjectData = SUBJECTS[subject];
   const unit = unitIdx !== null ? subjectData.units[unitIdx] : null;
@@ -3537,6 +3539,56 @@ export default function App() {
   function openRetryWrong() {
     setRetryAnswers({});
     setScreen("retryWrong");
+  }
+
+  // Dynamically load a script from CDN only once (used for html2canvas / jsPDF, so no npm install / package.json edits are needed).
+  function loadExternalScript(src, isLoaded) {
+    if (isLoaded()) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = () => reject(new Error("script failed to load: " + src));
+      document.body.appendChild(s);
+    });
+  }
+
+  // Render the report card (score + question breakdown) to an image and save it as a downloadable PDF.
+  async function downloadReportPdf() {
+    if (!reportPrintRef.current || pdfGenerating) return;
+    setPdfGenerating(true);
+    try {
+      await loadExternalScript("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js", () => !!window.html2canvas);
+      await loadExternalScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js", () => !!window.jspdf);
+
+      const canvas = await window.html2canvas(reportPrintRef.current, { scale: 2, backgroundColor: "#F3F6FB", useCORS: true });
+      const imgData = canvas.toDataURL("image/png");
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF("p", "pt", "a4");
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let heightLeft = imgHeight;
+      let position = 0;
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      const safeName = (student.name || "student").replace(/[^\w가-힣-]/g, "");
+      pdf.save(`${safeName}_${subjectData.label}_Unit${unit.id}_result.pdf`);
+    } catch (err) {
+      alert("PDF 생성에 실패했어요. 네트워크 연결을 확인하고 다시 시도해주세요.");
+    } finally {
+      setPdfGenerating(false);
+    }
   }
 
   // Save/remove a question in the bookmark list (persisted to localStorage, per-device).
@@ -3948,7 +4000,10 @@ export default function App() {
 
         {screen === "quiz" && (
           <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-4 px-3 py-2" style={{
+              position: "sticky", top: 0, zIndex: 10,
+              background: PAPER, borderBottom: `1px solid ${LINE}`,
+            }}>
               <div className="text-xs font-bold uppercase tracking-wide" style={{ color: GREEN }}>{subjectData.label} · Unit {unit.id} · {section.id} {section.title}</div>
               <div className="px-3 py-1.5 text-sm font-bold" style={{ background: INK, color: PAPER, borderRadius: 3, fontFamily: "ui-monospace, monospace" }}>
                 ⏱ {formatDuration(elapsedSec)}
@@ -4024,10 +4079,6 @@ export default function App() {
 
         {screen === "report" && (
           <div>
-            <div className="mb-4 text-xs font-bold uppercase tracking-wide" style={{ color: "#8A8270" }}>
-              {student.name} · {student.email}
-              {finalDurationSec !== null && ` · 풀이 시간 ${formatDuration(finalDurationSec)}`}
-            </div>
             {SHEET_ENDPOINT ? (
               <div className="mb-4 px-3 py-2 text-xs" style={{
                 borderRadius: 3,
@@ -4039,9 +4090,6 @@ export default function App() {
                 {submitState === "error" && "전송 실패 — 네트워크를 확인해주세요. (화면 점수는 그대로 유효합니다)"}
               </div>
             ) : null}
-            <div className="flex items-center gap-4 mb-8 p-6 flex-wrap" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
-              <DonutChart correct={score} incorrect={wrong} unanswered={blank} />
-            </div>
 
             <div className="flex gap-2 mb-5 flex-wrap">
               {["all", "correct", "incorrect"].map((f) => (
@@ -4051,48 +4099,60 @@ export default function App() {
                   {{ all: "전체", correct: "정답", incorrect: "오답" }[f]}
                 </button>
               ))}
+              <button onClick={downloadReportPdf} disabled={pdfGenerating} className="px-3 py-1.5 text-xs font-bold uppercase tracking-wide" style={{ background: INK, color: PAPER, borderRadius: 3, opacity: pdfGenerating ? 0.6 : 1 }}>
+                {pdfGenerating ? "PDF 생성 중..." : "⬇ 결과 PDF 다운로드"}
+              </button>
             </div>
 
-            <div className="space-y-5">
-              {filtered.map((r) => {
-                const stat = classStats && classStats[r.id];
-                const classPct = stat && stat.total > 0 ? Math.round((stat.correct / stat.total) * 100) : null;
-                return (
-                <div key={r.id} className="p-5" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
-                  <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-xs font-bold px-2 py-0.5" style={{
-                        color: PAPER,
-                        background: r.unanswered ? AMBER : r.correct ? GREEN : RUST,
-                        borderRadius: 2,
-                      }}>
-                        {r.unanswered ? "미응답" : r.correct ? "정답" : "오답"}
-                      </span>
-                      {classPct !== null && (
-                        <span className="text-xs px-2 py-0.5" style={{ border: `1px solid ${GREEN}`, color: GREEN, borderRadius: 2 }}>
-                          전체 정답률 {classPct}%
+            <div ref={reportPrintRef} style={{ background: PAPER, padding: 4 }}>
+              <div className="mb-4 text-xs font-bold uppercase tracking-wide" style={{ color: "#8A8270" }}>
+                {student.name} · {student.email}
+                {finalDurationSec !== null && ` · 풀이 시간 ${formatDuration(finalDurationSec)}`}
+              </div>
+              <div className="flex items-center gap-4 mb-8 p-6 flex-wrap" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
+                <DonutChart correct={score} incorrect={wrong} unanswered={blank} />
+              </div>
+
+              <div className="space-y-5">
+                {filtered.map((r) => {
+                  const stat = classStats && classStats[r.id];
+                  const classPct = stat && stat.total > 0 ? Math.round((stat.correct / stat.total) * 100) : null;
+                  return (
+                  <div key={r.id} className="p-5" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
+                    <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-xs font-bold px-2 py-0.5" style={{
+                          color: PAPER,
+                          background: r.unanswered ? AMBER : r.correct ? GREEN : RUST,
+                          borderRadius: 2,
+                        }}>
+                          {r.unanswered ? "미응답" : r.correct ? "정답" : "오답"}
                         </span>
-                      )}
-                      {classStatsState === "loading" && !stat && (
-                        <span className="text-xs" style={{ color: "#8A8270" }}>전체 통계 불러오는 중...</span>
-                      )}
+                        {classPct !== null && (
+                          <span className="text-xs px-2 py-0.5" style={{ border: `1px solid ${GREEN}`, color: GREEN, borderRadius: 2 }}>
+                            전체 정답률 {classPct}%
+                          </span>
+                        )}
+                        {classStatsState === "loading" && !stat && (
+                          <span className="text-xs" style={{ color: "#8A8270" }}>전체 통계 불러오는 중...</span>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => toggleBookmark(r, { subjectLabel: subjectData.label, unitId: unit.id, sectionId: section.id, sectionTitle: section.title })}
+                        className="text-lg leading-none"
+                        title={isBookmarked(r.id) ? "북마크 해제" : "북마크에 저장"}
+                        style={{ color: isBookmarked(r.id) ? AMBER : "#C9C2AE" }}>
+                        {isBookmarked(r.id) ? "★" : "☆"}
+                      </button>
                     </div>
-                    <button
-                      onClick={() => toggleBookmark(r, { subjectLabel: subjectData.label, unitId: unit.id, sectionId: section.id, sectionTitle: section.title })}
-                      className="text-lg leading-none"
-                      title={isBookmarked(r.id) ? "북마크 해제" : "북마크에 저장"}
-                      style={{ color: isBookmarked(r.id) ? AMBER : "#C9C2AE" }}>
-                      {isBookmarked(r.id) ? "★" : "☆"}
-                    </button>
-                  </div>
-                  <p className="mb-3 leading-relaxed whitespace-pre-line">{r.text}</p>
-                  {r.image && (
-                    <img src={r.image} alt={`${r.id} data`} className="mb-3 max-w-full rounded" style={{ border: `1px solid ${LINE}` }} />
-                  )}
-                  <div className="space-y-1 text-sm mb-3">
-                    {r.choices.map((c, ci) => (
-                      <div key={ci} className="px-3 py-1.5" style={{
-                        borderRadius: 3,
+                    <p className="mb-3 leading-relaxed whitespace-pre-line">{r.text}</p>
+                    {r.image && (
+                      <img src={r.image} alt={`${r.id} data`} className="mb-3 max-w-full rounded" style={{ border: `1px solid ${LINE}` }} />
+                    )}
+                    <div className="space-y-1 text-sm mb-3">
+                      {r.choices.map((c, ci) => (
+                        <div key={ci} className="px-3 py-1.5" style={{
+                          borderRadius: 3,
                         background: ci === r.answer ? "rgba(47,111,94,0.1)" : r.given === ci ? "rgba(166,67,45,0.08)" : "transparent",
                       }}>
                         <span className="font-bold mr-2" style={{ color: ci === r.answer ? GREEN : INK }}>{String.fromCharCode(65 + ci)}</span>{c}
@@ -4102,6 +4162,7 @@ export default function App() {
                   <div className="text-xs leading-relaxed whitespace-pre-line" style={{ color: "#5C5648", background: "#F1ECDD", padding: "10px 12px", borderRadius: 3 }}>{r.note}</div>
                 </div>
               );})}
+            </div>
             </div>
 
             <div className="flex gap-3 flex-wrap mt-8">
