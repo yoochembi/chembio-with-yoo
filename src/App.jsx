@@ -241,16 +241,9 @@ function DonutChart({ correct, incorrect, unanswered, size = 150 }) {
 
 export default function App() {
   const [subject, setSubject] = useState("chem"); // chem | bio
-  const [screen, setScreen] = useState("landing"); // landing | categories | units | sections | student | quiz | report
+  const [screen, setScreen] = useState("landing"); // landing | categories | units | sections | quiz | report
   const [unitIdx, setUnitIdx] = useState(null);
   const [student, setStudent] = useState({ name: "", email: "" });
-  const [studentDraft, setStudentDraft] = useState({ name: "", email: "" });
-  const NAME_REGEX = /^[a-zA-Z가-힣]+(?:[\s.]?[a-zA-Z가-힣]+)*$/;
-  const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const nameTrimmed = studentDraft.name.trim();
-  const emailTrimmed = studentDraft.email.trim();
-  const isNameValid = nameTrimmed.length >= 2 && nameTrimmed.length <= 30 && NAME_REGEX.test(nameTrimmed);
-  const isEmailValid = EMAIL_REGEX.test(emailTrimmed);
   const [sectionIdx, setSectionIdx] = useState(0);
   const [answers, setAnswers] = useState({});
   const [crossedOut, setCrossedOut] = useState({}); // { [qId]: { [choiceIdx]: true } }
@@ -267,17 +260,18 @@ export default function App() {
       return [];
     }
   });
-  // High School Chem/Bio login gate — student code + password, verified server-side
-  // against a Roster tab in the HS spreadsheet. Only hsChem/hsBio are gated; AP stays open.
-  const [hsAuth, setHsAuth] = useState(() => {
+  // Login gate — student code + password, verified server-side against a Roster tab.
+  // Now covers all four subjects (chem, bio, hsChem, hsBio), not just High School.
+  const [auth, setAuth] = useState(() => {
     try {
-      const raw = localStorage.getItem("cby_hs_auth");
+      var raw = localStorage.getItem("cby_auth");
+      if (!raw) raw = localStorage.getItem("cby_hs_auth"); // migrate old HS-only key if present
       return raw ? JSON.parse(raw) : null;
     } catch {
       return null;
     }
   });
-  const [pendingHSKey, setPendingHSKey] = useState(null);
+  const [pendingSubjectKey, setPendingSubjectKey] = useState(null);
   const [loginDraft, setLoginDraft] = useState({ code: "", password: "" });
   const [loginState, setLoginState] = useState("idle"); // idle | checking | error
   const [loginError, setLoginError] = useState("");
@@ -430,15 +424,13 @@ export default function App() {
     : ALL_CATEGORIES.map((c) => (c.id === "frq" && (subject === "chem" || subject === "bio") ? { ...c, available: true, desc: "College Board 기출 FRQ (2023–2026)" } : c));
 
   function switchSubject(s) {
-    if (s === "hsChem" || s === "hsBio") {
-      const authorized = hsAuth && Array.isArray(hsAuth.subjects) && hsAuth.subjects.includes(s);
-      if (!authorized) {
-        setPendingHSKey(s);
-        setLoginError("");
-        setLoginState("idle");
-        setScreen("login");
-        return;
-      }
+    const authorized = auth && Array.isArray(auth.subjects) && auth.subjects.includes(s);
+    if (!authorized) {
+      setPendingSubjectKey(s);
+      setLoginError("");
+      setLoginState("idle");
+      setScreen("login");
+      return;
     }
     setSubject(s);
     setUnitIdx(null);
@@ -454,18 +446,18 @@ export default function App() {
     }
     setLoginState("checking");
     setLoginError("");
-    jsonp(SHEET_ENDPOINT, { mode: "hsLogin", code, password })
+    jsonp(SHEET_ENDPOINT, { mode: "login", code, password, subject: pendingSubjectKey || "" })
       .then((data) => {
         if (data && data.ok) {
-          const auth = { code, name: data.name || "", subjects: data.subjects || [] };
-          setHsAuth(auth);
-          try { localStorage.setItem("cby_hs_auth", JSON.stringify(auth)); } catch {}
+          const newAuth = { code, name: data.name || "", subjects: data.subjects || [] };
+          setAuth(newAuth);
+          try { localStorage.setItem("cby_auth", JSON.stringify(newAuth)); } catch {}
           setLoginState("idle");
-          if (pendingHSKey && auth.subjects.includes(pendingHSKey)) {
-            setSubject(pendingHSKey);
+          if (pendingSubjectKey && newAuth.subjects.includes(pendingSubjectKey)) {
+            setSubject(pendingSubjectKey);
             setUnitIdx(null);
             setScreen("categories");
-            setPendingHSKey(null);
+            setPendingSubjectKey(null);
           } else {
             setLoginError("이 코드로는 해당 과목 수강 권한이 없어요. 선생님께 문의해주세요.");
             setScreen("landing");
@@ -481,9 +473,12 @@ export default function App() {
       });
   }
 
-  function hsLogout() {
-    setHsAuth(null);
-    try { localStorage.removeItem("cby_hs_auth"); } catch {}
+  function logout() {
+    setAuth(null);
+    try {
+      localStorage.removeItem("cby_auth");
+      localStorage.removeItem("cby_hs_auth");
+    } catch {}
     setScreen("landing");
   }
 
@@ -507,14 +502,7 @@ export default function App() {
     setRetryAnswers({});
     setSubmitState("idle");
     setShowValidation(false);
-    setStudentDraft({ name: "", email: "" });
-    setStudent({ name: "", email: "" });
-    setScreen("student");
-  }
-
-  function submitStudentInfo() {
-    if (!isNameValid || !isEmailValid) return;
-    setStudent(studentDraft);
+    setStudent({ name: (auth && auth.name) || "", email: "" });
     setStartTime(Date.now());
     setElapsedSec(0);
     setFinalDurationSec(null);
@@ -690,10 +678,10 @@ export default function App() {
 
         {screen === "login" && (
           <div>
-            <button onClick={() => { setScreen("landing"); setPendingHSKey(null); }} className="mb-5 px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 처음으로</button>
+            <button onClick={() => { setScreen("landing"); setPendingSubjectKey(null); }} className="mb-5 px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 처음으로</button>
             <div className="max-w-sm mx-auto">
               <p className="mb-4 leading-relaxed text-sm" style={{ color: "#4A4438" }}>
-                {pendingHSKey === "hsBio" ? "High School Biology" : "High School Chemistry"}는 로그인이 필요해요. 선생님께 받은 학생 코드와 비밀번호를 입력해주세요.
+                {pendingSubjectKey && SUBJECTS[pendingSubjectKey] ? SUBJECTS[pendingSubjectKey].label : "이 과목"}은(는) 로그인이 필요해요. 선생님께 받은 학생 코드와 비밀번호를 입력해주세요.
               </p>
               <div className="space-y-3 mb-4">
                 <div>
@@ -736,12 +724,12 @@ export default function App() {
 
         {screen === "categories" && (
           <div>
-            {(subject === "hsChem" || subject === "hsBio") && hsAuth && (
+            {auth && (
               <div className="mb-5 p-4 flex items-center justify-between flex-wrap gap-2" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
                 <span className="font-bold text-xl" style={{ color: INK }}>
-                  {hsAuth.name ? `${hsAuth.name}님, 반갑습니다! 👋` : "반갑습니다!"}
+                  {auth.name ? `${auth.name}님, 반갑습니다! 👋` : "반갑습니다!"}
                 </span>
-                <button onClick={hsLogout} className="text-xs underline" style={{ color: GREEN }}>로그아웃</button>
+                <button onClick={logout} className="text-xs underline" style={{ color: GREEN }}>로그아웃</button>
               </div>
             )}
             {subjectData.recommendedBooks && subjectData.recommendedBooks.length > 0 && (
@@ -875,8 +863,13 @@ export default function App() {
           <div>
             <button onClick={() => setScreen("units")} className="mb-5 px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 단원 목록</button>
             <p className="mb-4 leading-relaxed" style={{ color: "#4A4438" }}>
-              각 섹션 시작 시 이름/이메일을 입력합니다.
+              섹션을 선택하면 바로 시작됩니다. 채점 결과는 로그인한 이름으로 선생님께 자동 전달돼요.
             </p>
+            <div className="mb-6 p-4 text-sm leading-relaxed" style={{ border: `1px solid ${RUST}`, borderRadius: 4, background: "rgba(179,64,44,0.06)", color: "#7A3020" }}>
+              <div className="font-bold mb-1">⚠️ 풀이 전 확인</div>
+              AI(챗봇), 인터넷 검색, 답지 검색 없이 <b>본인 실력으로만</b> 풀어주세요.<br />
+              지금 정직하게 틀리는 게, 시험장에서 실력 없이 틀리는 것보다 훨씬 낫습니다.
+            </div>
             <div className="space-y-4">
               {unit.sections.map((s, i) => (
                 <button key={s.id} onClick={() => startSection(i)}
@@ -889,70 +882,6 @@ export default function App() {
                   <span className="text-sm" style={{ color: "#8A8270" }}>{s.questions.length}문항 →</span>
                 </button>
               ))}
-            </div>
-          </div>
-        )}
-
-        {screen === "student" && (
-          <div>
-            <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: GREEN }}>{subjectData.label} · Unit {unit.id} · {section.id} {section.title}</div>
-            <p className="mb-4 leading-relaxed" style={{ color: "#4A4438" }}>
-              이 섹션을 풀기 전에 이름과 이메일을 입력해주세요. 채점 결과는 선생님께 자동으로 전달됩니다.
-            </p>
-            <div className="mb-6 p-4 text-sm leading-relaxed" style={{ border: `1px solid ${RUST}`, borderRadius: 4, background: "rgba(179,64,44,0.06)", color: "#7A3020" }}>
-              <div className="font-bold mb-1">⚠️ 풀이 전 확인</div>
-              AI(챗봇), 인터넷 검색, 답지 검색 없이 <b>본인 실력으로만</b> 풀어주세요.<br />
-              지금 정직하게 틀리는 게, 시험장에서 실력 없이 틀리는 것보다 훨씬 낫습니다.
-            </div>
-            <div className="space-y-4 max-w-sm">
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: GREEN }}>이름</label>
-                <input
-                  type="text"
-                  value={studentDraft.name}
-                  onChange={(e) => setStudentDraft((s) => ({ ...s, name: e.target.value }))}
-                  placeholder="Enter name"
-                  className="w-full px-3 py-2 text-sm"
-                  style={{ border: `1.5px solid ${nameTrimmed && !isNameValid ? RUST : LINE}`, borderRadius: 3, background: "#FFFEFB" }}
-                />
-                {nameTrimmed && !isNameValid && (
-                  <p className="mt-1 text-xs" style={{ color: RUST }}>이름은 한글/영문 2~30자로 입력해주세요. (숫자·특수문자 불가)</p>
-                )}
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: GREEN }}>이메일</label>
-                <input
-                  type="email"
-                  value={studentDraft.email}
-                  onChange={(e) => setStudentDraft((s) => ({ ...s, email: e.target.value }))}
-                  placeholder="name@example.com"
-                  className="w-full px-3 py-2 text-sm"
-                  style={{ border: `1.5px solid ${emailTrimmed && !isEmailValid ? RUST : LINE}`, borderRadius: 3, background: "#FFFEFB" }}
-                />
-                {emailTrimmed && !isEmailValid && (
-                  <p className="mt-1 text-xs" style={{ color: RUST }}>올바른 이메일 형식이 아닙니다. (예: name@example.com)</p>
-                )}
-              </div>
-              <button
-                onClick={submitStudentInfo}
-                disabled={!isNameValid || !isEmailValid}
-                className="px-6 py-3 font-bold text-sm uppercase tracking-wide"
-                style={{
-                  background: isNameValid && isEmailValid ? INK : LINE,
-                  color: PAPER,
-                  borderRadius: 3,
-                  cursor: isNameValid && isEmailValid ? "pointer" : "not-allowed",
-                }}
-              >
-                시작하기 →
-              </button>
-              <button
-                onClick={() => setScreen("sections")}
-                className="ml-3 px-4 py-3 text-sm font-bold uppercase tracking-wide"
-                style={{ border: `1.5px solid ${INK}`, borderRadius: 3, background: "transparent" }}
-              >
-                ← 섹션 목록
-              </button>
             </div>
           </div>
         )}
@@ -1065,7 +994,7 @@ export default function App() {
 
             <div ref={reportPrintRef} style={{ background: PAPER, padding: 4 }}>
               <div className="mb-4 text-xs font-bold uppercase tracking-wide" style={{ color: "#8A8270" }}>
-                {student.name} · {student.email}
+                {student.name}{auth && auth.code ? ` (${auth.code})` : ""}
                 {finalDurationSec !== null && ` · 풀이 시간 ${formatDuration(finalDurationSec)}`}
               </div>
               <div className="flex items-center gap-4 mb-8 p-6 flex-wrap" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
