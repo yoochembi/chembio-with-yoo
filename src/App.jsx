@@ -3370,10 +3370,82 @@ const HSBIO_UNIT8 = [
   },
 ];
 
+// Pre-diagnostic test (사전 진단고사) — 20 MCQ covering regular/high-school chemistry basics,
+// used to gauge readiness before starting AP Chemistry. Answers independently verified.
+const CHEM_DIAGNOSTIC_SECTIONS = [
+  {
+    id: "D0-1",
+    title: "AP Chemistry 사전 진단고사",
+    questions: [
+      { id: "D0-Q1", text: "An atom has an atomic number of 17 and a mass number of 35. How many neutrons does it have?",
+        choices: ["17", "18", "35", "52"],
+        answer: 1, note: "Neutrons = mass number − atomic number = 35 − 17 = 18." },
+      { id: "D0-Q2", text: "Which of the following correctly describes isotopes?",
+        choices: ["Atoms of different elements with the same mass number", "Atoms of the same element with different numbers of neutrons", "Atoms with the same number of neutrons but different protons", "Ions formed by gaining electrons"],
+        answer: 1, note: "Isotopes are atoms of the same element (same # protons) with different numbers of neutrons." },
+      { id: "D0-Q3", text: "Which of the following elements has the largest atomic radius?",
+        choices: ["Na", "Mg", "K", "Ca"],
+        answer: 2, note: "Atomic radius increases down a group and decreases across a period. K is in period 4, group 1 — furthest down and leftmost, so it has the largest radius." },
+      { id: "D0-Q4", text: "Which trend is correct about ionization energy across Period 3 (Na → Ar)?",
+        choices: ["Decreases, because atomic radius increases", "Increases, because effective nuclear charge increases", "Stays the same, because all are in the same period", "Decreases, because more electrons are added"],
+        answer: 1, note: "Across a period, effective nuclear charge increases, pulling electrons in more tightly and increasing ionization energy." },
+      { id: "D0-Q5", text: "Which molecule has a bent geometry?",
+        choices: ["CO₂", "BF₃", "H₂O", "CH₄"],
+        answer: 2, note: "H₂O has 2 bonding pairs and 2 lone pairs on O, giving it a bent (angular) molecular geometry." },
+      { id: "D0-Q6", text: "Which type of intermolecular force is responsible for the unusually high boiling point of water compared to H₂S?",
+        choices: ["London dispersion forces", "Dipole-dipole interactions", "Hydrogen bonding", "Ionic bonding"],
+        answer: 2, note: "Water's O–H bonds allow strong hydrogen bonding, which H₂S cannot form (S is less electronegative and larger), explaining water's much higher boiling point." },
+      { id: "D0-Q7", text: "What is the correct name for the compound Cu₂SO₄?",
+        choices: ["Copper sulfate", "Copper(I) sulfate", "Copper(II) sulfate", "Dicopper sulfate"],
+        answer: 1, note: "SO₄ is 2− overall, so two Cu ions must each be 1+ to balance charge (Cu₂SO₄ → 2 Cu⁺ + SO₄²⁻). Transition metal charge is shown with Roman numerals: Copper(I) sulfate." },
+      { id: "D0-Q8", text: "How many moles of O₂ are required to completely combust 3 moles of C₃H₈?\nC₃H₈ + 5 O₂ → 3 CO₂ + 4 H₂O",
+        choices: ["3 mol", "5 mol", "15 mol", "12 mol"],
+        answer: 2, note: "Mole ratio of C₃H₈ : O₂ is 1 : 5, so 3 mol C₃H₈ × (5 mol O₂ / 1 mol C₃H₈) = 15 mol O₂." },
+      { id: "D0-Q9", text: "Calculate the number of moles in 46.0 g of ethanol (C₂H₅OH).\n(Molar mass of C₂H₅OH = 46.0 g/mol)",
+        choices: ["0.50 mol", "1.00 mol", "2.00 mol", "46.0 mol"],
+        answer: 1, note: "moles = mass / molar mass = 46.0 g / 46.0 g/mol = 1.00 mol." },
+      { id: "D0-Q10", text: "What type of chemical reaction is:\nZn(s) + 2 HCl(aq) → ZnCl₂(aq) + H₂(g)",
+        choices: ["Synthesis", "Decomposition", "Single replacement", "Double replacement"],
+        answer: 2, note: "A free element (Zn) replaces the H in HCl, forming a new compound and releasing H₂ gas — this is a single replacement reaction." },
+      { id: "D0-Q11", text: "A gas occupies 4.0 L at 2.0 atm. What is the new volume when pressure is increased to 8.0 atm at constant temperature?",
+        choices: ["0.5 L", "1.0 L", "2.0 L", "16.0 L"],
+        answer: 1, note: "Boyle's Law: P₁V₁ = P₂V₂ → (2.0)(4.0) = (8.0)(V₂) → V₂ = 1.0 L." },
+      { id: "D0-Q12", text: "What is the molarity of a solution prepared by dissolving 4.0 mol of NaOH in 2.0 L of water?",
+        choices: ["0.50 M", "1.0 M", "2.0 M", "8.0 M"],
+        answer: 2, note: "Molarity = mol solute / L solution = 4.0 mol / 2.0 L = 2.0 M." },
+      { id: "D0-Q13", text: "Which of the following changes would NOT increase the rate of a chemical reaction?",
+        choices: ["Increasing the temperature", "Adding a catalyst", "Increasing the concentration of reactants", "Decreasing the surface area of a solid reactant"],
+        answer: 3, note: "Decreasing surface area reduces the frequency of effective collisions, which slows the reaction rate rather than increasing it." },
+      { id: "D0-Q14", text: "In a reaction, doubling the concentration of reactant A doubles the rate. What is the order of the reaction with respect to A?",
+        choices: ["Zero order", "First order", "Second order", "Third order"],
+        answer: 1, note: "Rate ∝ [A]¹ — doubling [A] doubles the rate, which is the definition of first-order dependence." },
+      { id: "D0-Q15", text: "How much heat is absorbed when 50.0 g of water is heated from 20.0°C to 40.0°C?\n(Specific heat of water = 4.18 J/g·°C)",
+        choices: ["418 J", "2,090 J", "4,180 J", "8,360 J"],
+        answer: 2, note: "q = mcΔT = (50.0 g)(4.18 J/g·°C)(20.0°C) = 4,180 J." },
+      { id: "D0-Q16", text: "Which of the following correctly describes an exothermic reaction?",
+        choices: ["The system absorbs heat, and ΔH is positive", "The system releases heat, and ΔH is negative", "The temperature of the surroundings decreases", "The activation energy is zero"],
+        answer: 1, note: "Exothermic reactions release heat to the surroundings, so ΔH (enthalpy of the system) is negative." },
+      { id: "D0-Q17", text: "For: N₂(g) + 3 H₂(g) ⇌ 2 NH₃(g)\nWhat happens if additional H₂ is added to the system at equilibrium?",
+        choices: ["Equilibrium shifts left, producing more N₂", "Equilibrium shifts right, producing more NH₃", "The equilibrium constant K increases", "There is no change"],
+        answer: 1, note: "By Le Châtelier's principle, adding a reactant (H₂) shifts equilibrium toward the products, producing more NH₃. K itself does not change (only T changes K)." },
+      { id: "D0-Q18", text: "A reaction has K = 1.5 × 10⁻⁸. Which statement is correct?",
+        choices: ["Products are strongly favored", "[products] = [reactants] at equilibrium", "Reactants are strongly favored", "The reaction does not reach equilibrium"],
+        answer: 2, note: "A very small K (≪1) means the ratio [products]/[reactants] is tiny at equilibrium, so reactants are strongly favored." },
+      { id: "D0-Q19", text: "What is the pH of a 0.010 M HCl solution?\n(HCl is a strong monoprotic acid)",
+        choices: ["1", "2", "3", "12"],
+        answer: 1, note: "HCl fully dissociates, so [H⁺] = 0.010 M = 1.0×10⁻² M. pH = −log(1.0×10⁻²) = 2." },
+      { id: "D0-Q20", text: "It takes 25.0 mL of 0.200 M NaOH to neutralize 50.0 mL of HCl. What is the concentration of HCl?",
+        choices: ["0.050 M", "0.100 M", "0.200 M", "0.400 M"],
+        answer: 1, note: "M₁V₁ = M₂V₂ (1:1 neutralization) → (0.200)(25.0) = (C₂)(50.0) → C₂ = 0.100 M." },
+    ],
+  },
+];
+
 const SUBJECTS = {
   chem: {
     label: "AP Chemistry",
     units: [
+      { id: "D0", title: "사전 진단고사 (Diagnostic Test)", sections: CHEM_DIAGNOSTIC_SECTIONS, isDiagnostic: true },
       { id: "1", title: "Atomic Structure and Properties", sections: CHEM_UNIT1_SECTIONS },
       { id: "2", title: "Molecular and Ionic Compound Structure", sections: CHEM_UNIT2_SECTIONS },
       { id: "3", title: "Intermolecular Forces and Properties", sections: CHEM_UNIT3_SECTIONS },
@@ -3899,7 +3971,9 @@ export default function App() {
                       cursor: locked ? "not-allowed" : "pointer",
                       minHeight: 88,
                     }}>
-                    <div className="text-xs font-bold uppercase tracking-wide" style={{ color: GREEN }}>Unit {u.id}</div>
+                    <div className="text-xs font-bold uppercase tracking-wide" style={{ color: GREEN }}>
+                      {u.isDiagnostic ? "진단고사" : `Unit ${u.id}`}
+                    </div>
                     <div className="font-bold">{u.title}</div>
                     <div className="text-xs mt-1" style={{ color: "#8A8270" }}>
                       {locked ? "준비중" : `${u.sections.length}개 섹션 · ${totalQ}문항 →`}
@@ -4112,6 +4186,19 @@ export default function App() {
               <div className="flex items-center gap-4 mb-8 p-6 flex-wrap" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
                 <DonutChart correct={score} incorrect={wrong} unanswered={blank} />
               </div>
+
+              {unit && unit.isDiagnostic && pct < 80 && (
+                <div className="mb-8 p-5" style={{ border: `1.5px solid ${AMBER}`, borderRadius: 4, background: "#FBF3E0" }}>
+                  <div className="font-bold mb-2" style={{ color: AMBER }}>📘 AP 시작 전, 복습을 추천드려요</div>
+                  <p className="text-sm leading-relaxed mb-3" style={{ color: "#4A4438" }}>
+                    성취도가 80% 미만인 경우, AP Chemistry를 수강하기 전에 regular chemistry의 전반적인 review가 가능한 워크북으로 미리 복습하시면 도움이 됩니다.
+                  </p>
+                  <div className="flex gap-4 text-sm font-bold">
+                    <a href="https://a.co/d/04QAGTnU" target="_blank" rel="noreferrer" style={{ color: GREEN, textDecoration: "underline" }}>아마존에서 보기</a>
+                    <a href="https://product.kyobobook.co.kr/detail/S000216730013" target="_blank" rel="noreferrer" style={{ color: GREEN, textDecoration: "underline" }}>교보문고에서 보기</a>
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-5">
                 {filtered.map((r) => {
