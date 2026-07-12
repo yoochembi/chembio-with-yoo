@@ -664,6 +664,23 @@ export default function App() {
 
         {screen === "landing" && (
           <div>
+            <div className="mb-8 p-6" style={{ borderRadius: 6, background: INK, color: PAPER }}>
+              <div>
+                {[
+                  "정직하게, 나 자신에게 떳떳하게 공부하기",
+                  "노력은 결국 배신하지 않는다는 믿음",
+                  "오늘 하루, 최선을 다하기",
+                ].map((line, i) => (
+                  <div key={i} className="flex items-baseline gap-3 py-2.5" style={{ borderTop: i === 0 ? "none" : "1px solid rgba(243,246,251,0.15)" }}>
+                    <span className="text-xl font-bold shrink-0" style={{ color: "rgba(243,246,251,0.35)", fontVariantNumeric: "tabular-nums" }}>
+                      0{i + 1}
+                    </span>
+                    <span className="text-base font-bold leading-snug">{line}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className="mb-10 p-5" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
               <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: GREEN }}>공지</div>
               <ul className="space-y-2 text-sm leading-relaxed" style={{ color: "#33455E" }}>
