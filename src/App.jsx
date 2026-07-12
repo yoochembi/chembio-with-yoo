@@ -3512,6 +3512,24 @@ const BIO_DIAGNOSTIC_SECTIONS = [
   },
 ];
 
+// AP Chemistry / AP Biology Past Free-Response Questions — College Board only keeps
+// the 3 most recent years' scoring guidelines public alongside the questions PDF.
+// 2026 scoring guidelines aren't posted yet (exam just happened in May), so that's
+// left empty until College Board publishes it.
+const AP_CHEM_FRQ_YEARS = [
+  { year: 2026, questions: "https://apcentral.collegeboard.org/media/pdf/ap26-frq-chemistry.pdf", scoring: null },
+  { year: 2025, questions: "https://apcentral.collegeboard.org/media/pdf/ap25-frq-chemistry.pdf", scoring: "https://apcentral.collegeboard.org/media/pdf/ap25-sg-chemistry.pdf" },
+  { year: 2024, questions: "https://apcentral.collegeboard.org/media/pdf/ap24-frq-chemistry.pdf", scoring: "https://apcentral.collegeboard.org/media/pdf/ap24-sg-chemistry.pdf" },
+  { year: 2023, questions: "https://apcentral.collegeboard.org/media/pdf/ap23-frq-chemistry.pdf", scoring: "https://apcentral.collegeboard.org/media/pdf/ap23-sg-chemistry.pdf" },
+];
+
+const AP_BIO_FRQ_YEARS = [
+  { year: 2026, questions: "https://apcentral.collegeboard.org/media/pdf/ap26-frq-biology.pdf", scoring: null },
+  { year: 2025, questions: "https://apcentral.collegeboard.org/media/pdf/ap25-frq-biology.pdf", scoring: "https://apcentral.collegeboard.org/media/pdf/ap25-sg-biology.pdf" },
+  { year: 2024, questions: "https://apcentral.collegeboard.org/media/pdf/ap24-frq-biology.pdf", scoring: "https://apcentral.collegeboard.org/media/pdf/ap24-sg-biology.pdf" },
+  { year: 2023, questions: "https://apcentral.collegeboard.org/media/pdf/ap23-frq-biology.pdf", scoring: "https://apcentral.collegeboard.org/media/pdf/ap23-sg-biology.pdf" },
+];
+
 const SUBJECTS = {
   chem: {
     label: "AP Chemistry",
@@ -3812,7 +3830,7 @@ export default function App() {
   const isHS = subject === "hsChem" || subject === "hsBio";
   const CATEGORIES = isHS
     ? ALL_CATEGORIES.filter((c) => c.id === "unit-quiz" || c.id === "practice")
-    : ALL_CATEGORIES;
+    : ALL_CATEGORIES.map((c) => (c.id === "frq" && (subject === "chem" || subject === "bio") ? { ...c, available: true, desc: "College Board 기출 FRQ (2023–2026)" } : c));
 
   function switchSubject(s) {
     setSubject(s);
@@ -3822,6 +3840,7 @@ export default function App() {
 
   function openCategory(cat) {
     if (!cat.available) return; // coming soon
+    if (cat.id === "frq") { setScreen("frq"); return; }
     setScreen("units");
   }
 
@@ -4062,6 +4081,38 @@ export default function App() {
                     {cat.available ? cat.desc : "준비중"}
                   </div>
                 </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {screen === "frq" && (
+          <div>
+            <button onClick={() => setScreen("categories")} className="mb-5 px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← Unit Quiz 카테고리</button>
+            <p className="mb-4 leading-relaxed" style={{ color: "#4A4438" }}>
+              College Board에서 제공하는 {subjectData.label} 기출 서술형(FRQ) 문제와 채점 기준입니다. PDF는 College Board 사이트에서 직접 열립니다.
+            </p>
+            <div className="space-y-4">
+              {(subject === "bio" ? AP_BIO_FRQ_YEARS : AP_CHEM_FRQ_YEARS).map((y) => (
+                <div key={y.year} className="p-5 flex items-center justify-between gap-3 flex-wrap" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
+                  <div className="font-bold text-lg">{y.year}</div>
+                  <div className="flex gap-2">
+                    <a href={y.questions} target="_blank" rel="noreferrer"
+                      className="px-3 py-1.5 text-xs font-bold uppercase tracking-wide"
+                      style={{ background: INK, color: PAPER, borderRadius: 3 }}>
+                      Free-Response Questions
+                    </a>
+                    {y.scoring ? (
+                      <a href={y.scoring} target="_blank" rel="noreferrer"
+                        className="px-3 py-1.5 text-xs font-bold uppercase tracking-wide"
+                        style={{ border: `1.5px solid ${INK}`, color: INK, borderRadius: 3 }}>
+                        Scoring Guidelines
+                      </a>
+                    ) : (
+                      <span className="px-3 py-1.5 text-xs" style={{ color: "#8A8270" }}>Scoring Guidelines 미공개</span>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
