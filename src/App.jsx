@@ -3515,8 +3515,13 @@ const BIO_DIAGNOSTIC_SECTIONS = [
 const SUBJECTS = {
   chem: {
     label: "AP Chemistry",
+    recommendedBooks: [
+      { title: "AP Chemistry Booster Workbook: 2025 AP Chemistry Prep Workbook (Vol. 1)", amazon: "https://www.amazon.com/dp/B0DF59JF5B" },
+      { title: "AP Chemistry Booster Workbook Volume 2: 2025 AP Chemistry Prep Workbook", amazon: "https://www.amazon.com/dp/B0DL9HRXVS" },
+      { title: "AP Chemistry Practice Booster Workbook (합본, 365 Questions)", kyobo: "https://ebook-product.kyobobook.co.kr/dig/epd/ebook/E000010493992", amazon: "https://www.amazon.com/dp/B0DLB6LT3T" },
+    ],
     units: [
-      { id: "D0", title: "사전 진단고사 (Diagnostic Test)", sections: CHEM_DIAGNOSTIC_SECTIONS, isDiagnostic: true, workbookLinks: { amazon: "https://a.co/d/04QAGTnU", kyobo: "https://product.kyobobook.co.kr/detail/S000216730013" } },
+      { id: "D0", title: "사전 진단고사 (Diagnostic Test)", sections: CHEM_DIAGNOSTIC_SECTIONS, isDiagnostic: true, workbookLinks: { amazon: "https://a.co/d/04QAGTnU", kyobo: "https://product.kyobobook.co.kr/detail/S000220217245" } },
       { id: "1", title: "Atomic Structure and Properties", sections: CHEM_UNIT1_SECTIONS },
       { id: "2", title: "Molecular and Ionic Compound Structure", sections: CHEM_UNIT2_SECTIONS },
       { id: "3", title: "Intermolecular Forces and Properties", sections: CHEM_UNIT3_SECTIONS },
@@ -3530,8 +3535,13 @@ const SUBJECTS = {
   },
   bio: {
     label: "AP Biology",
+    recommendedBooks: [
+      { title: "AP Biology Booster Workbook (Part 1): 400 Essential Practice Problems", kyobo: "https://product.kyobobook.co.kr/detail/S000216826524", amazon: "https://www.amazon.com/dp/B0FN4JR6TC" },
+      { title: "AP Biology Booster Workbook (Part 2): 400 Essential Practice Problems", kyobo: "https://product.kyobobook.co.kr/detail/S000218478349", amazon: "https://www.amazon.com/dp/B0G25BTN6K" },
+      { title: "AP Biology Practice Booster Workbook: AP Biology test prep (합본)", amazon: "https://www.amazon.com/dp/B0G24YQGTN" },
+    ],
     units: [
-      { id: "D0", title: "사전 진단고사 (Diagnostic Test)", sections: BIO_DIAGNOSTIC_SECTIONS, isDiagnostic: true, workbookLinks: { amazon: "https://a.co/d/09J2No8J", kyobo: "https://product.kyobobook.co.kr/detail/S000216795837" } },
+      { id: "D0", title: "사전 진단고사 (Diagnostic Test)", sections: BIO_DIAGNOSTIC_SECTIONS, isDiagnostic: true, workbookLinks: { amazon: "https://a.co/d/09J2No8J", kyobo: "https://product.kyobobook.co.kr/detail/S000220217244" } },
       { id: "1", title: "Chemistry of Life", sections: BIO_UNIT1_SECTIONS },
       { id: "2", title: "Cell Structure and Function", sections: BIO_UNIT2_SECTIONS },
       { id: "3", title: "Cellular Energetics", sections: BIO_UNIT3_SECTIONS },
@@ -3544,6 +3554,10 @@ const SUBJECTS = {
   },
   hsChem: {
     label: "High School Chemistry",
+    recommendedBooks: [
+      { title: "High School Chemistry Practice Booster", kyobo: "https://product.kyobobook.co.kr/detail/S000220217245", amazon: "https://a.co/d/04OH2aLv" },
+      { title: "Scientific Writing for Lab Reports", kyobo: "https://product.kyobobook.co.kr/detail/S000218478348", amazon: "https://a.co/d/08jL9zmQ" },
+    ],
     units: [
       { id: "1", title: "Atomic Structure", sections: HSCHEM_UNIT1 },
       { id: "2", title: "Periodicity", sections: HSCHEM_UNIT2 },
@@ -3558,6 +3572,10 @@ const SUBJECTS = {
   },
   hsBio: {
     label: "High School Biology",
+    recommendedBooks: [
+      { title: "High School Biology Concept Booster", kyobo: "https://product.kyobobook.co.kr/detail/S000220217244", amazon: "https://a.co/d/07VQwwju" },
+      { title: "Scientific Writing for Lab Reports", kyobo: "https://product.kyobobook.co.kr/detail/S000218478348", amazon: "https://a.co/d/08jL9zmQ" },
+    ],
     units: [
       { id: "1", title: "Cells", sections: HSBIO_UNIT1 },
       { id: "2", title: "Membrane", sections: HSBIO_UNIT2 },
@@ -3783,7 +3801,7 @@ export default function App() {
     return true;
   });
 
-  const CATEGORIES = [
+  const ALL_CATEGORIES = [
     { id: "unit-quiz", label: "Unit Quiz", desc: "단원별 퀴즈", available: true },
     { id: "practice", label: "Practice Questions", desc: "단원별 연습문제", available: false },
     { id: "mock1", label: "Mock Test 1", desc: "모의고사 1회", available: false },
@@ -3791,6 +3809,10 @@ export default function App() {
     { id: "mock3", label: "Mock Test 3", desc: "모의고사 3회", available: false },
     { id: "frq", label: "Past Papers — FRQs", desc: "기출 서술형 문제", available: false },
   ];
+  const isHS = subject === "hsChem" || subject === "hsBio";
+  const CATEGORIES = isHS
+    ? ALL_CATEGORIES.filter((c) => c.id === "unit-quiz" || c.id === "practice")
+    : ALL_CATEGORIES;
 
   function switchSubject(s) {
     setSubject(s);
@@ -3991,6 +4013,34 @@ export default function App() {
 
         {screen === "categories" && (
           <div>
+            {subjectData.recommendedBooks && subjectData.recommendedBooks.length > 0 && (
+              <div className="mb-5 p-4" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
+                <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#8A8270" }}>추천 교재</div>
+                <div className="space-y-2">
+                  {subjectData.recommendedBooks.map((book, bi) => (
+                    <div key={bi} className="flex items-center justify-between gap-3 flex-wrap">
+                      <span className="text-sm font-bold">{book.title}</span>
+                      <div className="flex gap-2">
+                        {book.kyobo && (
+                          <a href={book.kyobo} target="_blank" rel="noreferrer"
+                            className="px-3 py-1.5 text-xs font-bold uppercase tracking-wide"
+                            style={{ background: INK, color: PAPER, borderRadius: 3 }}>
+                            교보문고
+                          </a>
+                        )}
+                        {book.amazon && (
+                          <a href={book.amazon} target="_blank" rel="noreferrer"
+                            className="px-3 py-1.5 text-xs font-bold uppercase tracking-wide"
+                            style={{ border: `1.5px solid ${INK}`, color: INK, borderRadius: 3 }}>
+                            Amazon
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             <button onClick={() => setScreen("landing")} className="mb-5 px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 처음으로</button>
             <p className="mb-4 leading-relaxed" style={{ color: "#4A4438" }}>
               원하는 항목을 선택하세요. 준비중인 항목은 곧 추가됩니다.
