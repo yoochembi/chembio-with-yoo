@@ -267,6 +267,20 @@ export default function App() {
       return [];
     }
   });
+  // High School Chem/Bio login gate — student code + password, verified server-side
+  // against a Roster tab in the HS spreadsheet. Only hsChem/hsBio are gated; AP stays open.
+  const [hsAuth, setHsAuth] = useState(() => {
+    try {
+      const raw = localStorage.getItem("cby_hs_auth");
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [pendingHSKey, setPendingHSKey] = useState(null);
+  const [loginDraft, setLoginDraft] = useState({ code: "", password: "" });
+  const [loginState, setLoginState] = useState("idle"); // idle | checking | error
+  const [loginError, setLoginError] = useState("");
   const [startTime, setStartTime] = useState(null);
   const [elapsedSec, setElapsedSec] = useState(0);
   const [finalDurationSec, setFinalDurationSec] = useState(null);
@@ -416,9 +430,61 @@ export default function App() {
     : ALL_CATEGORIES.map((c) => (c.id === "frq" && (subject === "chem" || subject === "bio") ? { ...c, available: true, desc: "College Board 기출 FRQ (2023–2026)" } : c));
 
   function switchSubject(s) {
+    if (s === "hsChem" || s === "hsBio") {
+      const authorized = hsAuth && Array.isArray(hsAuth.subjects) && hsAuth.subjects.includes(s);
+      if (!authorized) {
+        setPendingHSKey(s);
+        setLoginError("");
+        setLoginState("idle");
+        setScreen("login");
+        return;
+      }
+    }
     setSubject(s);
     setUnitIdx(null);
     setScreen("categories");
+  }
+
+  function submitLogin() {
+    const code = loginDraft.code.trim();
+    const password = loginDraft.password;
+    if (!code || !password) {
+      setLoginError("코드와 비밀번호를 모두 입력해주세요.");
+      return;
+    }
+    setLoginState("checking");
+    setLoginError("");
+    jsonp(SHEET_ENDPOINT, { mode: "hsLogin", code, password })
+      .then((data) => {
+        if (data && data.ok) {
+          const auth = { code, name: data.name || "", subjects: data.subjects || [] };
+          setHsAuth(auth);
+          try { localStorage.setItem("cby_hs_auth", JSON.stringify(auth)); } catch {}
+          setLoginState("idle");
+          if (pendingHSKey && auth.subjects.includes(pendingHSKey)) {
+            setSubject(pendingHSKey);
+            setUnitIdx(null);
+            setScreen("categories");
+            setPendingHSKey(null);
+          } else {
+            setLoginError("이 코드로는 해당 과목 수강 권한이 없어요. 선생님께 문의해주세요.");
+            setScreen("landing");
+          }
+        } else {
+          setLoginState("error");
+          setLoginError("코드 또는 비밀번호가 올바르지 않아요.");
+        }
+      })
+      .catch(() => {
+        setLoginState("error");
+        setLoginError("서버 연결에 실패했어요. 잠시 후 다시 시도해주세요.");
+      });
+  }
+
+  function hsLogout() {
+    setHsAuth(null);
+    try { localStorage.removeItem("cby_hs_auth"); } catch {}
+    setScreen("landing");
   }
 
   function openCategory(cat) {
@@ -622,8 +688,60 @@ export default function App() {
           </div>
         )}
 
+        {screen === "login" && (
+          <div>
+            <button onClick={() => { setScreen("landing"); setPendingHSKey(null); }} className="mb-5 px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 처음으로</button>
+            <div className="max-w-sm mx-auto">
+              <p className="mb-4 leading-relaxed text-sm" style={{ color: "#4A4438" }}>
+                {pendingHSKey === "hsBio" ? "High School Biology" : "High School Chemistry"}는 로그인이 필요해요. 선생님께 받은 학생 코드와 비밀번호를 입력해주세요.
+              </p>
+              <div className="space-y-3 mb-4">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: GREEN }}>학생 코드</label>
+                  <input
+                    type="text"
+                    value={loginDraft.code}
+                    onChange={(e) => setLoginDraft({ ...loginDraft, code: e.target.value })}
+                    className="w-full px-3 py-2 text-sm"
+                    style={{ border: `1px solid ${LINE}`, borderRadius: 4 }}
+                    placeholder="예: yoo2026"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: GREEN }}>비밀번호</label>
+                  <input
+                    type="password"
+                    value={loginDraft.password}
+                    onChange={(e) => setLoginDraft({ ...loginDraft, password: e.target.value })}
+                    onKeyDown={(e) => { if (e.key === "Enter") submitLogin(); }}
+                    className="w-full px-3 py-2 text-sm"
+                    style={{ border: `1px solid ${LINE}`, borderRadius: 4 }}
+                  />
+                </div>
+              </div>
+              {loginError && (
+                <div className="mb-4 text-xs px-3 py-2" style={{ background: "rgba(166,67,45,0.08)", color: RUST, borderRadius: 3 }}>{loginError}</div>
+              )}
+              <button
+                onClick={submitLogin}
+                disabled={loginState === "checking"}
+                className="w-full py-2.5 text-sm font-bold uppercase tracking-wide"
+                style={{ background: INK, color: PAPER, borderRadius: 3, opacity: loginState === "checking" ? 0.6 : 1 }}
+              >
+                {loginState === "checking" ? "확인 중..." : "로그인"}
+              </button>
+            </div>
+          </div>
+        )}
+
         {screen === "categories" && (
           <div>
+            {(subject === "hsChem" || subject === "hsBio") && hsAuth && (
+              <div className="mb-4 flex items-center justify-between text-xs" style={{ color: "#8A8270" }}>
+                <span>{hsAuth.name ? `${hsAuth.name}님으로 로그인됨` : "로그인됨"}</span>
+                <button onClick={hsLogout} className="underline" style={{ color: GREEN }}>로그아웃</button>
+              </div>
+            )}
             {subjectData.recommendedBooks && subjectData.recommendedBooks.length > 0 && (
               <div className="mb-5 p-4" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
                 <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: "#8A8270" }}>추천 교재</div>
