@@ -277,6 +277,7 @@ export default function App() {
   const [loginError, setLoginError] = useState("");
   const [historyRecords, setHistoryRecords] = useState(null);
   const [historyState, setHistoryState] = useState("idle"); // idle | loading | loaded | error
+  const [historyDetailUnit, setHistoryDetailUnit] = useState(null); // null = summary list, else showing that unit's full history
   const [startTime, setStartTime] = useState(null);
   const [elapsedSec, setElapsedSec] = useState(0);
   const [finalDurationSec, setFinalDurationSec] = useState(null);
@@ -442,6 +443,7 @@ export default function App() {
   function fetchHistory(subjectKey, code) {
     setHistoryState("loading");
     setHistoryRecords(null);
+    setHistoryDetailUnit(null);
     jsonp(SHEET_ENDPOINT, { mode: "history", code, subject: subjectKey })
       .then((data) => {
         setHistoryRecords((data && data.records) || []);
@@ -747,7 +749,6 @@ export default function App() {
               </span>
               <button onClick={logout} className="text-xs underline" style={{ color: GREEN }}>로그아웃</button>
             </div>
-            <p className="mb-4 text-sm font-bold uppercase tracking-wide" style={{ color: GREEN }}>내 기록 — {subjectData.label}</p>
 
             {historyState === "loading" && (
               <div className="p-6 text-center text-sm" style={{ border: `1px dashed ${LINE}`, borderRadius: 4, color: "#8A8270" }}>기록 불러오는 중...</div>
@@ -758,22 +759,64 @@ export default function App() {
             {historyState === "loaded" && historyRecords && historyRecords.length === 0 && (
               <div className="p-6 text-center text-sm" style={{ border: `1px dashed ${LINE}`, borderRadius: 4, color: "#8A8270" }}>아직 제출한 기록이 없어요. 첫 문제를 풀어보세요!</div>
             )}
-            {historyState === "loaded" && historyRecords && historyRecords.length > 0 && (
-              <div className="space-y-3 mb-6">
-                {historyRecords.map((r, i) => (
-                  <div key={i} className="p-4 flex items-center justify-between flex-wrap gap-2" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
-                    <div>
-                      <div className="font-bold">{r.unit || "-"}</div>
-                      <div className="text-xs" style={{ color: "#8A8270" }}>{r.timestamp}</div>
-                    </div>
-                    <div className="text-xl font-bold" style={{ color: Number(r.percent) >= 80 ? GREEN : Number(r.percent) >= 50 ? AMBER : RUST }}>
-                      {r.percent !== "" ? `${r.percent}%` : "-"}
-                      <span className="ml-2 text-xs font-normal" style={{ color: "#8A8270" }}>({r.score}/{r.total})</span>
-                    </div>
+
+            {historyState === "loaded" && historyRecords && historyRecords.length > 0 && historyDetailUnit === null && (() => {
+              // Records already arrive sorted newest-first, so the first occurrence
+              // of each unit is that unit's latest attempt.
+              const seen = new Set();
+              const latestPerUnit = [];
+              historyRecords.forEach((r) => {
+                const key = r.unit || "-";
+                if (seen.has(key)) return;
+                seen.add(key);
+                latestPerUnit.push(r);
+              });
+              return (
+                <>
+                  <p className="mb-4 text-sm font-bold uppercase tracking-wide" style={{ color: GREEN }}>내 기록 — {subjectData.label}</p>
+                  <div className="space-y-3 mb-6">
+                    {latestPerUnit.map((r, i) => (
+                      <button key={i} onClick={() => setHistoryDetailUnit(r.unit || "-")}
+                        className="w-full text-left p-4 flex items-center justify-between flex-wrap gap-2"
+                        style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
+                        <div>
+                          <div className="font-bold">{r.unit || "-"}</div>
+                          <div className="text-xs" style={{ color: "#8A8270" }}>최근 제출 · {r.timestamp}</div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className="text-xl font-bold" style={{ color: Number(r.percent) >= 80 ? GREEN : Number(r.percent) >= 50 ? AMBER : RUST }}>
+                            {r.percent !== "" ? `${r.percent}%` : "-"}
+                            <span className="ml-2 text-xs font-normal" style={{ color: "#8A8270" }}>({r.score}/{r.total})</span>
+                          </div>
+                          <span className="text-xs" style={{ color: "#8A8270" }}>전체 기록 보기 →</span>
+                        </div>
+                      </button>
+                    ))}
                   </div>
-                ))}
-              </div>
-            )}
+                </>
+              );
+            })()}
+
+            {historyState === "loaded" && historyRecords && historyDetailUnit !== null && (() => {
+              const attempts = historyRecords.filter((r) => (r.unit || "-") === historyDetailUnit);
+              return (
+                <>
+                  <button onClick={() => setHistoryDetailUnit(null)} className="mb-4 px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 내 기록으로</button>
+                  <p className="mb-4 font-bold text-lg">{historyDetailUnit}</p>
+                  <div className="space-y-3 mb-6">
+                    {attempts.map((r, i) => (
+                      <div key={i} className="p-4 flex items-center justify-between flex-wrap gap-2" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
+                        <div className="text-xs" style={{ color: "#8A8270" }}>{i === 0 ? "최근 제출 · " : ""}{r.timestamp}</div>
+                        <div className="text-xl font-bold" style={{ color: Number(r.percent) >= 80 ? GREEN : Number(r.percent) >= 50 ? AMBER : RUST }}>
+                          {r.percent !== "" ? `${r.percent}%` : "-"}
+                          <span className="ml-2 text-xs font-normal" style={{ color: "#8A8270" }}>({r.score}/{r.total})</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              );
+            })()}
 
             <button
               onClick={() => setScreen("categories")}
