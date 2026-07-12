@@ -275,6 +275,8 @@ export default function App() {
   const [loginDraft, setLoginDraft] = useState({ code: "", password: "" });
   const [loginState, setLoginState] = useState("idle"); // idle | checking | error
   const [loginError, setLoginError] = useState("");
+  const [historyRecords, setHistoryRecords] = useState(null);
+  const [historyState, setHistoryState] = useState("idle"); // idle | loading | loaded | error
   const [startTime, setStartTime] = useState(null);
   const [elapsedSec, setElapsedSec] = useState(0);
   const [finalDurationSec, setFinalDurationSec] = useState(null);
@@ -437,6 +439,19 @@ export default function App() {
     setScreen("categories");
   }
 
+  function fetchHistory(subjectKey, code) {
+    setHistoryState("loading");
+    setHistoryRecords(null);
+    jsonp(SHEET_ENDPOINT, { mode: "history", code, subject: subjectKey })
+      .then((data) => {
+        setHistoryRecords((data && data.records) || []);
+        setHistoryState("loaded");
+      })
+      .catch(() => {
+        setHistoryState("error");
+      });
+  }
+
   function submitLogin() {
     const code = loginDraft.code.trim();
     const password = loginDraft.password;
@@ -456,7 +471,8 @@ export default function App() {
           if (pendingSubjectKey && newAuth.subjects.includes(pendingSubjectKey)) {
             setSubject(pendingSubjectKey);
             setUnitIdx(null);
-            setScreen("categories");
+            fetchHistory(pendingSubjectKey, newAuth.code);
+            setScreen("history");
             setPendingSubjectKey(null);
           } else {
             setLoginError("이 코드로는 해당 과목 수강 권한이 없어요. 선생님께 문의해주세요.");
@@ -582,6 +598,7 @@ export default function App() {
     const payload = {
       name: student.name,
       email: student.email,
+      studentCode: (auth && auth.code) || "",
       subject: subjectData.label,
       unit: `Unit ${unit.id} (${unit.title}) - ${section.id} ${section.title}`,
       sectionKey,
@@ -722,6 +739,52 @@ export default function App() {
           </div>
         )}
 
+        {screen === "history" && (
+          <div>
+            <div className="mb-5 p-4 flex items-center justify-between flex-wrap gap-2" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
+              <span className="font-bold text-xl" style={{ color: INK }}>
+                {auth && auth.name ? `${auth.name}님, 반갑습니다! 👋` : "반갑습니다!"}
+              </span>
+              <button onClick={logout} className="text-xs underline" style={{ color: GREEN }}>로그아웃</button>
+            </div>
+            <p className="mb-4 text-sm font-bold uppercase tracking-wide" style={{ color: GREEN }}>내 기록 — {subjectData.label}</p>
+
+            {historyState === "loading" && (
+              <div className="p-6 text-center text-sm" style={{ border: `1px dashed ${LINE}`, borderRadius: 4, color: "#8A8270" }}>기록 불러오는 중...</div>
+            )}
+            {historyState === "error" && (
+              <div className="p-6 text-center text-sm" style={{ border: `1px dashed ${LINE}`, borderRadius: 4, color: RUST }}>기록을 불러오지 못했어요. 새로고침해서 다시 시도해주세요.</div>
+            )}
+            {historyState === "loaded" && historyRecords && historyRecords.length === 0 && (
+              <div className="p-6 text-center text-sm" style={{ border: `1px dashed ${LINE}`, borderRadius: 4, color: "#8A8270" }}>아직 제출한 기록이 없어요. 첫 문제를 풀어보세요!</div>
+            )}
+            {historyState === "loaded" && historyRecords && historyRecords.length > 0 && (
+              <div className="space-y-3 mb-6">
+                {historyRecords.map((r, i) => (
+                  <div key={i} className="p-4 flex items-center justify-between flex-wrap gap-2" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
+                    <div>
+                      <div className="font-bold">{r.unit || "-"}</div>
+                      <div className="text-xs" style={{ color: "#8A8270" }}>{r.timestamp}</div>
+                    </div>
+                    <div className="text-xl font-bold" style={{ color: Number(r.percent) >= 80 ? GREEN : Number(r.percent) >= 50 ? AMBER : RUST }}>
+                      {r.percent !== "" ? `${r.percent}%` : "-"}
+                      <span className="ml-2 text-xs font-normal" style={{ color: "#8A8270" }}>({r.score}/{r.total})</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <button
+              onClick={() => setScreen("categories")}
+              className="px-6 py-3 font-bold text-sm uppercase tracking-wide"
+              style={{ background: INK, color: PAPER, borderRadius: 3 }}
+            >
+              단원 목록 보러 가기 →
+            </button>
+          </div>
+        )}
+
         {screen === "categories" && (
           <div>
             {auth && (
@@ -729,7 +792,10 @@ export default function App() {
                 <span className="font-bold text-xl" style={{ color: INK }}>
                   {auth.name ? `${auth.name}님, 반갑습니다! 👋` : "반갑습니다!"}
                 </span>
-                <button onClick={logout} className="text-xs underline" style={{ color: GREEN }}>로그아웃</button>
+                <div className="flex items-center gap-3">
+                  <button onClick={() => { fetchHistory(subject, auth.code); setScreen("history"); }} className="text-xs underline" style={{ color: GREEN }}>내 기록 보기</button>
+                  <button onClick={logout} className="text-xs underline" style={{ color: GREEN }}>로그아웃</button>
+                </div>
               </div>
             )}
             {subjectData.recommendedBooks && subjectData.recommendedBooks.length > 0 && (
