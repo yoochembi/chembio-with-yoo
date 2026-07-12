@@ -737,9 +737,11 @@ export default function App() {
         {screen === "categories" && (
           <div>
             {(subject === "hsChem" || subject === "hsBio") && hsAuth && (
-              <div className="mb-4 flex items-center justify-between text-xs" style={{ color: "#8A8270" }}>
-                <span>{hsAuth.name ? `${hsAuth.name}님으로 로그인됨` : "로그인됨"}</span>
-                <button onClick={hsLogout} className="underline" style={{ color: GREEN }}>로그아웃</button>
+              <div className="mb-5 p-4 flex items-center justify-between flex-wrap gap-2" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
+                <span className="font-bold" style={{ color: INK }}>
+                  {hsAuth.name ? `${hsAuth.name}님, 반갑습니다! 👋` : "반갑습니다!"}
+                </span>
+                <button onClick={hsLogout} className="text-xs underline" style={{ color: GREEN }}>로그아웃</button>
               </div>
             )}
             {subjectData.recommendedBooks && subjectData.recommendedBooks.length > 0 && (
