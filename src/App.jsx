@@ -685,6 +685,7 @@ export default function App() {
 
   return (
     <div style={{ background: PAPER, minHeight: "100vh", color: INK, fontFamily: "'Figtree', sans-serif" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap');`}</style>
       <div className="max-w-3xl mx-auto px-6 py-10">
         <div className="mb-6 pb-4" style={{ borderBottom: `2px solid ${INK}` }}>
           {screen === "landing" && (
@@ -701,7 +702,7 @@ export default function App() {
               ChemBio with YOO
             </button>
           </div>
-          <h1 className="text-xl font-bold text-center">
+          <h1 className={screen === "landing" ? "text-3xl font-bold text-center" : "text-xl font-bold text-center"}>
             {screen === "landing" ? "Think. Why? How?" : (
               <>
                 {subjectData.label}
@@ -716,9 +717,9 @@ export default function App() {
             <div className="mb-8 p-6" style={{ borderRadius: 6, background: INK, color: PAPER }}>
               <div>
                 {[
-                  "정직하게, 나 자신에게 떳떳하게 공부하기",
-                  "노력은 결국 배신하지 않는다는 믿음",
-                  "오늘 하루, 최선을 다하기",
+                  "정직하게, 나 자신에게 떳떳하게 공부하기 💪🏻",
+                  "노력은 결국 배신하지 않는다는 믿음 💟",
+                  "오늘 하루, 최선을 다하기 🔥",
                 ].map((line, i) => (
                   <div key={i} className="flex items-baseline gap-3 py-2.5" style={{ borderTop: i === 0 ? "none" : "1px solid rgba(243,246,251,0.15)" }}>
                     <span className="text-xl font-bold shrink-0" style={{ color: "rgba(243,246,251,0.35)", fontVariantNumeric: "tabular-nums" }}>
@@ -731,7 +732,7 @@ export default function App() {
             </div>
 
             <div className="mb-10 p-5" style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
-              <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: GREEN }}>공지</div>
+              <div className="text-base font-bold uppercase tracking-wide mb-2" style={{ color: GREEN }}>공지</div>
               <ul className="space-y-2 text-sm leading-relaxed" style={{ color: "#33455E" }}>
                 <li>· 이 사이트는 단순 암기가 아니라 "왜 이렇게 되는지" 이해했는지 확인하는 용도예요. 답만 확인하지 말고 해설까지 꼭 읽어보세요.</li>
                 <li>· AI나 친구 답 베껴서 풀지 마세요. 지금 정직하게 틀리는 게, 시험장에서 실력 없이 틀리는 것보다 훨씬 낫습니다.</li>
@@ -752,7 +753,7 @@ export default function App() {
                 <button key={key} onClick={() => switchSubject(key)}
                   className="p-8 text-center"
                   style={{ border: `2px solid ${INK}`, borderRadius: 6, background: cardColors[key] || "#FFFEFB" }}>
-                  <div className="text-2xl font-bold" style={{ color: INK }}>{s.label}</div>
+                  <div className="text-2xl" style={{ color: INK, fontFamily: "'Fredoka', sans-serif", fontWeight: 700 }}>{s.label}</div>
                   <div className="text-xs mt-2 uppercase tracking-wide" style={{ color: GREEN }}>단원 선택하기 →</div>
                 </button>
               );})}
