@@ -192,6 +192,7 @@ const SUBJECTS = {
 
 
 const INK = "#152A47";
+const SESSION_TTL_MS = 12 * 60 * 60 * 1000; // 12h — auto-expire a saved login so it doesn't linger on shared/lab devices
 const PAPER = "#F3F6FB";
 const GREEN = "#2158A6";
 const RUST = "#B3402C";
@@ -242,6 +243,7 @@ function DonutChart({ correct, incorrect, unanswered, size = 150 }) {
 export default function App() {
   const [subject, setSubject] = useState("chem"); // chem | bio
   const [screen, setScreen] = useState("landing"); // landing | categories | units | sections | quiz | report
+  const submitPayloadRef = useRef(null); // { payload, sectionKey } for the current report — reused if the student retries a failed submission
   const [unitIdx, setUnitIdx] = useState(null);
   const [student, setStudent] = useState({ name: "", email: "" });
   const [sectionIdx, setSectionIdx] = useState(0);
@@ -266,7 +268,15 @@ export default function App() {
     try {
       var raw = localStorage.getItem("cby_auth");
       if (!raw) raw = localStorage.getItem("cby_hs_auth"); // migrate old HS-only key if present
-      return raw ? JSON.parse(raw) : null;
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.loggedInAt && Date.now() - parsed.loggedInAt > SESSION_TTL_MS) {
+        // Saved login is too old (e.g. left signed-in on a shared hagwon PC) — treat as logged out.
+        localStorage.removeItem("cby_auth");
+        localStorage.removeItem("cby_hs_auth");
+        return null;
+      }
+      return parsed;
     } catch {
       return null;
     }
@@ -506,7 +516,7 @@ export default function App() {
     jsonp(SHEET_ENDPOINT, { mode: "login", code, password, subject: pendingSubjectKey || "" })
       .then((data) => {
         if (data && data.ok) {
-          const newAuth = { code, name: data.name || "", subjects: data.subjects || [] };
+          const newAuth = { code, name: data.name || "", subjects: data.subjects || [], loggedInAt: Date.now() };
           setAuth(newAuth);
           try { localStorage.setItem("cby_auth", JSON.stringify(newAuth)); } catch {}
           setLoginState("idle");
@@ -653,11 +663,49 @@ export default function App() {
     });
   }
 
+  // Sends the currently-pending submission (built in the effect below) and verifies it actually
+  // landed in the sheet. `fetch(..., { mode: "no-cors" })` is opaque — the .then() fires whether
+  // Apps Script succeeded or errored, so on its own it can't be trusted. For logged-in students we
+  // follow it up with a `mode: "history"` read (the same call the history screen already relies on)
+  // and only report success once this attempt's row is actually visible there.
+  function sendSubmission() {
+    const ctx = submitPayloadRef.current;
+    if (!ctx) return;
+    const { payload, sectionKey } = ctx;
+    setSubmitState("sending");
+    fetch(SHEET_ENDPOINT, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(payload).toString(),
+    })
+      .then(() => {
+        if (!(auth && auth.code)) {
+          // Not logged in — no history to verify against, so this is the best confirmation we get.
+          setSubmitState("sent");
+          return;
+        }
+        setSubmitState("verifying");
+        setTimeout(() => {
+          jsonp(SHEET_ENDPOINT, { mode: "history", code: auth.code, subject })
+            .then((data) => {
+              const records = (data && data.records) || [];
+              const top = records[0];
+              const landed = top && top.sectionKey === sectionKey
+                && Number(top.score) === Number(payload.score)
+                && Number(top.total) === Number(payload.total);
+              setSubmitState(landed ? "sent" : "error");
+            })
+            .catch(() => setSubmitState("error"));
+        }, 1500);
+      })
+      .catch(() => setSubmitState("error"));
+  }
+
   // Auto-send the graded result to the teacher's Google Sheet when the report screen opens.
   useEffect(() => {
     if (screen !== "report") return;
     if (!SHEET_ENDPOINT) { setSubmitState("idle"); return; }
-    setSubmitState("sending");
     const sectionKey = `${subject}__${unit.id}__${section.id}`;
     const perQuestion = results.map((r) => ({ id: r.id, correct: !!r.correct, given: r.given === undefined ? null : r.given }));
     const wrongQuestions = results
@@ -681,14 +729,8 @@ export default function App() {
       wrongQuestions: JSON.stringify(wrongQuestions),
       timestamp: new Date().toLocaleString("ko-KR"),
     };
-    fetch(SHEET_ENDPOINT, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams(payload).toString(),
-    })
-      .then(() => setSubmitState("sent"))
-      .catch(() => setSubmitState("error"));
+    submitPayloadRef.current = { payload, sectionKey };
+    sendSubmission();
 
     // Fetch class-wide per-question accuracy (includes this submission + everyone before it).
     setClassStatsState("loading");
@@ -758,7 +800,7 @@ export default function App() {
             </div>
 
             <p className="mb-4 text-sm font-bold uppercase tracking-wide" style={{ color: GREEN }}>과목을 선택하세요</p>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {Object.entries(SUBJECTS).map(([key, s]) => {
                 const cardColors = {
                   chem: "#FBE4EC",   // AP Chemistry — light pink
@@ -882,7 +924,7 @@ export default function App() {
                   <p className="mb-4 leading-relaxed" style={{ color: "#4A4438" }}>
                     지금까지 응시한 단원별 기록이에요. 단원을 선택하면 세부 퀴즈별 기록을 볼 수 있어요.
                   </p>
-                  <div className="grid grid-cols-2 gap-3 mb-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
                     {groups.map((g, gi) => {
                       const avgPct = Math.round(g.items.reduce((s, r) => s + (Number(r.percent) || 0), 0) / g.items.length);
                       return (
@@ -1119,7 +1161,7 @@ export default function App() {
             <p className="mb-4 leading-relaxed" style={{ color: "#4A4438" }}>
               원하는 항목을 선택하세요. 준비중인 항목은 곧 추가됩니다.
             </p>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {CATEGORIES.map((cat) => (
                 <button key={cat.id} onClick={() => openCategory(cat)} disabled={!cat.available}
                   className="text-left p-5 flex flex-col justify-between"
@@ -1184,7 +1226,7 @@ export default function App() {
                 아직 이 과목의 콘텐츠가 준비되지 않았어요. 단원 목록/문제를 알려주시면 바로 채워드릴게요.
               </div>
             ) : (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {subjectData.units.map((u, i) => {
                 const locked = !u.sections;
                 const totalQ = locked ? 0 : u.sections.reduce((acc, s) => acc + s.questions.length, 0);
@@ -1357,14 +1399,22 @@ export default function App() {
         {screen === "report" && (
           <div>
             {SHEET_ENDPOINT ? (
-              <div className="mb-4 px-3 py-2 text-xs" style={{
+              <div className="mb-4 px-3 py-2 text-xs flex items-center justify-between flex-wrap gap-2" style={{
                 borderRadius: 3,
                 background: submitState === "sent" ? "rgba(47,111,94,0.1)" : submitState === "error" ? "rgba(166,67,45,0.1)" : "#F1ECDD",
                 color: submitState === "sent" ? GREEN : submitState === "error" ? RUST : "#8A8270",
               }}>
-                {submitState === "sending" && "채점 결과를 선생님 시트로 전송 중..."}
-                {submitState === "sent" && "✓ 채점 결과가 선생님께 전송되었습니다."}
-                {submitState === "error" && "전송 실패 — 네트워크를 확인해주세요. (화면 점수는 그대로 유효합니다)"}
+                <span>
+                  {submitState === "sending" && "채점 결과를 선생님 시트로 전송 중..."}
+                  {submitState === "verifying" && "전송 확인 중..."}
+                  {submitState === "sent" && "✓ 채점 결과가 선생님께 전송되었습니다."}
+                  {submitState === "error" && "전송 확인 실패 — 기록이 저장되지 않았을 수 있어요. (화면 점수는 그대로 유효합니다)"}
+                </span>
+                {submitState === "error" && (
+                  <button onClick={sendSubmission} className="px-3 py-1 text-xs font-bold uppercase tracking-wide shrink-0" style={{ border: `1.5px solid ${RUST}`, borderRadius: 3, color: RUST }}>
+                    다시 전송
+                  </button>
+                )}
               </div>
             ) : null}
 
