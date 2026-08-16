@@ -278,6 +278,7 @@ export default function App() {
   const [historyRecords, setHistoryRecords] = useState(null);
   const [historyState, setHistoryState] = useState("idle"); // idle | loading | loaded | error
   const [historyDetailUnit, setHistoryDetailUnit] = useState(null); // null = summary list, else showing that unit's full history
+  const [historyGroupOpen, setHistoryGroupOpen] = useState(null); // which broad "Unit N (...)" group is expanded in the summary list
   const [expandedAttempt, setExpandedAttempt] = useState(null); // index of attempt currently showing per-question breakdown
   const [startTime, setStartTime] = useState(null);
   const [elapsedSec, setElapsedSec] = useState(0);
@@ -513,6 +514,8 @@ export default function App() {
             setSubject(pendingSubjectKey);
             setUnitIdx(null);
             fetchHistory(pendingSubjectKey, newAuth.code);
+            setHistoryGroupOpen(null);
+            setHistoryDetailUnit(null);
             setScreen("history");
             setPendingSubjectKey(null);
           } else {
@@ -536,6 +539,9 @@ export default function App() {
       localStorage.removeItem("cby_auth");
       localStorage.removeItem("cby_hs_auth");
     } catch {}
+    setHistoryDetailUnit(null);
+    setHistoryGroupOpen(null);
+    setExpandedAttempt(null);
     setScreen("landing");
   }
 
@@ -837,9 +843,9 @@ export default function App() {
               <div className="p-6 text-center text-sm" style={{ border: `1px dashed ${LINE}`, borderRadius: 4, color: "#8A8270" }}>아직 제출한 기록이 없어요. 첫 문제를 풀어보세요!</div>
             )}
 
-            {historyState === "loaded" && historyRecords && historyRecords.length > 0 && historyDetailUnit === null && (() => {
+            {historyState === "loaded" && historyRecords && historyRecords.length > 0 && historyDetailUnit === null && historyGroupOpen === null && (() => {
               // Records already arrive sorted newest-first, so the first occurrence
-              // of each unit is that unit's latest attempt.
+              // of each specific quiz (r.unit) is that quiz's latest attempt.
               const seen = new Set();
               const latestPerUnit = [];
               historyRecords.forEach((r) => {
@@ -848,11 +854,76 @@ export default function App() {
                 seen.add(key);
                 latestPerUnit.push(r);
               });
+              // Group those into broad units. The saved label is "Unit {id} ({title}) - {section...}";
+              // find the id via the fixed prefix, then look up the real unit definition (title/isDiagnostic)
+              // from subjectData rather than re-parsing the (possibly nested-parens) title text.
+              const idOf = (unitStr) => {
+                const m = /^Unit\s+(\S+)\s+\(/.exec(unitStr || "");
+                return m ? m[1] : "-";
+              };
+              const groups = [];
+              const groupIndex = new Map();
+              latestPerUnit.forEach((r) => {
+                const gId = idOf(r.unit);
+                if (!groupIndex.has(gId)) {
+                  groupIndex.set(gId, groups.length);
+                  const uDef = subjectData.units.find((u) => u.id === gId);
+                  groups.push({
+                    id: gId,
+                    label: uDef && uDef.isDiagnostic ? "진단고사" : `Unit ${gId}`,
+                    title: uDef ? uDef.title : (r.unit || "-"),
+                    items: [],
+                  });
+                }
+                groups[groupIndex.get(gId)].items.push(r);
+              });
               return (
                 <>
-                  <p className="mb-4 text-sm font-bold uppercase tracking-wide" style={{ color: GREEN }}>내 기록 — {subjectData.label}</p>
+                  <p className="mb-4 leading-relaxed" style={{ color: "#4A4438" }}>
+                    지금까지 응시한 단원별 기록이에요. 단원을 선택하면 세부 퀴즈별 기록을 볼 수 있어요.
+                  </p>
+                  <div className="grid grid-cols-2 gap-3 mb-6">
+                    {groups.map((g, gi) => {
+                      const avgPct = Math.round(g.items.reduce((s, r) => s + (Number(r.percent) || 0), 0) / g.items.length);
+                      return (
+                        <button key={gi} onClick={() => setHistoryGroupOpen(g.id)}
+                          className="text-left p-4 flex flex-col justify-between"
+                          style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB", minHeight: 88 }}>
+                          <div className="text-xs font-bold uppercase tracking-wide" style={{ color: GREEN }}>{g.label}</div>
+                          <div className="font-bold">{g.title}</div>
+                          <div className="text-xs mt-1" style={{ color: "#8A8270" }}>
+                            {g.items.length}개 퀴즈 · 평균 {avgPct}% →
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              );
+            })()}
+
+            {historyState === "loaded" && historyRecords && historyGroupOpen !== null && historyDetailUnit === null && (() => {
+              const seen = new Set();
+              const latestPerUnit = [];
+              historyRecords.forEach((r) => {
+                const key = r.unit || "-";
+                if (seen.has(key)) return;
+                seen.add(key);
+                latestPerUnit.push(r);
+              });
+              const idOf = (unitStr) => {
+                const m = /^Unit\s+(\S+)\s+\(/.exec(unitStr || "");
+                return m ? m[1] : "-";
+              };
+              const items = latestPerUnit.filter((r) => idOf(r.unit) === historyGroupOpen);
+              const uDef = subjectData.units.find((u) => u.id === historyGroupOpen);
+              const groupTitle = uDef ? uDef.title : historyGroupOpen;
+              return (
+                <>
+                  <button onClick={() => setHistoryGroupOpen(null)} className="mb-4 px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 내 기록</button>
+                  <p className="mb-4 font-bold text-lg">{uDef && uDef.isDiagnostic ? "진단고사" : `Unit ${historyGroupOpen}`} · {groupTitle}</p>
                   <div className="space-y-3 mb-6">
-                    {latestPerUnit.map((r, i) => (
+                    {items.map((r, i) => (
                       <button key={i} onClick={() => { setHistoryDetailUnit(r.unit || "-"); setExpandedAttempt(null); }}
                         className="w-full text-left p-4 flex items-center justify-between flex-wrap gap-2"
                         style={{ border: `1px solid ${LINE}`, borderRadius: 4, background: "#FFFEFB" }}>
@@ -878,7 +949,7 @@ export default function App() {
               const attempts = historyRecords.filter((r) => (r.unit || "-") === historyDetailUnit);
               return (
                 <>
-                  <button onClick={() => { setHistoryDetailUnit(null); setExpandedAttempt(null); }} className="mb-4 px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 내 기록으로</button>
+                  <button onClick={() => { setHistoryDetailUnit(null); setExpandedAttempt(null); }} className="mb-4 px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 세부 퀴즈 목록</button>
                   <p className="mb-4 font-bold text-lg">{historyDetailUnit}</p>
                   <div className="space-y-3 mb-6">
                     {attempts.map((r, i) => {
@@ -972,6 +1043,12 @@ export default function App() {
                                             )}
                                           </div>
                                         )}
+
+                                        {q.note && (
+                                          <div className="mt-2 ml-6 text-xs leading-relaxed whitespace-pre-line" style={{ color: "#5C5648", background: "#F1ECDD", padding: "10px 12px", borderRadius: 3 }}>
+                                            <span className="font-bold" style={{ color: INK }}>해설: </span>{q.note}
+                                          </div>
+                                        )}
                                       </div>
                                     );
                                   })}
@@ -1005,7 +1082,7 @@ export default function App() {
                   {auth.name ? `${auth.name}님, 반갑습니다! 👋` : "반갑습니다!"}
                 </span>
                 <div className="flex items-center gap-3">
-                  <button onClick={() => { fetchHistory(subject, auth.code); setScreen("history"); }} className="text-xs underline" style={{ color: GREEN }}>내 기록 보기</button>
+                  <button onClick={() => { fetchHistory(subject, auth.code); setHistoryGroupOpen(null); setHistoryDetailUnit(null); setScreen("history"); }} className="text-xs underline" style={{ color: GREEN }}>내 기록 보기</button>
                   <button onClick={logout} className="text-xs underline" style={{ color: GREEN }}>로그아웃</button>
                 </div>
               </div>
