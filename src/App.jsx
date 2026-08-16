@@ -922,16 +922,12 @@ export default function App() {
                               {questionRows && (
                                 <div className="space-y-2 pt-2" style={{ borderTop: `1px solid ${LINE}` }}>
                                   {questionRows.map(({ q, correct, given }, qi) => {
-                                    // Format a stored answer value (MC choice index, or raw numeric/text string) for display.
+                                    // Format a stored answer value (raw numeric/text string) for non-MC questions.
                                     const formatGiven = (val) => {
                                       if (val === null || val === undefined || val === "") return "(미답변)";
-                                      if (Array.isArray(q.choices) && typeof val === "number") return q.choices[val] ?? String(val);
                                       return String(val);
                                     };
-                                    const formatAnswer = () => {
-                                      if (Array.isArray(q.choices) && typeof q.answer === "number") return q.choices[q.answer];
-                                      return String(q.answer);
-                                    };
+                                    const isMC = Array.isArray(q.choices) && typeof q.answer === "number";
                                     return (
                                       <div key={q.id} className="p-3 text-sm" style={{ background: correct === true ? "rgba(58,122,58,0.06)" : correct === false ? "rgba(179,64,44,0.06)" : "#F5F2E8", borderRadius: 3 }}>
                                         <div className="flex items-start gap-2">
@@ -940,11 +936,39 @@ export default function App() {
                                           </span>
                                           <span className="whitespace-pre-line" style={{ color: "#33455E" }}>{q.text}</span>
                                         </div>
-                                        {correct === false && (
+
+                                        {isMC ? (
+                                          <div className="mt-2 ml-6 space-y-1.5">
+                                            {q.choices.map((choice, ci) => {
+                                              const isCorrectChoice = ci === q.answer;
+                                              const isGivenChoice = given === ci;
+                                              const boxStyle = isCorrectChoice
+                                                ? { border: `1.5px solid ${GREEN}`, background: "rgba(58,122,58,0.08)" }
+                                                : isGivenChoice
+                                                ? { border: `1.5px solid ${RUST}`, background: "rgba(179,64,44,0.08)" }
+                                                : { border: `1px solid ${LINE}`, background: "#FFFEFB" };
+                                              const markColor = isCorrectChoice ? GREEN : isGivenChoice ? RUST : "#8A8270";
+                                              return (
+                                                <div key={ci} className="px-3 py-2 text-xs flex items-start gap-2" style={{ ...boxStyle, borderRadius: 3 }}>
+                                                  <span className="font-bold shrink-0" style={{ color: markColor }}>
+                                                    {isCorrectChoice ? "✓" : isGivenChoice ? "✗" : String.fromCharCode(65 + ci)}
+                                                  </span>
+                                                  <span style={{ color: "#33455E" }}>{choice}</span>
+                                                  {isGivenChoice && (
+                                                    <span className="ml-auto text-[10px] font-bold uppercase tracking-wide shrink-0" style={{ color: markColor }}>선택함</span>
+                                                  )}
+                                                </div>
+                                              );
+                                            })}
+                                            {given === null && (
+                                              <div className="text-xs" style={{ color: "#8A8270" }}>(미답변)</div>
+                                            )}
+                                          </div>
+                                        ) : (
                                           <div className="mt-1.5 ml-6 text-xs space-y-0.5">
-                                            <div style={{ color: RUST }}>네가 고른 답: {formatGiven(given)}</div>
-                                            {Array.isArray(q.choices) && typeof q.answer === "number" && (
-                                              <div style={{ color: GREEN }}>정답: {formatAnswer()}</div>
+                                            <div style={{ color: correct ? GREEN : RUST }}>네가 쓴 답: {formatGiven(given)}</div>
+                                            {correct === false && (
+                                              <div style={{ color: GREEN }}>정답: {String(q.answer)}</div>
                                             )}
                                           </div>
                                         )}
