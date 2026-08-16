@@ -653,7 +653,7 @@ export default function App() {
     if (!SHEET_ENDPOINT) { setSubmitState("idle"); return; }
     setSubmitState("sending");
     const sectionKey = `${subject}__${unit.id}__${section.id}`;
-    const perQuestion = results.map((r) => ({ id: r.id, correct: !!r.correct }));
+    const perQuestion = results.map((r) => ({ id: r.id, correct: !!r.correct, given: r.given === undefined ? null : r.given }));
     const wrongQuestions = results
       .filter((r) => !r.correct)
       .map((r) => ({ id: r.id, text: r.text.slice(0, 200), unanswered: r.unanswered }));
@@ -891,7 +891,11 @@ export default function App() {
                         if (section && perQ.length > 0) {
                           questionRows = section.questions.map((q) => {
                             const result = perQ.find((p) => p.id === q.id);
-                            return { q, correct: result ? !!result.correct : null };
+                            return {
+                              q,
+                              correct: result ? !!result.correct : null,
+                              given: result && result.given !== undefined ? result.given : null,
+                            };
                           });
                         }
                       }
@@ -917,21 +921,36 @@ export default function App() {
                               )}
                               {questionRows && (
                                 <div className="space-y-2 pt-2" style={{ borderTop: `1px solid ${LINE}` }}>
-                                  {questionRows.map(({ q, correct }, qi) => (
-                                    <div key={q.id} className="p-3 text-sm" style={{ background: correct === true ? "rgba(58,122,58,0.06)" : correct === false ? "rgba(179,64,44,0.06)" : "#F5F2E8", borderRadius: 3 }}>
-                                      <div className="flex items-start gap-2">
-                                        <span className="font-bold shrink-0" style={{ color: correct === true ? GREEN : correct === false ? RUST : "#8A8270" }}>
-                                          {correct === true ? "✓" : correct === false ? "✗" : "?"} Q{qi + 1}
-                                        </span>
-                                        <span className="whitespace-pre-line" style={{ color: "#33455E" }}>{q.text}</span>
-                                      </div>
-                                      {correct === false && Array.isArray(q.choices) && typeof q.answer === "number" && (
-                                        <div className="mt-1.5 ml-6 text-xs" style={{ color: GREEN }}>
-                                          정답: {q.choices[q.answer]}
+                                  {questionRows.map(({ q, correct, given }, qi) => {
+                                    // Format a stored answer value (MC choice index, or raw numeric/text string) for display.
+                                    const formatGiven = (val) => {
+                                      if (val === null || val === undefined || val === "") return "(미답변)";
+                                      if (Array.isArray(q.choices) && typeof val === "number") return q.choices[val] ?? String(val);
+                                      return String(val);
+                                    };
+                                    const formatAnswer = () => {
+                                      if (Array.isArray(q.choices) && typeof q.answer === "number") return q.choices[q.answer];
+                                      return String(q.answer);
+                                    };
+                                    return (
+                                      <div key={q.id} className="p-3 text-sm" style={{ background: correct === true ? "rgba(58,122,58,0.06)" : correct === false ? "rgba(179,64,44,0.06)" : "#F5F2E8", borderRadius: 3 }}>
+                                        <div className="flex items-start gap-2">
+                                          <span className="font-bold shrink-0" style={{ color: correct === true ? GREEN : correct === false ? RUST : "#8A8270" }}>
+                                            {correct === true ? "✓" : correct === false ? "✗" : "?"} Q{qi + 1}
+                                          </span>
+                                          <span className="whitespace-pre-line" style={{ color: "#33455E" }}>{q.text}</span>
                                         </div>
-                                      )}
-                                    </div>
-                                  ))}
+                                        {correct === false && (
+                                          <div className="mt-1.5 ml-6 text-xs space-y-0.5">
+                                            <div style={{ color: RUST }}>네가 고른 답: {formatGiven(given)}</div>
+                                            {Array.isArray(q.choices) && typeof q.answer === "number" && (
+                                              <div style={{ color: GREEN }}>정답: {formatAnswer()}</div>
+                                            )}
+                                          </div>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
                                 </div>
                               )}
                             </div>
