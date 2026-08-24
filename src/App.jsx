@@ -113,6 +113,13 @@ const AP_BIO_FRQ_YEARS = [
   { year: 2023, questions: "https://apcentral.collegeboard.org/media/pdf/ap23-frq-biology.pdf", scoring: "https://apcentral.collegeboard.org/media/pdf/ap23-sg-biology.pdf" },
 ];
 
+const USNCO_2010_SECTIONS = _dq("W3siaWQiOiAiUTEtNSIsICJ0aXRsZSI6ICJRdWVzdGlvbnMgMeKAkzUiLCAicXVlc3Rpb25zIjogW3siaWQiOiAiVVNOQ08xMC1RMSIsICJ0ZXh0IjogIkEgc3R1ZGVudCBpcyBhc2tlZCB0byBtZWFzdXJlIDMwLjAgZyBvZiBtZXRoYW5vbCAoZCA9IDAuNzkxNCBnL21MIGF0IDI1wrBDKSBidXQgaGFzIG9ubHkgYSBncmFkdWF0ZWQgY3lsaW5kZXIgd2l0aCB3aGljaCB0byBtZWFzdXJlIGl0LiBXaGF0IHZvbHVtZSBvZiBtZXRoYW5vbCBzaG91bGQgdGhlIHN0dWRlbnQgdXNlIHRvIG9idGFpbiB0aGUgcmVxdWlyZWQgMzAuMCBnPyIsICJjaG9pY2VzIjogWyIyMy43IG1MIiwgIjMwLjAgbUwiLCAiMzIuNCBtTCIsICIzNy45IG1MIl0sICJhbnN3ZXIiOiAzLCAibm90ZSI6ICJWb2x1bWUgPSBtYXNzIMO3IGRlbnNpdHkgPSAzMC4wIGcgw7cgMC43OTE0IGcvbUwgPSAzNy45IG1MLiJ9LCB7ImlkIjogIlVTTkNPMTAtUTIiLCAidGV4dCI6ICJBIGZsYW1lIHRlc3Qgd2FzIHBlcmZvcm1lZCB0byBjb25maXJtIHRoZSBpZGVudGl0eSBvZiBhIG1ldGFsIGlvbiBpbiBzb2x1dGlvbi4gVGhlIHJlc3VsdCB3YXMgYSBncmVlbiBmbGFtZS4gV2hpY2ggb2YgdGhlIGZvbGxvd2luZyBtZXRhbCBpb25zIGlzIGluZGljYXRlZD8iLCAiY2hvaWNlcyI6IFsiY29wcGVyIiwgInNvZGl1bSIsICJzdHJvbnRpdW0iLCAiemluYyJdLCAiYW5zd2VyIjogMCwgIm5vdGUiOiAiQ29wcGVyIGdpdmVzIGEgY2hhcmFjdGVyaXN0aWMgKGJsdWUtKWdyZWVuIGZsYW1lIHRlc3QgY29sb3IuIFN0cm9udGl1bSBpcyByZWQsIHNvZGl1bSBpcyB5ZWxsb3csIGFuZCB6aW5jIGdpdmVzIGVzc2VudGlhbGx5IG5vIGNvbG9yLiJ9LCB7ImlkIjogIlVTTkNPMTAtUTMiLCAidGV4dCI6ICJXaGVuIHBoZW5vbHBodGhhbGVpbiBpcyBhZGRlZCB0byBhbiBhcXVlb3VzIHNvbHV0aW9uIGNvbnRhaW5pbmcgb25lIG9mIHRoZSBmb2xsb3dpbmcgc29sdXRlcyB0aGUgc29sdXRpb24gdHVybnMgcGluay4gV2hpY2ggc29sdXRlIGlzIHByZXNlbnQ/IiwgImNob2ljZXMiOiBbIk5hQ2wiLCAiS0MySDNPMiIsICJMaUJyIiwgIk5INE5PMyJdLCAiYW5zd2VyIjogMSwgIm5vdGUiOiAiS0MySDNPMiBpcyB0aGUgc2FsdCBvZiBhIHdlYWsgYWNpZCAoYWNldGljIGFjaWQpIGFuZCBhIHN0cm9uZyBiYXNlIChLT0gpOyBpdCBoeWRyb2x5emVzIHRvIGdpdmUgYSBiYXNpYyBzb2x1dGlvbiwgdHVybmluZyBwaGVub2xwaHRoYWxlaW4gcGluay4ifSwgeyJpZCI6ICJVU05DTzEwLVE0IiwgInRleHQiOiAiU29saWQgY2FtcGhvciBpcyBpbnNvbHVibGUgaW4gd2F0ZXIgYnV0IGlzIHNvbHVibGUgaW4gdmVnZXRhYmxlIG9pbC4gVGhlIGJlc3QgZXhwbGFuYXRpb24gZm9yIHRoaXMgYmVoYXZpb3IgaXMgdGhhdCBjYW1waG9yIGlzIGEobikiLCAiY2hvaWNlcyI6IFsiaW9uaWMgc29saWQiLCAibWV0YWxsaWMgc29saWQiLCAibW9sZWN1bGFyIHNvbGlkIiwgIm5ldHdvcmsgc29saWQiXSwgImFuc3dlciI6IDIsICJub3RlIjogIkJ5IFwibGlrZSBkaXNzb2x2ZXMgbGlrZSxcIiBiZWluZyBpbnNvbHVibGUgaW4gcG9sYXIgd2F0ZXIgYnV0IHNvbHVibGUgaW4gbm9ucG9sYXIgb2lsIGluZGljYXRlcyBjYW1waG9yIGlzIGEgbm9ucG9sYXIgbW9sZWN1bGFyIHNvbGlkLiJ9LCB7ImlkIjogIlVTTkNPMTAtUTUiLCAidGV4dCI6ICJBIHN0dWRlbnQgcGVyZm9ybWVkIGFuIGV4cGVyaW1lbnQgdG8gZGV0ZXJtaW5lIHRoZSByYXRpbyBvZiBIMk8gdG8gQ3VTTzQgaW4gYSBzYW1wbGUgb2YgaHlkcmF0ZWQgY29wcGVyKElJKSBzdWxmYXRlIGJ5IGhlYXRpbmcgaXQgdG8gZHJpdmUgb2ZmIHRoZSB3YXRlciBhbmQgd2VpZ2hpbmcgdGhlIHNvbGlkIGJlZm9yZSBhbmQgYWZ0ZXIgaGVhdGluZy4gVGhlIGZvcm11bGEgb2J0YWluZWQgZXhwZXJpbWVudGFsbHkgd2FzIEN1U080wrc1LjVIMk8gYnV0IHRoZSBhY2NlcHRlZCBmb3JtdWxhIGlzIEN1U080wrc1SDJPLiBXaGljaCBlcnJvciBiZXN0IGFjY291bnRzIGZvciB0aGUgZGlmZmVyZW5jZSBpbiByZXN1bHRzPyIsICJjaG9pY2VzIjogWyJEdXJpbmcgaGVhdGluZyBzb21lIG9mIHRoZSBoeWRyYXRlZCBjb3BwZXIoSUkpIHN1bGZhdGUgd2FzIGxvc3QuIiwgIlRoZSBoeWRyYXRlZCBzYW1wbGUgd2FzIG5vdCBoZWF0ZWQgbG9uZyBlbm91Z2ggdG8gZHJpdmUgb2ZmIGFsbCB0aGUgd2F0ZXIuIiwgIlRoZSBzdHVkZW50IHdlaWdoZWQgb3V0IHRvbyBtdWNoIHNhbXBsZSBpbml0aWFsbHkuIiwgIlRoZSBzdHVkZW50IHVzZWQgYSBiYWxhbmNlIHRoYXQgZ2F2ZSB3ZWlnaHRzIHRoYXQgd2VyZSBjb25zaXN0ZW50bHkgdG9vIGhpZ2ggYnkgMC4xMCBnLiJdLCAiYW5zd2VyIjogMCwgIm5vdGUiOiAiSWYgc29tZSBoeWRyYXRlZCBzb2xpZCBzcGF0dGVycy9pcyBsb3N0IGR1cmluZyBoZWF0aW5nLCB0aGUgbWFzcyByZW1haW5pbmcgYWZ0ZXIgaGVhdGluZyAoYW5oeWRyb3VzIEN1U080KSBhcHBlYXJzIHNtYWxsZXIgdGhhbiBpdCBzaG91bGQsIGluZmxhdGluZyB0aGUgY2FsY3VsYXRlZCBtb2wgSDJPIDogbW9sIEN1U080IHJhdGlvIGFib3ZlIHRoZSB0cnVlIHZhbHVlIG9mIDUuIn1dfV0=");
+const USNCO_2011_SECTIONS = _dq("W3siaWQiOiAiUTEtNSIsICJ0aXRsZSI6ICJRdWVzdGlvbnMgMeKAkzUiLCAicXVlc3Rpb25zIjogW3siaWQiOiAiVVNOQ08xMS1RMSIsICJ0ZXh0IjogIkEgc3R1ZGVudCBpcyBhc2tlZCB0byBkaXNwZW5zZSAyNC43MCBtTCBvZiBhIHNvbHV0aW9uIHdpdGggYW4gdW5jZXJ0YWludHkgb2YgbGVzcyB0aGFuIDAuMDUgbUwuIFdoaWNoIGl0ZW0gc2hvdWxkIGJlIHVzZWQgZm9yIHRoaXMgdGFzaz8iLCAiY2hvaWNlcyI6IFsiNTAgbUwgYmVha2VyIiwgIjUwIG1MIGJ1cmV0IiwgIjUwIG1MIEVybGVubWV5ZXIgZmxhc2siLCAiNTAgbUwgZ3JhZHVhdGVkIGN5bGluZGVyIl0sICJhbnN3ZXIiOiAxLCAibm90ZSI6ICJBIGJ1cmV0IGhhcyBmaW5lIGdyYWR1YXRpb25zIGFuZCBwcmVjaXNlIGNvbnRyb2wgb2YgZGlzcGVuc2VkIHZvbHVtZSwgZ2l2aW5nIGFuIHVuY2VydGFpbnR5IHNtYWxsZXIgdGhhbiDCsTAuMDUgbUwg4oCUIGZhciBtb3JlIHByZWNpc2UgdGhhbiB0aGUgb3RoZXIgbGlzdGVkIGdsYXNzd2FyZS4ifSwgeyJpZCI6ICJVU05DTzExLVEyIiwgInRleHQiOiAiT3h5Z2VuIGdhcyBjYW4gYmUgcHJvZHVjZWQgYnkgdGhlIGRlY29tcG9zaXRpb24gb2YgYWxsIG9mIHRoZSBmb2xsb3dpbmcgc3Vic3RhbmNlcyBFWENFUFQiLCAiY2hvaWNlcyI6IFsiY2FsY2l1bSBveGlkZS4iLCAiaHlkcm9nZW4gcGVyb3hpZGUuIiwgIm1lcmN1cnkoSUkpIG94aWRlLiIsICJvem9uZS4iXSwgImFuc3dlciI6IDAsICJub3RlIjogIkNhTyBpcyBhIHZlcnkgc3RhYmxlIGlvbmljIG94aWRlIGFuZCBkb2VzIG5vdCBkZWNvbXBvc2UgdG8gcmVsZWFzZSBPMi4gSDJPMiwgSGdPLCBhbmQgTzMgY2FuIGVhY2ggdW5kZXJnbyBkZWNvbXBvc2l0aW9uIChvciBkaXNwcm9wb3J0aW9uYXRpb24pIHRoYXQgcmVsZWFzZXMgTzIuIn0sIHsiaWQiOiAiVVNOQ08xMS1RMyIsICJ0ZXh0IjogIldoaWNoIGdhc2VvdXMgcHJvZHVjdCBpcyBmb3JtZWQgd2hlbiBkaWx1dGUgbml0cmljIGFjaWQgcmVhY3RzIHdpdGggc2lsdmVyIG1ldGFsIGluIHRoZSBhYnNlbmNlIG9mIGFpcj8iLCAiY2hvaWNlcyI6IFsiSDIiLCAiTzIiLCAiTkgzIiwgIk5PIl0sICJhbnN3ZXIiOiAzLCAibm90ZSI6ICJEaWx1dGUgSE5PMyByZWFjdHMgd2l0aCBBZyB0byBwcm9kdWNlIE5PIGdhczogM0FnICsgNEhOTzMoZGlsdXRlKSDihpIgM0FnTk8zICsgTk8gKyAySDJPLiAoQ29uY2VudHJhdGVkIEhOTzMgd291bGQgaW5zdGVhZCBwcm9kdWNlIE5PMi4pIn0sIHsiaWQiOiAiVVNOQ08xMS1RNCIsICJ0ZXh0IjogIkhvdyBtYW55IG9mIHRoZSBmb2xsb3dpbmcgZ2FzZXMgYXJlIGNoYXJhY3Rlcml6ZWQgYnkgQk9USCBjb2xvciBBTkQgYSBkaXN0aW5jdGl2ZSBvZG9yPyBDbDIsIENINCwgTk8yIiwgImNob2ljZXMiOiBbIm5vbmUiLCAib25lIiwgInR3byIsICJ0aHJlZSJdLCAiYW5zd2VyIjogMiwgIm5vdGUiOiAiQ2wyICh5ZWxsb3ctZ3JlZW4sIHNoYXJwIG9kb3IpIGFuZCBOTzIgKGJyb3duLCBzaGFycCBvZG9yKSBib3RoIGhhdmUgY29sb3IgYW5kIG9kb3IsIHdoaWxlIENINCBpcyBjb2xvcmxlc3MgYW5kIG9kb3JsZXNzLiBTbyB0aGUgYW5zd2VyIGlzIHR3by4ifSwgeyJpZCI6ICJVU05DTzExLVE1IiwgInRleHQiOiAiV2hpY2ggYWN0aW9uIHNob3VsZCBiZSB0YWtlbiBpbW1lZGlhdGVseSBpZiBjb25jZW50cmF0ZWQgc3VsZnVyaWMgYWNpZCBpcyBzcGlsbGVkIG9uIHRoZSBza2luPyIsICJjaG9pY2VzIjogWyJJdCBzaG91bGQgYmUgcmluc2VkIG9mZiB3aXRoIGxhcmdlIHF1YW50aXRpZXMgb2YgcnVubmluZyB3YXRlci4iLCAiSXQgc2hvdWxkIGJlIG5ldXRyYWxpemVkIHdpdGggc29saWQgQ2FDTzMuIiwgIkl0IHNob3VsZCBiZSBuZXV0cmFsaXplZCB3aXRoIGNvbmNlbnRyYXRlZCBOYU9ILiIsICJUaGUgYXJlYSBvZiB0aGUgc3BpbGwgc2hvdWxkIGJlIHdyYXBwZWQgdGlnaHRseSB3aXRoIGNsb3RoIGFuZCBzaG93biB0byBhIGhlYWx0aCBwcm92aWRlci4iXSwgImFuc3dlciI6IDAsICJub3RlIjogIkltbWVkaWF0ZWx5IHJpbnNpbmcgd2l0aCBsYXJnZSBhbW91bnRzIG9mIHJ1bm5pbmcgd2F0ZXIgZGlsdXRlcyBhbmQgcmVtb3ZlcyB0aGUgYWNpZC4gTmV1dHJhbGl6aW5nIGFnZW50cyByZWxlYXNlIGhlYXQsIHdoaWNoIGNhbiB3b3JzZW4gdGhlIGJ1cm4uIn1dfV0=");
+const USNCO_2012_SECTIONS = _dq("W3siaWQiOiAiUTEtNSIsICJ0aXRsZSI6ICJRdWVzdGlvbnMgMeKAkzUiLCAicXVlc3Rpb25zIjogW3siaWQiOiAiVVNOQ08xMi1RMSIsICJ0ZXh0IjogIkhvdyBtYW55IGF0b21zIGFyZSBpbiA0LjAgw5cgMTDigbvigbUgZ3JhbXMgb2YgQWw/IiwgImNob2ljZXMiOiBbIjguOSDDlyAxMMK54oG3IiwgIjIuNCDDlyAxMMK54oG5IiwgIjYuNSDDlyAxMMKy4oGwIiwgIjIuMCDDlyAxMMKywrIiXSwgImFuc3dlciI6IDAsICJub3RlIjogIm1vbCBBbCA9IDQuMMOXMTDigbvigbUgZyDDtyAyNi45OCBnL21vbCA9IDEuNDjDlzEw4oG74oG2IG1vbC4gTnVtYmVyIG9mIGF0b21zID0gMS40OMOXMTDigbvigbYgw5cgNi4wMjLDlzEwwrLCsyA9IDguOcOXMTDCueKBtyBhdG9tcy4ifSwgeyJpZCI6ICJVU05DTzEyLVEyIiwgInRleHQiOiAiSG93IG1hbnkgbW9sZXMgb2Ygc3VsZmF0ZSBpb25zIGFyZSBpbiAxMDAgbUwgb2YgYSBzb2x1dGlvbiBvZiAwLjAwMjAgTSBGZTIoU080KTM/IiwgImNob2ljZXMiOiBbIjIuMCDDlyAxMOKBu+KBtCIsICI2LjAgw5cgMTDigbvigbQiLCAiMi4wIMOXIDEw4oG7wrkiLCAiNi4wIMOXIDEw4oG7wrkiXSwgImFuc3dlciI6IDEsICJub3RlIjogIm1vbCBGZTIoU080KTMgPSAwLjAwMjAgTSDDlyAwLjEwMCBMID0gMi4ww5cxMOKBu+KBtCBtb2wuIEVhY2ggZm9ybXVsYSB1bml0IGhhcyAzIFNPNMKy4oG7LCBzbyBtb2wgU080wrLigbsgPSAzIMOXIDIuMMOXMTDigbvigbQgPSA2LjDDlzEw4oG74oG0IG1vbC4ifSwgeyJpZCI6ICJVU05DTzEyLVEzIiwgInRleHQiOiAiVGhlIHZhbHVlIG9mIHdoaWNoIGNvbmNlbnRyYXRpb24gdW5pdCBmb3IgYSBzb2x1dGlvbiBjaGFuZ2VzIHdpdGggdGVtcGVyYXR1cmU/IiwgImNob2ljZXMiOiBbIm1vbGFyaXR5IiwgIm1vbGFsaXR5IiwgIm1vbGUgZnJhY3Rpb24iLCAibWFzcyBwZXJjZW50YWdlIl0sICJhbnN3ZXIiOiAwLCAibm90ZSI6ICJNb2xhcml0eSBpcyBkZWZpbmVkIHBlciB2b2x1bWUgb2Ygc29sdXRpb24sIGFuZCB2b2x1bWUgY2hhbmdlcyB3aXRoIHRlbXBlcmF0dXJlICh0aGVybWFsIGV4cGFuc2lvbiksIHNvIG1vbGFyaXR5IGNoYW5nZXMgd2l0aCBULiBNb2xhbGl0eSwgbW9sZSBmcmFjdGlvbiwgYW5kIG1hc3MgcGVyY2VudGFnZSBhcmUgYWxsIG1hc3MtYmFzZWQgYW5kIGluZGVwZW5kZW50IG9mIHRlbXBlcmF0dXJlLiJ9LCB7ImlkIjogIlVTTkNPMTItUTQiLCAidGV4dCI6ICJIb3cgbWFueSBtb2xlcyBvZiB3YXRlciBhcmUgcHJvZHVjZWQgYnkgdGhlIGNvbXBsZXRlIGNvbWJ1c3Rpb24gb2YgMTQuNCBnIG9mIEM1SDEyPyAoQzVIMTIgKyA4TzIg4oaSIDVDTzIgKyA2SDJPKSIsICJjaG9pY2VzIjogWyIwLjIwMCIsICIwLjYwMCIsICIxLjIwIiwgIjIuNDAiXSwgImFuc3dlciI6IDIsICJub3RlIjogIm1vbCBDNUgxMiA9IDE0LjQgZyDDtyA3Mi4xNSBnL21vbCA9IDAuMjAwIG1vbC4gV2l0aCBhIDE6NiBtb2xlIHJhdGlvLCBtb2wgSDJPID0gMC4yMDAgw5cgNiA9IDEuMjAgbW9sLiJ9LCB7ImlkIjogIlVTTkNPMTItUTUiLCAidGV4dCI6ICJBIHNvbHV0aW9uIG9mIEJhKE9IKTIgaXMgc3RhbmRhcmRpemVkIHdpdGggcG90YXNzaXVtIGFjaWQgcGh0aGFsYXRlIChLSFApLCBLSEM4SDhPNCAoTSA9IDIwNCkuIElmIDEuNTMwIGcgb2YgS0hQIGlzIHRpdHJhdGVkIHdpdGggMzQuNTAgbUwgb2YgdGhlIEJhKE9IKTIgc29sdXRpb24sIHdoYXQgaXMgdGhlIG1vbGFyaXR5IG9mIEJhKE9IKTI/IiwgImNob2ljZXMiOiBbIjAuMDIxNyBNIiwgIjAuMDQzNSBNIiwgIjAuMTA5IE0iLCAiMC4yMTcgTSJdLCAiYW5zd2VyIjogMiwgIm5vdGUiOiAibW9sIEtIUCA9IDEuNTMwIGcgw7cgMjA0IGcvbW9sID0gNy41MMOXMTDigbvCsyBtb2wgKD0gbW9sIE9I4oG7IG5lZWRlZCkuIFNpbmNlIEJhKE9IKTIgc3VwcGxpZXMgMiBPSOKBuyBwZXIgZm9ybXVsYSB1bml0LCBtb2wgQmEoT0gpMiA9IDcuNTDDlzEw4oG7wrMgw7cgMiA9IDMuNzXDlzEw4oG7wrMgbW9sLiBNb2xhcml0eSA9IDMuNzXDlzEw4oG7wrMgbW9sIMO3IDAuMDM0NTAgTCA9IDAuMTA5IE0uIn1dfV0=");
+const USNCO_2013_SECTIONS = _dq("W3siaWQiOiAiUTEtNSIsICJ0aXRsZSI6ICJRdWVzdGlvbnMgMeKAkzUiLCAicXVlc3Rpb25zIjogW3siaWQiOiAiVVNOQ08xMy1RMSIsICJ0ZXh0IjogIldoZW4gdGhpcyBlcXVhdGlvbiBpcyBiYWxhbmNlZCB1c2luZyB0aGUgc21hbGxlc3QgcG9zc2libGUgaW50ZWdlcnMsIHdoYXQgaXMgdGhlIHN1bSBvZiB0aGUgY29lZmZpY2llbnRzPyBfXyhOSDQpM1BPNChhcSkgKyBfX0NhQ2wyKGFxKSDihpIgX19DYTMoUE80KTIocykgKyBfX05INENsKGFxKSIsICJjaG9pY2VzIjogWyI4IiwgIjkiLCAiMTEiLCAiMTIiXSwgImFuc3dlciI6IDMsICJub3RlIjogIkJhbGFuY2VkIGVxdWF0aW9uOiAyKE5INCkzUE80ICsgM0NhQ2wyIOKGkiBDYTMoUE80KTIgKyA2Tkg0Q2wuIFN1bSBvZiBjb2VmZmljaWVudHMgPSAyICsgMyArIDEgKyA2ID0gMTIuIn0sIHsiaWQiOiAiVVNOQ08xMy1RMiIsICJ0ZXh0IjogIkEgc29sdXRpb24gb2YgS05PMyBpbiB3YXRlciBpcyBwcmVwYXJlZCBmb3Igd2hpY2ggdGhlIGZvbGxvd2luZyBkYXRhIGhhdmUgYmVlbiBvYnRhaW5lZDogbWFzc2VzIG9mIHNvbHV0ZSBhbmQgc29sdmVudCwgbW9sYXIgbWFzc2VzIG9mIHNvbHV0ZSBhbmQgc29sdmVudC4gV2hpY2ggb2YgdGhlc2UgcXVhbnRpdGF0aXZlIGRlc2NyaXB0aW9ucyBvZiB0aGUgc29sdXRpb24gY2FuIGJlIGRldGVybWluZWQ/IEkuIG1vbGFyaXR5IElJLiBtb2xhbGl0eSBJSUkuIGRlbnNpdHkgb2Ygc29sdXRpb24iLCAiY2hvaWNlcyI6IFsiSS4gb25seSIsICJJSS4gb25seSIsICJJLiBhbmQgSUkuIG9ubHkiLCAiSS4sIElJLiBhbmQgSUlJLiJdLCAiYW5zd2VyIjogMSwgIm5vdGUiOiAiTW9sYWxpdHkgY2FuIGJlIGNhbGN1bGF0ZWQgZnJvbSBtb2wgc29sdXRlIMO3IGtnIHNvbHZlbnQgdXNpbmcgb25seSBtYXNzIGFuZCBtb2xhci1tYXNzIGRhdGEuIE1vbGFyaXR5IG5lZWRzIHRoZSBzb2x1dGlvbidzIHZvbHVtZSAoaS5lLiwgZGVuc2l0eSksIHdoaWNoIGlzIG5vdCBnaXZlbiwgYW5kIGRlbnNpdHkgaXRzZWxmIGNhbm5vdCBiZSBkZXJpdmVkIGZyb20gdGhlIGdpdmVuIGRhdGEgZWl0aGVyLiBTbyBvbmx5IElJIGlzIHBvc3NpYmxlLiJ9LCB7ImlkIjogIlVTTkNPMTMtUTMiLCAidGV4dCI6ICJXaGF0IG1hc3Mgb2YgdGhlIGNvbXBvdW5kIENyTzMgKE0gPSAxMDAuMCkgY29udGFpbnMgNC41IMOXIDEwwrLCsyBveHlnZW4gYXRvbXM/IiwgImNob2ljZXMiOiBbIjIuMjUgZyIsICIxMi4wIGciLCAiMjUuMCBnIiwgIjc1LjAgZyJdLCAiYW5zd2VyIjogMiwgIm5vdGUiOiAibW9sIE8gPSA0LjXDlzEwwrLCsyDDtyA2LjAyMsOXMTDCssKzID0gMC43NDcgbW9sLiBFYWNoIENyTzMgZm9ybXVsYSB1bml0IGhhcyAzIE8gYXRvbXMsIHNvIG1vbCBDck8zID0gMC43NDcgw7cgMyA9IDAuMjQ5IG1vbC4gTWFzcyA9IDAuMjQ5IG1vbCDDlyAxMDAuMCBnL21vbCDiiYggMjUuMCBnLiJ9LCB7ImlkIjogIlVTTkNPMTMtUTQiLCAidGV4dCI6ICJBbiAxOC41IGcgc2FtcGxlIG9mIHRpbiAoTSA9IDExOC43KSBjb21iaW5lcyB3aXRoIDEwLjAgZyBvZiBzdWxmdXIgKE0gPSAzMi4wNykgdG8gZm9ybSBhIGNvbXBvdW5kLiBXaGF0IGlzIHRoZSBlbXBpcmljYWwgZm9ybXVsYSBvZiB0aGlzIGNvbXBvdW5kPyIsICJjaG9pY2VzIjogWyJTblMiLCAiU25TMiIsICJTbjJTIiwgIlNuMlMzIl0sICJhbnN3ZXIiOiAxLCAibm90ZSI6ICJtb2wgU24gPSAxOC41IMO3IDExOC43ID0gMC4xNTU4IG1vbC4gbW9sIFMgPSAxMC4wIMO3IDMyLjA3ID0gMC4zMTE4IG1vbC4gUmF0aW8gUzpTbiDiiYggMjoxLCBnaXZpbmcgdGhlIGVtcGlyaWNhbCBmb3JtdWxhIFNuUzIuIn0sIHsiaWQiOiAiVVNOQ08xMy1RNSIsICJ0ZXh0IjogIkEgbWl4dHVyZSBpcyBwcmVwYXJlZCBieSBhZGRpbmcgNTAuMCBtTCBvZiAwLjIwMCBNIE5hT0ggdG8gNzUuMCBtTCBvZiAwLjEwMCBNIE5hT0guIFdoYXQgaXMgdGhlIFtPSOKBu10gaW4gdGhlIG1peHR1cmU/IiwgImNob2ljZXMiOiBbIjAuMDYwMCBNIiwgIjAuMDgwMCBNIiwgIjAuMTQwIE0iLCAiMC4yMzMgTSJdLCAiYW5zd2VyIjogMiwgIm5vdGUiOiAiVG90YWwgbW9sIE9I4oG7ID0gKDAuMDUwMCBMIMOXIDAuMjAwIE0pICsgKDAuMDc1MCBMIMOXIDAuMTAwIE0pID0gMC4wMTAwICsgMC4wMDc1MCA9IDAuMDE3NSBtb2wuIFRvdGFsIHZvbHVtZSA9IDAuMTI1IEwuIFtPSOKBu10gPSAwLjAxNzUgw7cgMC4xMjUgPSAwLjE0MCBNLiJ9XX1d");
+const USNCO_2014_SECTIONS = _dq("W3siaWQiOiAiUTEtNSIsICJ0aXRsZSI6ICJRdWVzdGlvbnMgMeKAkzUiLCAicXVlc3Rpb25zIjogW3siaWQiOiAiVVNOQ08xNC1RMSIsICJ0ZXh0IjogIldoaWNoIGNvbXBvdW5kIGNvbnRhaW5zIHRoZSBoaWdoZXN0IHBlcmNlbnRhZ2Ugb2YgbWFnbmVzaXVtIGJ5IG1hc3M/IiwgImNob2ljZXMiOiBbIk1nTkg0UE80IiwgIk1nKEgyUE80KTIiLCAiTWcyUDRPNyIsICJNZzMoUE80KTIiXSwgImFuc3dlciI6IDMsICJub3RlIjogIkNvbXBhcmluZyAlTWcgYnkgbW9sYXIgbWFzcywgTWczKFBPNCkyIChNIOKJiCAyNjIuOSwgJU1nIOKJiCAyNy43JSkgaGFzIHRoZSBoaWdoZXN0IG1hZ25lc2l1bSBjb250ZW50IG9mIHRoZSBmb3VyIGNvbXBvdW5kcyBsaXN0ZWQuIn0sIHsiaWQiOiAiVVNOQ08xNC1RMiIsICJ0ZXh0IjogIkluIGEgZGlhZ3JhbSwgcGFpcmVkIG9wZW4gc3BoZXJlcyByZXByZXNlbnQgSDIgbW9sZWN1bGVzIGFuZCBwYWlyZWQgc29saWQgc3BoZXJlcyByZXByZXNlbnQgTjIgbW9sZWN1bGVzLiBXaGVuIHRoZXkgcmVhY3QgdG8gZm9ybSB0aGUgbWF4aW11bSBhbW91bnQgb2YgTkgzLCB3aGF0IGlzIHRoZSBsaW1pdGluZyByZWFjdGFudCBhbmQgaG93IG1hbnkgTkgzIG1vbGVjdWxlcyBmb3JtPyIsICJjaG9pY2VzIjogWyJOMiBpcyBsaW1pdGluZy4gNSBtb2xlY3VsZXMgb2YgTkgzIGNhbiBiZSBmb3JtZWQuIiwgIk4yIGlzIGxpbWl0aW5nLiAxMCBtb2xlY3VsZXMgb2YgTkgzIGNhbiBiZSBmb3JtZWQuIiwgIkgyIGlzIGxpbWl0aW5nLiA4IG1vbGVjdWxlcyBvZiBOSDMgY2FuIGJlIGZvcm1lZC4iLCAiSDIgaXMgbGltaXRpbmcuMTIgbW9sZWN1bGVzIG9mIE5IMyBjYW4gYmUgZm9ybWVkLiJdLCAiYW5zd2VyIjogMiwgIm5vdGUiOiAiRm9yIE4yKGcpICsgM0gyKGcpIOKGkiAyTkgzKGcpLCB0aGUgbnVtYmVyIG9mIEgyIG1vbGVjdWxlcyBzaG93biBpcyBpbnN1ZmZpY2llbnQgcmVsYXRpdmUgdG8gdGhlIHJlcXVpcmVkIDM6MSByYXRpbywgbWFraW5nIEgyIHRoZSBsaW1pdGluZyByZWFjdGFudDsgdGhpcyB5aWVsZHMgOCBtb2xlY3VsZXMgb2YgTkgzLiJ9LCB7ImlkIjogIlVTTkNPMTQtUTMiLCAidGV4dCI6ICJWYW5pbGxpbiwgQzhIOE8zIChNID0gMTUyIGcvbW9sKSwgaXMgdGhlIG1vbGVjdWxlIHJlc3BvbnNpYmxlIGZvciB0aGUgdmFuaWxsYSBmbGF2b3IgaW4gZm9vZC4gSG93IG1hbnkgb3h5Z2VuIGF0b21zIGFyZSBwcmVzZW50IGluIGEgNDUuMCBtZyBzYW1wbGUgb2YgdmFuaWxsaW4/IiwgImNob2ljZXMiOiBbIjEuNzggw5cgMTDCsuKBsCIsICI1LjM1IMOXIDEwwrLigbAiLCAiMS43OCDDlyAxMMKywrMiLCAiNS4zNSDDlyAxMMKywrMiXSwgImFuc3dlciI6IDEsICJub3RlIjogIm1vbCB2YW5pbGxpbiA9IDAuMDQ1MCBnIMO3IDE1MiBnL21vbCA9IDIuOTbDlzEw4oG74oG0IG1vbC4gTyBhdG9tcyA9IDIuOTbDlzEw4oG74oG0IMOXIDMgw5cgNi4wMjLDlzEwwrLCsyA9IDUuMzXDlzEwwrLigbAgYXRvbXMuIn0sIHsiaWQiOiAiVVNOQ08xNC1RNCIsICJ0ZXh0IjogIldoYXQgaXMgdGhlIG1vbGFyaXR5IG9mIHNvZGl1bSBpb25zIGluIGEgc29sdXRpb24gcHJlcGFyZWQgYnkgZGlsdXRpbmcgMjUwLiBtTCBvZiAwLjU1MCBNIE5hMlNPNCB0byAxLjI1IEw/IiwgImNob2ljZXMiOiBbIjAuMTEwIE0iLCAiMC4xMzggTSIsICIwLjIyMCBNIiwgIjAuMjc1IE0iXSwgImFuc3dlciI6IDIsICJub3RlIjogIm1vbCBOYTJTTzQgPSAwLjI1MCBMIMOXIDAuNTUwIE0gPSAwLjEzNzUgbW9sIOKGkiBtb2wgTmHigbogPSAwLjI3NSBtb2wuIERpbHV0ZWQgdG8gMS4yNSBMLCBbTmHigbpdID0gMC4yNzUgw7cgMS4yNSA9IDAuMjIwIE0uIn0sIHsiaWQiOiAiVVNOQ08xNC1RNSIsICJ0ZXh0IjogIlRoZSBzb2x1YmlsaXR5IG9mIEsyQ3IyTzcgaW4gd2F0ZXIgaXMgMTI1IGcvTCBhdCAyMMKwQy4gQSBzb2x1dGlvbiBpcyBwcmVwYXJlZCBhdCAyMMKwQyB0aGF0IGNvbnRhaW5zIDYuMCBncmFtcyBvZiBLMkNyMk83IGluIDUwLiBtTCBvZiB3YXRlci4gVGhpcyBzb2x1dGlvbiBpcyIsICJjaG9pY2VzIjogWyJkaWx1dGUuIiwgInNhdHVyYXRlZC4iLCAic3VwZXJzYXR1cmF0ZWQuIiwgInVuc2F0dXJhdGVkLiJdLCAiYW5zd2VyIjogMywgIm5vdGUiOiAiQ29uY2VudHJhdGlvbiBwcmVwYXJlZCA9IDYuMCBnIMO3IDAuMDUwIEwgPSAxMjAgZy9MLCB3aGljaCBpcyBiZWxvdyB0aGUgMTI1IGcvTCBzb2x1YmlsaXR5IGxpbWl0IGF0IDIwwrBDLCBzbyB0aGUgc29sdXRpb24gaXMgdW5zYXR1cmF0ZWQuIn1dfV0=");
+const USNCO_2015_SECTIONS = _dq("W3siaWQiOiAiUTEtNSIsICJ0aXRsZSI6ICJRdWVzdGlvbnMgMeKAkzUiLCAicXVlc3Rpb25zIjogW3siaWQiOiAiVVNOQ08xNS1RMSIsICJ0ZXh0IjogIkJlbnplbmUsIEM2SDYsIHJlYWN0cyB3aXRoIG94eWdlbiwgTzIsIHRvIGZvcm0gQ08yIGFuZCBIMk8uIEhvdyBtdWNoIE8yIGlzIHJlcXVpcmVkIGZvciB0aGUgY29tcGxldGUgY29tYnVzdGlvbiBvZiAxLjAgbW9sIEM2SDY/IiwgImNob2ljZXMiOiBbIjYuMCBtb2wiLCAiNy41IG1vbCIsICI5LjAgbW9sIiwgIjEyIG1vbCJdLCAiYW5zd2VyIjogMSwgIm5vdGUiOiAiQmFsYW5jZWQgZXF1YXRpb246IEM2SDYgKyA3LjUgTzIg4oaSIDZDTzIgKyAzSDJPLiBTbyAxLjAgbW9sIGJlbnplbmUgcmVxdWlyZXMgNy41IG1vbCBPMi4ifSwgeyJpZCI6ICJVU05DTzE1LVEyIiwgInRleHQiOiAiQSAxMC4wMCBnIHNhbXBsZSBvZiBhIHNvbHVibGUgYmFyaXVtIHNhbHQgaXMgdHJlYXRlZCB3aXRoIGV4Y2VzcyBzb2RpdW0gc3VsZmF0ZSB0byBwcmVjaXBpdGF0ZSAxMS4yMSBnIEJhU080IChNID0gMjMzLjQpLiBXaGljaCBiYXJpdW0gc2FsdCBpcyBpdD8iLCAiY2hvaWNlcyI6IFsiQmFDbDIgKE0gPSAyMDguMikiLCAiQmEoTzJDSCkyIChNID0gMjI3LjMpIiwgIkJhKE5PMykyIChNID0gMjYxLjMpIiwgIkJhQnIyIChNID0gMjk3LjEpIl0sICJhbnN3ZXIiOiAwLCAibm90ZSI6ICJtb2wgQmFTTzQgPSAxMS4yMSDDtyAyMzMuNCA9IDAuMDQ4MDMgbW9sID0gbW9sIGJhcml1bSBzYWx0LiBNKHNhbHQpID0gMTAuMDAgZyDDtyAwLjA0ODAzIG1vbCA9IDIwOC4yIGcvbW9sLCBtYXRjaGluZyBCYUNsMi4ifSwgeyJpZCI6ICJVU05DTzE1LVEzIiwgInRleHQiOiAiV2hhdCBpcyB0aGUgY29uY2VudHJhdGlvbiBvZiBuaXRyYXRlIGlvbiBpbiBhIDQyNSBtTCBzb2x1dGlvbiBjb250YWluaW5nIDMyLjAgZyBvZiBNZyhOTzMpMiAoTSA9IDE0OC4zKT8iLCAiY2hvaWNlcyI6IFsiMC4yMTYgTSIsICIwLjQzMiBNIiwgIjAuNTA4IE0iLCAiMS4wMiBNIl0sICJhbnN3ZXIiOiAzLCAibm90ZSI6ICJtb2wgTWcoTk8zKTIgPSAzMi4wIMO3IDE0OC4zID0gMC4yMTU4IG1vbCDihpIgbW9sIE5PM+KBuyA9IDAuNDMxNiBtb2wuIFtOTzPigbtdID0gMC40MzE2IMO3IDAuNDI1IEwgPSAxLjAyIE0uIn0sIHsiaWQiOiAiVVNOQ08xNS1RNCIsICJ0ZXh0IjogIlRoZSBmb3JtdWxhIGZvciB0ZXJiaXVtIHBob3NwaGF0ZSBpcyBUYlBPNC4gVGhlIGZvcm11bGEgZm9yIHRlcmJpdW0gc3VsZmF0ZSBpcyIsICJjaG9pY2VzIjogWyJUYjJTTzQiLCAiVGJTTzQiLCAiVGIyKFNPNCkzIiwgIlRiKFNPNCkyIl0sICJhbnN3ZXIiOiAyLCAibm90ZSI6ICJTaW5jZSBQTzTCs+KBuyByZXF1aXJlcyBhICszIGNhdGlvbiBpbiBUYlBPNCwgVGIgbXVzdCBiZSBUYsKz4oG6LiBCYWxhbmNpbmcgY2hhcmdlIHdpdGggU080wrLigbsgZ2l2ZXMgVGIyKFNPNCkzLiJ9LCB7ImlkIjogIlVTTkNPMTUtUTUiLCAidGV4dCI6ICJBIDI1LjAgbUwgc2FtcGxlIG9mIDAuMTUgTSBBZ05PMyBpcyByZWFjdGVkIHdpdGggYSAzLjU4IGcgc2FtcGxlIG9mIENhQ2wyIChNID0gMTExLjApLiBXaGljaCBvZiB0aGUgZm9sbG93aW5nIHN0YXRlbWVudHMgaXMgdHJ1ZT8iLCAiY2hvaWNlcyI6IFsiU2lsdmVyIG5pdHJhdGUgaXMgdGhlIGxpbWl0aW5nIHJlYWN0YW50IGFuZCBjYWxjaXVtIG5pdHJhdGUgcHJlY2lwaXRhdGVzLiIsICJTaWx2ZXIgbml0cmF0ZSBpcyB0aGUgbGltaXRpbmcgcmVhY3RhbnQgYW5kIHNpbHZlciBjaGxvcmlkZSBwcmVjaXBpdGF0ZXMuIiwgIkNhbGNpdW0gY2hsb3JpZGUgaXMgdGhlIGxpbWl0aW5nIHJlYWN0YW50IGFuZCBjYWxjaXVtIG5pdHJhdGUgcHJlY2lwaXRhdGVzLiIsICJDYWxjaXVtIGNobG9yaWRlIGlzIHRoZSBsaW1pdGluZyByZWFjdGFudCBhbmQgc2lsdmVyIGNobG9yaWRlIHByZWNpcGl0YXRlcy4iXSwgImFuc3dlciI6IDEsICJub3RlIjogIm1vbCBBZ05PMyA9IDAuMDI1MCBMIMOXIDAuMTUgTSA9IDMuNzXDlzEw4oG7wrMgbW9sLiBtb2wgQ2FDbDIgPSAzLjU4IMO3IDExMS4wID0gMC4wMzIzIG1vbCwgd2hpY2ggd291bGQgcmVxdWlyZSAwLjA2NDUgbW9sIEFnTk8zIGZvciBjb21wbGV0ZSByZWFjdGlvbiDigJQgZmFyIG1vcmUgdGhhbiBhdmFpbGFibGUuIFNvIEFnTk8zIGlzIGxpbWl0aW5nLCBhbmQgQWdDbCBwcmVjaXBpdGF0ZXMuIn1dfV0=");
+
 const SUBJECTS = {
   chem: {
     label: "AP Chemistry",
@@ -188,6 +195,18 @@ const SUBJECTS = {
       { id: "8", title: "Ecology", sections: HSBIO_UNIT8 },
     ],
   },
+  usnco: {
+    label: "USNCO",
+    recommendedBooks: [],
+    units: [
+      { id: "2015", title: "2015 U.S. National Chemistry Olympiad — Local Section Exam", sections: USNCO_2015_SECTIONS },
+      { id: "2014", title: "2014 U.S. National Chemistry Olympiad — Local Section Exam", sections: USNCO_2014_SECTIONS },
+      { id: "2013", title: "2013 U.S. National Chemistry Olympiad — Local Section Exam", sections: USNCO_2013_SECTIONS },
+      { id: "2012", title: "2012 U.S. National Chemistry Olympiad — Local Section Exam", sections: USNCO_2012_SECTIONS },
+      { id: "2011", title: "2011 U.S. National Chemistry Olympiad — Local Section Exam", sections: USNCO_2011_SECTIONS },
+      { id: "2010", title: "2010 U.S. National Chemistry Olympiad — Local Section Exam", sections: USNCO_2010_SECTIONS },
+    ],
+  },
 };
 
 
@@ -215,7 +234,7 @@ function Ring({ pct, size = 140 }) {
   );
 }
 
-// A 3-segment donut (correct / incorrect / unanswered), similar to the "Result Analysis" chart in Zestia's report card.
+// A 3-segment donut (correct / incorrect / unanswered), similar to the "Result Analysis" chart in the report card.
 function DonutChart({ correct, incorrect, unanswered, size = 150 }) {
   const total = correct + incorrect + unanswered || 1;
   const pCorrect = (correct / total) * 100;
@@ -301,6 +320,11 @@ export default function App() {
 
   const subjectData = SUBJECTS[subject];
   const unit = unitIdx !== null ? subjectData.units[unitIdx] : null;
+  // Display-only label: USNCO's "units" are actually exam years, so show "Year" instead of "Unit".
+  // NOTE: this must stay purely cosmetic — the literal string "Unit " sent to the backend (see the
+  // `unit:` field built for submissions) and the history-grouping regex that parses it back both
+  // depend on that exact prefix, so those two spots intentionally keep "Unit" regardless of subject.
+  const unitWord = subject === "usnco" ? "Year" : "Unit";
   const section = unit ? unit.sections[sectionIdx] : null;
   const qs = section ? section.questions : [];
 
@@ -381,7 +405,7 @@ export default function App() {
       }
 
       const safeName = (student.name || "student").replace(/[^\w가-힣-]/g, "");
-      pdf.save(`${safeName}_${subjectData.label}_Unit${unit.id}_result.pdf`);
+      pdf.save(`${safeName}_${subjectData.label}_${unitWord}${unit.id}_result.pdf`);
     } catch (err) {
       alert("PDF 생성에 실패했어요. 네트워크 연결을 확인하고 다시 시도해주세요.");
     } finally {
@@ -405,7 +429,7 @@ export default function App() {
             note: q.note,
             image: q.image || null,
             subjectLabel: ctx.subjectLabel,
-            unitLabel: `Unit ${ctx.unitId} · ${ctx.sectionId} ${ctx.sectionTitle}`,
+            unitLabel: `${unitWord} ${ctx.unitId} · ${ctx.sectionId} ${ctx.sectionTitle}`,
           }];
       try { localStorage.setItem("cby_bookmarks", JSON.stringify(next)); } catch {}
       return next;
@@ -470,7 +494,7 @@ export default function App() {
     { id: "mock3", label: "Mock Test 3", desc: "모의고사 3회", available: false },
     { id: "frq", label: "Past Papers — FRQs", desc: "기출 서술형 문제", available: false },
   ];
-  const isHS = subject === "hsChem" || subject === "hsBio";
+  const isHS = subject === "hsChem" || subject === "hsBio" || subject === "usnco";
   const CATEGORIES = isHS
     ? ALL_CATEGORIES.filter((c) => c.id === "unit-quiz" || c.id === "practice")
     : ALL_CATEGORIES.map((c) => (c.id === "frq" && (subject === "chem" || subject === "bio") ? { ...c, available: true, desc: "College Board 기출 FRQ (2023–2026)" } : c));
@@ -765,7 +789,7 @@ export default function App() {
             {screen === "landing" ? "Think. Why? How?" : (
               <>
                 {subjectData.label}
-                {unit ? ` — Unit ${unit.id}: ${unit.title}` : ""}
+                {unit ? ` — ${unitWord} ${unit.id}: ${unit.title}` : ""}
               </>
             )}
           </h1>
@@ -807,6 +831,7 @@ export default function App() {
                   bio: "#EDE3F7",    // AP Biology — light purple
                   hsChem: "#E3F3DD", // High School Chemistry — light green
                   hsBio: "#FDF3D0",  // High School Biology — light yellow
+                  usnco: "#DCEAF7",  // USNCO — light blue
                 };
                 return (
                 <button key={key} onClick={() => switchSubject(key)}
@@ -912,7 +937,7 @@ export default function App() {
                   const uDef = subjectData.units.find((u) => u.id === gId);
                   groups.push({
                     id: gId,
-                    label: uDef && uDef.isDiagnostic ? "진단고사" : `Unit ${gId}`,
+                    label: uDef && uDef.isDiagnostic ? "진단고사" : `${unitWord} ${gId}`,
                     title: uDef ? uDef.title : (r.unit || "-"),
                     items: [],
                   });
@@ -963,7 +988,7 @@ export default function App() {
               return (
                 <>
                   <button onClick={() => setHistoryGroupOpen(null)} className="mb-4 px-4 py-2 text-xs font-bold uppercase tracking-wide" style={{ border: `1.5px solid ${INK}`, borderRadius: 3 }}>← 내 기록</button>
-                  <p className="mb-4 font-bold text-lg">{uDef && uDef.isDiagnostic ? "진단고사" : `Unit ${historyGroupOpen}`} · {groupTitle}</p>
+                  <p className="mb-4 font-bold text-lg">{uDef && uDef.isDiagnostic ? "진단고사" : `${unitWord} ${historyGroupOpen}`} · {groupTitle}</p>
                   <div className="space-y-3 mb-6">
                     {items.map((r, i) => (
                       <button key={i} onClick={() => { setHistoryDetailUnit(r.unit || "-"); setExpandedAttempt(null); }}
@@ -1242,7 +1267,7 @@ export default function App() {
                       minHeight: 88,
                     }}>
                     <div className="text-xs font-bold uppercase tracking-wide" style={{ color: GREEN }}>
-                      {u.isDiagnostic ? "진단고사" : `Unit ${u.id}`}
+                      {u.isDiagnostic ? "진단고사" : `${unitWord} ${u.id}`}
                     </div>
                     <div className="font-bold">{u.title}</div>
                     <div className="text-xs mt-1" style={{ color: "#8A8270" }}>
@@ -1291,7 +1316,7 @@ export default function App() {
               position: "sticky", top: 0, zIndex: 10,
               background: PAPER, borderBottom: `1px solid ${LINE}`,
             }}>
-              <div className="text-xs font-bold uppercase tracking-wide" style={{ color: GREEN }}>{subjectData.label} · Unit {unit.id} · {section.id} {section.title}</div>
+              <div className="text-xs font-bold uppercase tracking-wide" style={{ color: GREEN }}>{subjectData.label} · {unitWord} {unit.id} · {section.id} {section.title}</div>
               <div className="px-3 py-1.5 text-sm font-bold" style={{
                 background: unit.timeLimitMin && (unit.timeLimitMin * 60 - elapsedSec) <= 60 ? RUST : INK,
                 color: PAPER, borderRadius: 3, fontFamily: "ui-monospace, monospace",
@@ -1553,7 +1578,7 @@ export default function App() {
         {screen === "retryWrong" && (
           <div>
             <div className="mb-6 text-xs font-bold uppercase tracking-wide" style={{ color: GREEN }}>
-              {subjectData.label} · Unit {unit.id} · 틀린 문제 복습
+              {subjectData.label} · {unitWord} {unit.id} · 틀린 문제 복습
             </div>
             <div className="space-y-6 mb-8">
               {results.filter((r) => !r.correct).map((q, i) => {
