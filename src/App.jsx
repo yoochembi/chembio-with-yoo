@@ -528,6 +528,27 @@ export default function App() {
       });
   }
 
+  // Maps the backend's internal `reason` string (see Code.gs handleLogin) to a
+  // Korean message the student can actually act on — e.g. distinguishing "you got
+  // rate-limited from testing too fast" from an actual wrong password, so students
+  // (and teachers debugging logins) aren't misled into re-typing a correct password.
+  function loginErrorMessage(reason) {
+    switch (reason) {
+      case "too many attempts, try again later":
+        return "로그인 시도가 너무 많아 잠시 잠겼어요. 5분 정도 기다렸다가 다시 시도해주세요.";
+      case "wrong password":
+        return "코드는 맞지만 비밀번호가 올바르지 않아요.";
+      case "code not found":
+        return "등록되지 않은 코드예요. 선생님께 코드를 다시 확인해주세요.";
+      case "account inactive":
+        return "비활성화된 계정이에요. 선생님께 문의해주세요.";
+      case "missing code or password":
+        return "코드와 비밀번호를 모두 입력해주세요.";
+      default:
+        return "코드 또는 비밀번호가 올바르지 않아요.";
+    }
+  }
+
   function submitLogin() {
     const code = loginDraft.code.trim();
     const password = loginDraft.password;
@@ -558,7 +579,7 @@ export default function App() {
           }
         } else {
           setLoginState("error");
-          setLoginError("코드 또는 비밀번호가 올바르지 않아요.");
+          setLoginError(loginErrorMessage(data && data.reason));
         }
       })
       .catch(() => {
