@@ -111,14 +111,14 @@ const BIO_DIAGNOSTIC_SECTIONS = _dq("W3siaWQiOiJEMC0xIiwidGl0bGUiOiJBUCBCaW9sb2d
 // 2026 scoring guidelines aren't posted yet (exam just happened in May), so that's
 // left empty until College Board publishes it.
 const AP_CHEM_FRQ_YEARS = [
-  { year: 2026, questions: "https://apcentral.collegeboard.org/media/pdf/ap26-frq-chemistry.pdf", scoring: null },
+  { year: 2026, questions: "https://apcentral.collegeboard.org/media/pdf/ap26-frq-chemistry.pdf", scoring: "https://apcentral.collegeboard.org/media/pdf/ap26-sg-chemistry.pdf" },
   { year: 2025, questions: "https://apcentral.collegeboard.org/media/pdf/ap25-frq-chemistry.pdf", scoring: "https://apcentral.collegeboard.org/media/pdf/ap25-sg-chemistry.pdf" },
   { year: 2024, questions: "https://apcentral.collegeboard.org/media/pdf/ap24-frq-chemistry.pdf", scoring: "https://apcentral.collegeboard.org/media/pdf/ap24-sg-chemistry.pdf" },
   { year: 2023, questions: "https://apcentral.collegeboard.org/media/pdf/ap23-frq-chemistry.pdf", scoring: "https://apcentral.collegeboard.org/media/pdf/ap23-sg-chemistry.pdf" },
 ];
 
 const AP_BIO_FRQ_YEARS = [
-  { year: 2026, questions: "https://apcentral.collegeboard.org/media/pdf/ap26-frq-biology.pdf", scoring: null },
+  { year: 2026, questions: "https://apcentral.collegeboard.org/media/pdf/ap26-frq-biology.pdf", scoring: "https://apcentral.collegeboard.org/media/pdf/ap26-sg-biology.pdf" },
   { year: 2025, questions: "https://apcentral.collegeboard.org/media/pdf/ap25-frq-biology.pdf", scoring: "https://apcentral.collegeboard.org/media/pdf/ap25-sg-biology.pdf" },
   { year: 2024, questions: "https://apcentral.collegeboard.org/media/pdf/ap24-frq-biology.pdf", scoring: "https://apcentral.collegeboard.org/media/pdf/ap24-sg-biology.pdf" },
   { year: 2023, questions: "https://apcentral.collegeboard.org/media/pdf/ap23-frq-biology.pdf", scoring: "https://apcentral.collegeboard.org/media/pdf/ap23-sg-biology.pdf" },
