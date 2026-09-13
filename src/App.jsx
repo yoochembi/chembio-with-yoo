@@ -244,6 +244,71 @@ const SUBJECTS = {
 };
 
 
+// Topic metadata is inferred from each question's unit and wording. This keeps the
+// existing quiz data and backend untouched while enabling topic-level reporting.
+const UNIT_TOPIC_NAMES = {
+  chem: { D0: "Chemistry Foundations", 1: "Atomic Structure", 2: "Molecular Structure", 3: "Intermolecular Forces", 4: "Chemical Reactions", 5: "Kinetics", 6: "Thermochemistry", 7: "Equilibrium", 8: "Acids and Bases", 9: "Thermodynamics" },
+  bio: { D0: "Biology Foundations", 1: "Chemistry of Life", 2: "Cell Structure and Function", 3: "Cellular Energetics", 4: "Cell Communication and Cell Cycle", 5: "Heredity", 6: "Gene Expression and Regulation", 7: "Natural Selection", 8: "Ecology" },
+  hsChem: { 1: "Atomic Structure", 2: "Periodicity", 3: "Chemical Bonding", 4: "Reactions and Stoichiometry", 5: "Gases and Solutions", 6: "Thermochemistry", 7: "Kinetics", 8: "Equilibrium", 9: "Acids and Bases" },
+  hsBio: { 1: "Cells", 2: "Membrane Transport", 3: "Chemistry of Life", 4: "Enzymes and Energetics", 5: "Cell Cycle", 6: "Heredity", 7: "Evolution", 8: "Ecology" },
+  usnco: {},
+};
+
+const CHEM_TOPIC_RULES = [
+  [/(photoelectron|pes|electron configuration|orbital|quantum|spectrum|spectra)/i, "Electronic Structure"],
+  [/(periodic trend|atomic radius|ionic radius|ionization energ|electronegat)/i, "Periodic Trends"],
+  [/(lewis|formal charge|resonance|vsepr|molecular geometry|hybridization|bond angle)/i, "Molecular Structure"],
+  [/(intermolecular|hydrogen bond|dipole|london dispersion|boiling point|melting point)/i, "Intermolecular Forces"],
+  [/(stoichiometr|limiting reagent|empirical formula|mole ratio|molar mass|percent composition)/i, "Stoichiometry"],
+  [/(spectrophot|beer.?lambert|absorbance|calibration curve)/i, "Spectrophotometry"],
+  [/(rate law|reaction rate|rate constant|mechanism|elementary step|activation energy|catalyst)/i, "Reaction Kinetics"],
+  [/(calorim|enthalp|hess|heat capacity|specific heat|bond enthalpy)/i, "Enthalpy and Calorimetry"],
+  [/(entropy|gibbs|free energy|spontaneous|thermodynamic)/i, "Entropy and Free Energy"],
+  [/(equilibrium|reaction quotient|Kc|Kp|le ch[aâ]telier)/i, "Chemical Equilibrium"],
+  [/(acid|base|pH|pKa|buffer|titration|neutralization)/i, "Acids and Bases"],
+  [/(oxidation|reduction|redox|electrochemical|galvanic|electrolysis|cell potential)/i, "Redox and Electrochemistry"],
+  [/(gas law|partial pressure|ideal gas|PV)/i, "Gases"],
+  [/(solution|solubility|molarity|molality|dilution|precipitat)/i, "Solutions"],
+];
+
+const BIO_TOPIC_RULES = [
+  [/(enzyme|competitive inhibition|allosteric|activation energ)/i, "Enzymes"],
+  [/(photosynth|light reaction|calvin cycle|chloroplast)/i, "Photosynthesis"],
+  [/(cellular respiration|glycolysis|krebs|citric acid cycle|electron transport chain|fermentation)/i, "Cellular Respiration"],
+  [/(membrane|diffusion|osmosis|active transport|passive transport|tonicity)/i, "Membrane Transport"],
+  [/(mitosis|meiosis|cell cycle|checkpoint|cyclin)/i, "Cell Cycle"],
+  [/(dna replication|transcription|translation|gene expression|operon|mutation)/i, "Gene Expression"],
+  [/(mendel|pedigree|punnett|inherit|allele|genotype|phenotype|crossing over)/i, "Inheritance"],
+  [/(natural selection|evolution|hardy.?weinberg|genetic drift|speciation|phylogen)/i, "Evolution"],
+  [/(population|community|ecosystem|food web|energy pyramid|biodiversity|carrying capacity)/i, "Ecology"],
+  [/(cell signaling|signal transduction|receptor|second messenger|phosphorylation cascade)/i, "Cell Communication"],
+  [/(protein|amino acid|carbohydrate|lipid|nucleic acid|macromolecule)/i, "Biological Macromolecules"],
+];
+
+const COMMON_TOPIC_RULES = [
+  [/(experimental design|control group|independent variable|dependent variable|hypothesis|error bar|standard deviation|chi.?square)/i, "Experimental Design and Statistics"],
+];
+
+function inferQuestionMeta(q, subjectKey, unitId) {
+  const haystack = [q.text, q.note, q.group, ...(q.choices || [])].filter(Boolean).join(" ");
+  const isBiology = subjectKey === "bio" || subjectKey === "hsBio";
+  const subjectRules = isBiology ? BIO_TOPIC_RULES : CHEM_TOPIC_RULES;
+  const matched = [...COMMON_TOPIC_RULES, ...subjectRules].find(([pattern]) => pattern.test(haystack));
+  const fallback = UNIT_TOPIC_NAMES[subjectKey] && UNIT_TOPIC_NAMES[subjectKey][unitId];
+  const topic = matched ? matched[1] : (fallback || (subjectKey === "usnco" ? "Olympiad Chemistry" : "Core Concepts"));
+
+  let skill = "Concept Application";
+  if (q.image || /graph|table|diagram|figure|data|trend|spectrum/i.test(haystack)) skill = "Data Analysis";
+  else if (q.type === "numeric" || /calculate|how many|determine the (value|mass|volume|concentration|number)|what is the (value|mass|volume|concentration|ph)/i.test(haystack)) skill = "Calculation";
+  else if (/experiment|procedure|control|variable|error|design|investigat/i.test(haystack)) skill = "Experimental Reasoning";
+  else if (/explain|justify|predict|support|evidence|best explains/i.test(haystack)) skill = "Scientific Reasoning";
+
+  let level = "Standard";
+  if (/diagnostic|foundation/i.test(String(q.group || "")) || String(unitId) === "D0") level = "Foundation";
+  if (q.type === "numeric" || q.type === "text" || /justify|mechanism|multi.?step|derive|evaluate|most likely explanation/i.test(haystack)) level = "Challenge";
+  return { topic, skill, level };
+}
+
 const INK = "#152A47";
 const SESSION_TTL_MS = 6 * 60 * 60 * 1000; // matches the server-side session lifetime
 const PAPER = "#F3F6FB";
@@ -373,7 +438,7 @@ export default function App() {
   // depend on that exact prefix, so those two spots intentionally keep "Unit" regardless of subject.
   const unitWord = subject === "usnco" ? "Year" : "Unit";
   const section = unit ? unit.sections[sectionIdx] : null;
-  const qs = section ? section.questions : [];
+  const qs = useMemo(() => section ? section.questions.map((q) => ({ ...q, ...inferQuestionMeta(q, subject, unit && unit.id) })) : [], [section, subject, unit]);
 
   function pick(id, idx) { setAnswers((a) => ({ ...a, [id]: idx })); }
 
@@ -528,6 +593,19 @@ export default function App() {
   const wrong = results.filter((r) => !r.correct && !r.unanswered).length;
   const blank = results.filter((r) => r.unanswered).length;
   const pct = qs.length ? Math.round((score / qs.length) * 100) : 0;
+  const topicPerformance = useMemo(() => {
+    const map = {};
+    results.forEach((r) => {
+      const key = r.topic || "Core Concepts";
+      if (!map[key]) map[key] = { topic: key, correct: 0, total: 0 };
+      map[key].total += 1;
+      if (r.correct) map[key].correct += 1;
+    });
+    return Object.values(map)
+      .map((item) => ({ ...item, percent: item.total ? Math.round(item.correct / item.total * 100) : 0 }))
+      .sort((a, b) => a.percent - b.percent || b.total - a.total);
+  }, [results]);
+  const priorityTopics = topicPerformance.filter((item) => item.total >= 2 && item.percent < 70).slice(0, 3);
 
   const filtered = results.filter((r) => {
     if (filter === "correct") return r.correct;
@@ -817,7 +895,7 @@ export default function App() {
     const perQuestion = results.map((r) => ({ id: r.id, correct: !!r.correct, given: r.given === undefined ? null : r.given }));
     const wrongQuestions = results
       .filter((r) => !r.correct)
-      .map((r) => ({ id: r.id, text: r.text.slice(0, 200), unanswered: r.unanswered }));
+      .map((r) => ({ id: r.id, text: r.text.slice(0, 200), topic: r.topic, skill: r.skill, unanswered: r.unanswered }));
     const payload = {
       name: student.name,
       email: student.email,
@@ -1470,6 +1548,9 @@ export default function App() {
                       {showValidation && isUnanswered && (
                         <span className="text-xs font-bold" style={{ color: RUST }}>· 미응답</span>
                       )}
+                      {q.topic && <span className="text-xs font-bold px-2 py-0.5" style={{ background: "#EAF1FB", color: GREEN, borderRadius: 999 }}>{q.topic}</span>}
+                      {q.skill && <span className="text-xs font-bold px-2 py-0.5" style={{ background: "#F1ECDD", color: "#6D624E", borderRadius: 999 }}>{q.skill}</span>}
+                      {q.level && <span className="text-xs font-bold px-2 py-0.5" style={{ border: `1px solid ${q.level === "Challenge" ? RUST : LINE}`, color: q.level === "Challenge" ? RUST : "#65748A", borderRadius: 999 }}>{q.level}</span>}
                     </div>
                     <button
                       onClick={() => toggleBookmark(q, { subjectLabel: subjectData.label, unitId: unit.id, sectionId: section.id, sectionTitle: section.title })}
@@ -1595,6 +1676,37 @@ export default function App() {
                 <DonutChart correct={score} incorrect={wrong} unanswered={blank} />
               </div>
 
+
+              {topicPerformance.length > 0 && (
+                <section className="mb-7 p-5 sm:p-6" style={{ border: `1px solid ${LINE}`, borderRadius: 10, background: "#FFFEFB" }}>
+                  <div className="flex items-start justify-between gap-4 flex-wrap mb-5">
+                    <div>
+                      <p className="text-xs font-extrabold tracking-[0.14em] mb-1" style={{ color: GREEN }}>TOPIC ANALYSIS</p>
+                      <h2 className="text-xl font-extrabold">토픽별 학습 성취도</h2>
+                    </div>
+                    {priorityTopics.length > 0 && (
+                      <div className="px-3 py-2 text-xs font-bold" style={{ background: "rgba(179,64,45,.08)", color: RUST, borderRadius: 7 }}>
+                        우선 복습 · {priorityTopics.map((item) => item.topic).join(" · ")}
+                      </div>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {topicPerformance.map((item) => (
+                      <div key={item.topic} className="p-4" style={{ border: `1px solid ${LINE}`, borderRadius: 8 }}>
+                        <div className="flex justify-between gap-3 text-sm mb-2">
+                          <span className="font-bold">{item.topic}</span>
+                          <span className="font-extrabold" style={{ color: item.percent >= 80 ? GREEN : item.percent >= 60 ? AMBER : RUST }}>{item.percent}%</span>
+                        </div>
+                        <div style={{ height: 7, background: "#E5EAF1", borderRadius: 999, overflow: "hidden" }}>
+                          <div style={{ width: `${item.percent}%`, height: "100%", background: item.percent >= 80 ? GREEN : item.percent >= 60 ? AMBER : RUST, borderRadius: 999 }} />
+                        </div>
+                        <div className="text-xs mt-2" style={{ color: "#7A8492" }}>{item.correct}/{item.total}문항 정답</div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
+
               {unit && unit.isDiagnostic && pct < 80 && (
                 <div className="mb-8 p-5" style={{ border: `1.5px solid ${AMBER}`, borderRadius: 4, background: "#FBF3E0" }}>
                   <div className="font-bold mb-2" style={{ color: AMBER }}>📘 AP 시작 전, 복습을 추천드려요</div>
@@ -1628,6 +1740,8 @@ export default function App() {
                         {r.group && (
                           <span className="text-xs font-bold px-2 py-0.5" style={{ background: "#EAF1FB", color: "#2158A6", borderRadius: 2 }}>{r.group}</span>
                         )}
+                        {r.topic && <span className="text-xs font-bold px-2 py-0.5" style={{ background: "#EAF1FB", color: GREEN, borderRadius: 999 }}>{r.topic}</span>}
+                        {r.skill && <span className="text-xs font-bold px-2 py-0.5" style={{ background: "#F1ECDD", color: "#6D624E", borderRadius: 999 }}>{r.skill}</span>}
                         {classPct !== null && (
                           <span className="text-xs px-2 py-0.5" style={{ border: `1px solid ${GREEN}`, color: GREEN, borderRadius: 2 }}>
                             전체 정답률 {classPct}%
