@@ -848,6 +848,7 @@ export default function App() {
         .cby-card-arrow { width: 34px; height: 34px; display: inline-grid; place-items: center; border-radius: 999px; color: white; background: var(--accent); transition: transform .2s ease; }
         .cby-subject-card:hover .cby-card-arrow { transform: translateX(3px); }
         .cby-panel { box-shadow: 0 10px 30px rgba(21,42,71,.06); }
+        .cby-study-guide b { color: #2158A6; font-weight: 800; }
         .cby-category-card { transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
         .cby-category-card:not(:disabled):hover { transform: translateY(-2px); border-color: #2158A6 !important; box-shadow: 0 10px 24px rgba(21,42,71,.08); }
         button, a { -webkit-tap-highlight-color: transparent; }
@@ -876,7 +877,7 @@ export default function App() {
             </button>
           </div>
           <h1 className={screen === "landing" ? "text-3xl sm:text-4xl font-extrabold text-center tracking-tight" : "text-xl sm:text-2xl font-extrabold text-center tracking-tight"}>
-            {screen === "landing" ? "Think. Why? How?" : (
+            {screen === "landing" ? "Think. Ask Why. Understand How." : (
               <>
                 {subjectData.label}
                 {unit ? ` — ${unitWord} ${unit.id}: ${unit.title}` : ""}
@@ -890,9 +891,9 @@ export default function App() {
             <div className="cby-values mb-7 p-6" style={{ borderRadius: 12, background: `linear-gradient(135deg, ${INK}, #203E68)`, color: PAPER }}>
               <div>
                 {[
-                  "정직하게, 나 자신에게 떳떳하게 공부하기 💪🏻",
-                  "노력은 결국 배신하지 않는다는 믿음 💟",
-                  "오늘 하루, 최선을 다하기 🔥",
+                  "정직하게, 내 실력으로 풀기 💪🏻",
+                  "틀린 문제에서 배우기 💡",
+                  "오늘의 최선을 쌓아가기 🔥",
                 ].map((line, i) => (
                   <div key={i} className="flex items-baseline gap-3 py-2.5" style={{ borderTop: i === 0 ? "none" : "1px solid rgba(243,246,251,0.15)" }}>
                     <span className="text-xl font-bold shrink-0" style={{ color: "rgba(243,246,251,0.35)", fontVariantNumeric: "tabular-nums" }}>
@@ -904,12 +905,12 @@ export default function App() {
               </div>
             </div>
 
-            <div className="cby-panel mb-9 p-5" style={{ border: `1px solid ${LINE}`, borderRadius: 10, background: "rgba(255,255,255,.88)" }}>
-              <div className="text-base font-bold uppercase tracking-wide mb-2" style={{ color: GREEN }}>공지</div>
+            <div className="cby-panel cby-study-guide mb-9 p-5" style={{ border: `1px solid ${LINE}`, borderRadius: 10, background: "rgba(255,255,255,.88)" }}>
+              <div className="text-base font-bold tracking-wide mb-2" style={{ color: GREEN }}>이렇게 공부해요</div>
               <ul className="space-y-2 text-sm leading-relaxed" style={{ color: "#33455E" }}>
-                <li>· 이 사이트는 단순 암기가 아니라 "왜 이렇게 되는지" 이해했는지 확인하는 용도예요. 답만 확인하지 말고 해설까지 꼭 읽어보세요.</li>
-                <li>· AI나 친구 답 베껴서 풀지 마세요. 지금 정직하게 틀리는 게, 시험장에서 실력 없이 틀리는 것보다 훨씬 낫습니다.</li>
-                <li>· 궁금한 점이나 이해 안 되는 해설은 선생님께 꼭 질문하세요.</li>
+                <li>· 이곳은 답을 외우는 곳이 아니라, <b>왜 그런지 이해했는지 확인하는 학습 공간</b>이에요. 채점 후에는 해설까지 꼭 읽어보세요.</li>
+                <li>· AI나 다른 사람의 도움 없이 <b>먼저 내 실력으로 풀어보세요.</b> 지금 발견한 실수가 시험장에서의 실수를 줄여줍니다.</li>
+                <li>· 이해되지 않는 문제나 해설은 그냥 넘기지 말고 선생님께 질문하세요.</li>
               </ul>
             </div>
 
