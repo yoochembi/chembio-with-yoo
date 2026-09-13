@@ -245,7 +245,7 @@ const SUBJECTS = {
 
 
 const INK = "#152A47";
-const SESSION_TTL_MS = 12 * 60 * 60 * 1000; // 12h — auto-expire a saved login so it doesn't linger on shared/lab devices
+const SESSION_TTL_MS = 6 * 60 * 60 * 1000; // matches the server-side session lifetime
 const PAPER = "#F3F6FB";
 const GREEN = "#2158A6";
 const RUST = "#B3402C";
@@ -331,6 +331,11 @@ export default function App() {
       if (!raw) raw = localStorage.getItem("cby_hs_auth"); // migrate old HS-only key if present
       if (!raw) return null;
       const parsed = JSON.parse(raw);
+      if (!parsed || !parsed.sessionToken) {
+        localStorage.removeItem("cby_auth");
+        localStorage.removeItem("cby_hs_auth");
+        return null;
+      }
       if (parsed && parsed.loggedInAt && Date.now() - parsed.loggedInAt > SESSION_TTL_MS) {
         // Saved login is too old (e.g. left signed-in on a shared hagwon PC) — treat as logged out.
         localStorage.removeItem("cby_auth");
@@ -557,12 +562,12 @@ export default function App() {
     setScreen("categories");
   }
 
-  function fetchHistory(subjectKey, code) {
+  function fetchHistory(subjectKey, sessionToken) {
     setHistoryState("loading");
     setHistoryRecords(null);
     setHistoryDetailUnit(null);
     setExpandedAttempt(null);
-    jsonp(SHEET_ENDPOINT, { mode: "history", code, subject: subjectKey })
+    jsonp(SHEET_ENDPOINT, { mode: "history", sessionToken, subject: subjectKey })
       .then((data) => {
         setHistoryRecords((data && data.records) || []);
         setHistoryState("loaded");
@@ -588,12 +593,20 @@ export default function App() {
         return "비활성화된 계정이에요. 선생님께 문의해주세요.";
       case "missing code or password":
         return "코드와 비밀번호를 모두 입력해주세요.";
+      case "challenge expired":
+        return "로그인 확인 시간이 만료됐어요. 다시 시도해주세요.";
       default:
         return "코드 또는 비밀번호가 올바르지 않아요.";
     }
   }
 
-  function submitLogin() {
+  async function sha256HexWeb(value) {
+    const bytes = new TextEncoder().encode(String(value));
+    const digest = await crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  async function submitLogin() {
     const code = loginDraft.code.trim();
     const password = loginDraft.password;
     if (!code || !password) {
@@ -602,34 +615,39 @@ export default function App() {
     }
     setLoginState("checking");
     setLoginError("");
-    jsonp(SHEET_ENDPOINT, { mode: "login", code, password, subject: pendingSubjectKey || "" })
-      .then((data) => {
-        if (data && data.ok) {
-          const newAuth = { code, name: data.name || "", subjects: data.subjects || [], loggedInAt: Date.now() };
-          setAuth(newAuth);
-          try { localStorage.setItem("cby_auth", JSON.stringify(newAuth)); } catch {}
-          setLoginState("idle");
-          if (pendingSubjectKey && newAuth.subjects.includes(pendingSubjectKey)) {
-            setSubject(pendingSubjectKey);
-            setUnitIdx(null);
-            fetchHistory(pendingSubjectKey, newAuth.code);
-            setHistoryGroupOpen(null);
-            setHistoryDetailUnit(null);
-            setScreen("history");
-            setPendingSubjectKey(null);
-          } else {
-            setLoginError("이 코드로는 해당 과목 수강 권한이 없어요. 선생님께 문의해주세요.");
-            setScreen("landing");
-          }
+    try {
+      const challenge = await jsonp(SHEET_ENDPOINT, { mode: "challenge", code, subject: pendingSubjectKey || "" });
+      if (!challenge || !challenge.ok) throw new Error("challenge failed");
+      const passwordHash = await sha256HexWeb(password);
+      const proof = await sha256HexWeb(`${passwordHash}:${challenge.nonce}`);
+      const data = await jsonp(SHEET_ENDPOINT, { mode: "login", challengeId: challenge.challengeId, proof });
+      setLoginDraft((prev) => ({ ...prev, password: "" }));
+      if (data && data.ok) {
+        const newAuth = { code, name: data.name || "", subjects: data.subjects || [], sessionToken: data.sessionToken, loggedInAt: Date.now() };
+        setAuth(newAuth);
+        try { localStorage.setItem("cby_auth", JSON.stringify(newAuth)); } catch {}
+        setLoginState("idle");
+        if (pendingSubjectKey && newAuth.subjects.includes(pendingSubjectKey)) {
+          setSubject(pendingSubjectKey);
+          setUnitIdx(null);
+          fetchHistory(pendingSubjectKey, newAuth.sessionToken);
+          setHistoryGroupOpen(null);
+          setHistoryDetailUnit(null);
+          setScreen("history");
+          setPendingSubjectKey(null);
         } else {
-          setLoginState("error");
-          setLoginError(loginErrorMessage(data && data.reason));
+          setLoginError("이 코드로는 해당 과목 수강 권한이 없어요. 선생님께 문의해주세요.");
+          setScreen("landing");
         }
-      })
-      .catch(() => {
+      } else {
         setLoginState("error");
-        setLoginError("서버 연결에 실패했어요. 잠시 후 다시 시도해주세요.");
-      });
+        setLoginError(loginErrorMessage(data && data.reason));
+      }
+    } catch (err) {
+      setLoginState("error");
+      setLoginDraft((prev) => ({ ...prev, password: "" }));
+      setLoginError("서버 연결에 실패했어요. 잠시 후 다시 시도해주세요.");
+    }
   }
 
   function logout() {
@@ -776,7 +794,7 @@ export default function App() {
         }
         setSubmitState("verifying");
         setTimeout(() => {
-          jsonp(SHEET_ENDPOINT, { mode: "history", code: auth.code, subject })
+          jsonp(SHEET_ENDPOINT, { mode: "history", sessionToken: auth.sessionToken, subject })
             .then((data) => {
               const records = (data && data.records) || [];
               const top = records[0];
@@ -804,6 +822,7 @@ export default function App() {
       name: student.name,
       email: student.email,
       studentCode: (auth && auth.code) || "",
+      sessionToken: (auth && auth.sessionToken) || "",
       subject: subjectData.label,
       unit: `Unit ${unit.id} (${unit.title}) - ${section.id} ${section.title}`,
       sectionKey,
@@ -824,7 +843,7 @@ export default function App() {
     // Fetch class-wide per-question accuracy (includes this submission + everyone before it).
     setClassStatsState("loading");
     setTimeout(() => {
-      jsonp(SHEET_ENDPOINT, { mode: "stats", sectionKey })
+      jsonp(SHEET_ENDPOINT, { mode: "stats", sectionKey, sessionToken: auth && auth.sessionToken ? auth.sessionToken : "" })
         .then((data) => { setClassStats(data); setClassStatsState("loaded"); })
         .catch(() => setClassStatsState("error"));
     }, 1500); // small delay so this submission's row is written before we read stats back
@@ -1247,7 +1266,7 @@ export default function App() {
                   {auth.name ? `${auth.name}님, 반갑습니다! 👋` : "반갑습니다!"}
                 </span>
                 <div className="flex items-center gap-3">
-                  <button onClick={() => { fetchHistory(subject, auth.code); setHistoryGroupOpen(null); setHistoryDetailUnit(null); setScreen("history"); }} className="text-xs underline" style={{ color: GREEN }}>내 기록 보기</button>
+                  <button onClick={() => { fetchHistory(subject, auth.sessionToken); setHistoryGroupOpen(null); setHistoryDetailUnit(null); setScreen("history"); }} className="text-xs underline" style={{ color: GREEN }}>내 기록 보기</button>
                   <button onClick={logout} className="text-xs underline" style={{ color: GREEN }}>로그아웃</button>
                 </div>
               </div>
